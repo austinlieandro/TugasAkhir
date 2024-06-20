@@ -7,6 +7,7 @@ import com.example.tugasakhir.data.repository.UserRepository
 import com.example.tugasakhir.di.Injection
 import com.example.tugasakhir.ui.screen.login.LoginViewModel
 import com.example.tugasakhir.ui.screen.register.RegisterViewModel
+import com.example.tugasakhir.ui.screen.welcome.WelcomeViewModel
 
 class UserModelFactory(private val repository: UserRepository): ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T{
@@ -16,6 +17,9 @@ class UserModelFactory(private val repository: UserRepository): ViewModelProvide
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(WelcomeViewModel::class.java) -> {
+                WelcomeViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }

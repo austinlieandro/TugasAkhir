@@ -14,6 +14,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,8 +27,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.tugasakhir.data.factory.UserModelFactory
 import com.example.tugasakhir.ui.navigation.Screen
 import com.example.tugasakhir.ui.theme.TugasAkhirTheme
 import kotlinx.coroutines.launch
@@ -33,14 +39,28 @@ import kotlinx.coroutines.launch
 fun WelcomeScreen(
     navController:NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
+    viewModel: WelcomeViewModel = viewModel(
+        factory = UserModelFactory.getInstance(LocalContext.current)
+    )
 ){
+
     val scope = rememberCoroutineScope()
 
     val context = LocalContext.current
 
+    val userSession by viewModel.getSession().observeAsState()
+
     BackHandler(enabled = true) {
         scope.launch {
             (context as? Activity)?.finish()
+        }
+    }
+
+    userSession?.let {
+        if (it.isLogin) {
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Welcome.route) { inclusive = true }
+            }
         }
     }
 
