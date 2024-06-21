@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tugasakhir.data.repository.BengkelRepository
 import com.example.tugasakhir.di.Injection
 import com.example.tugasakhir.ui.screen.bengkel.BengkelViewModel
+import com.example.tugasakhir.ui.screen.bengkeldetail.BengkelDetailViewModel
 
 class BengkelModelFactory(private val repository: BengkelRepository): ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T{
@@ -13,6 +14,10 @@ class BengkelModelFactory(private val repository: BengkelRepository): ViewModelP
             modelClass.isAssignableFrom(BengkelViewModel::class.java) -> {
                 BengkelViewModel(repository) as T
             }
+            modelClass.isAssignableFrom(BengkelDetailViewModel::class.java) -> {
+                BengkelDetailViewModel(repository) as T
+            }
+
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }
     }

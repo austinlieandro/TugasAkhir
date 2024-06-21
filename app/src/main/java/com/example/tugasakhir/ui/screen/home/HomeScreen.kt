@@ -49,7 +49,9 @@ fun HomeScreen(
 
     Scaffold(
         bottomBar = {
-            if (!logoutStatus.value && currentRoute != Screen.Welcome.route) {
+            if (!logoutStatus.value &&
+                currentRoute != Screen.Welcome.route &&
+                currentRoute != Screen.BengkelDetail.route) {
                 BottomBar(navController)
             }
         },

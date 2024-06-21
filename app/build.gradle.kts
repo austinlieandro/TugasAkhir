@@ -32,6 +32,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -84,7 +85,7 @@ dependencies {
     androidTestImplementation(libs.androidx.navigation.testing)
     implementation(libs.androidx.compose.material3.material3)
     implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
-    implementation("androidx.compose.material:material-icons-extended:1.6.8")
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.accompanist.pager)
 
     implementation (libs.retrofit)
@@ -98,4 +99,10 @@ dependencies {
     implementation ("com.github.bumptech.glide:compose:1.0.0-beta01")
 
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8")
+
+    implementation (libs.core)
+    implementation (libs.calendar.z)
+
+    implementation(libs.datetime)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
