@@ -29,6 +29,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,6 +44,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -238,25 +240,30 @@ fun BengkelDetailScreen(
 
             val dateDialogState = rememberMaterialDialogState()
 
-            Button(
-                onClick = {
-                    dateDialogState.show()
-                },
-                colors = ButtonDefaults.buttonColors(Color.White),
-                shape = RoundedCornerShape(10.dp),
-                border = ButtonDefaults.outlinedButtonBorder,
+            OutlinedTextField(
                 modifier = modifier
                     .fillMaxWidth()
-            ) {
-                Text(
-                    text = "Pilih Tanggal",
-                    color = Color.Black,
-                )
-            }
-            Text(
-                text = "Selected Date: $formattedDate",
-                modifier = modifier
-                    .padding(top = 8.dp)
+                    .clickable {
+                        dateDialogState.show()
+                    }
+                ,
+                label = {
+                    Text(
+                        text = "Pilih Tanggal",
+                        color = Color.Black
+                    )
+                },
+                value = "Selected Date: $formattedDate",
+                onValueChange = {},
+                readOnly = true,
+                singleLine = true,
+                enabled = false,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledBorderColor = Color.Black,
+                    disabledTextColor = Color.Black,
+                    containerColor = Color.White,
+                ),
+                shape = RoundedCornerShape(10.dp),
             )
 
             MaterialDialog(
