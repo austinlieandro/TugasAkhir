@@ -50,19 +50,19 @@ fun BengkelItem(
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp,
                 modifier = modifier
-                    .padding(8.dp)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
             )
             Text(
                 text = "$lokasiBengkel, $alamatBengkel",
                 fontSize = 18.sp,
                 modifier = modifier
-                    .padding(start = 8.dp, bottom = 8.dp)
+                    .padding(start = 16.dp, bottom = 8.dp)
             )
             Text(
                 text = numberBengkel,
                 fontSize = 18.sp,
                 modifier = modifier
-                    .padding(start = 8.dp)
+                    .padding(start = 16.dp)
             )
             Box(
                 modifier = modifier

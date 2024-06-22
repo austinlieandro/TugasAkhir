@@ -45,20 +45,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.tugasakhir.data.factory.UserModelFactory
-import com.example.tugasakhir.ui.navigation.Screen
-import com.example.tugasakhir.ui.theme.TugasAkhirTheme
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.LoginScreenDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination<RootGraph>
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-    navController: NavHostController = rememberNavController(),
+    navigator: DestinationsNavigator,
     modifier: Modifier = Modifier,
     viewModel: RegisterViewModel = viewModel(
         factory = UserModelFactory.getInstance(LocalContext.current)
@@ -395,7 +395,7 @@ fun RegisterScreen(
             }
             LaunchedEffect(statusState) {
                 if (statusState) {
-                    navController.navigate(Screen.Login.route)
+                    navigator.navigate(LoginScreenDestination)
                 }
             }
             errorState?.let { errorMsg ->
@@ -420,12 +420,4 @@ fun isValidEmail(text: String): Boolean{
 
 fun isValidPassword(text: String): Boolean{
     return text.matches(Regex(".{8,}"))
-}
-
-@Preview
-@Composable
-fun PreviewRegister(){
-    TugasAkhirTheme {
-        RegisterScreen()
-    }
 }

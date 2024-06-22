@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,27 +21,18 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuItemColors
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -52,7 +41,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -61,43 +49,32 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.tugasakhir.api.response.Bengkel
-import com.example.tugasakhir.api.response.JamOperasionalItem
 import com.example.tugasakhir.data.factory.BengkelModelFactory
 import com.example.tugasakhir.data.pref.UserModel
 import com.example.tugasakhir.data.pref.UserPreference
 import com.example.tugasakhir.data.pref.dataStore
-import com.maxkeppeker.sheets.core.models.base.UseCaseState
-import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
-import com.maxkeppeler.sheets.calendar.CalendarDialog
-import com.maxkeppeler.sheets.calendar.models.CalendarConfig
-import com.maxkeppeler.sheets.calendar.models.CalendarSelection
-import com.maxkeppeler.sheets.calendar.models.CalendarStyle
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
-import java.time.temporal.ChronoUnit
-import java.util.Calendar
 import java.util.Locale
 
+@Destination<RootGraph>
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BengkelDetailScreen(
+    navigator: DestinationsNavigator,
     bengkelId: Int,
-    navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
     viewModel: BengkelDetailViewModel = viewModel(
         factory = BengkelModelFactory.getInstance(LocalContext.current)
@@ -147,20 +124,20 @@ fun BengkelDetailScreen(
                 .fillMaxSize()
         ) {
             Text(
-                text = bengkelState?.value?.namaBengkel ?: "",
+                text = bengkelState.value?.namaBengkel ?: "",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "${bengkelState?.value?.lokasiBengkel}, ${bengkelState?.value?.alamatBengkel}"
+                text = "${bengkelState.value?.lokasiBengkel}, ${bengkelState.value?.alamatBengkel}"
             )
             Text(
-                text = bengkelState?.value?.numberBengkel ?: ""
+                text = bengkelState.value?.numberBengkel ?: ""
             )
             Row(
                 modifier = modifier
                     .clickable {
-                        openGmaps(context, bengkelState?.value?.gmapsBengkel ?: "")
+                        openGmaps(context, bengkelState.value?.gmapsBengkel ?: "")
                     }
             ) {
                 Icon(
@@ -245,7 +222,7 @@ fun BengkelDetailScreen(
                     expanded = isExpendedLayanan,
                     onDismissRequest = { isExpendedLayanan = false }
                 ) {
-                    bengkelState?.value?.jenisLayanan?.forEach { option ->
+                    bengkelState.value?.jenisLayanan?.forEach { option ->
                         DropdownMenuItem(
                             text = { option?.let { Text(it) } },
                             onClick = {
@@ -406,7 +383,16 @@ fun BengkelDetailScreen(
                     .fillMaxWidth()
             )
             Button(
-                onClick = {},
+                onClick = {
+                    viewModel.reservasiBengkel(
+                        formattedDate.toString(),
+                        selectedTextJamOperasional.toString(),
+                        selectedTextLayanan.toString(),
+                        kendala.toString(),
+                        selectedTextKendaraan.toString(),
+                        bengkelId,
+                        userModel.id)
+                },
                 colors = ButtonDefaults.buttonColors(Color.Red),
                 shape = RoundedCornerShape(10.dp),
                 modifier = modifier

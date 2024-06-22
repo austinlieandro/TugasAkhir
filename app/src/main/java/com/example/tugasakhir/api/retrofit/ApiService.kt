@@ -3,7 +3,10 @@ package com.example.tugasakhir.api.retrofit
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseLogin
+import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
+import com.example.tugasakhir.api.response.ResponseReservasiBengkel
+import com.example.tugasakhir.api.response.ResponseRiwayatReservasi
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -36,4 +39,25 @@ interface ApiService{
         @Path("bengkelId") bengkelId: Int
     ): ResponseDetailBengkel
 
+    @FormUrlEncoded
+    @POST("userReservasi")
+    suspend fun reservasiBengkel(
+        @Field("tanggal_reservasi") tanggal_reservasi: String,
+        @Field("jam_reservasi") jam_reservasi:String,
+        @Field("jeniskendala_reservasi") jeniskendala_reservasi: String,
+        @Field("detail_reservasi") detail_reservasi: String,
+        @Field("kendaraan_reservasi") kendaraan_reservasi:String,
+        @Field("bengkels_id") bengkels_id: Int,
+        @Field("users_id") users_id: Int
+    ): ResponseReservasiBengkel
+
+    @GET("showReservasiUser/{usersId}")
+    suspend fun riwayatReservasi(
+        @Path("usersId") usersId: Int
+    ): ResponseRiwayatReservasi
+
+    @GET("profile/{usersId}")
+    suspend fun profile(
+        @Path("usersId") usersId: Int
+    ): ResponseProfile
 }

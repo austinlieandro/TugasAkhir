@@ -1,8 +1,6 @@
 package com.example.tugasakhir.ui.screen.bengkel
 
 import android.os.Build
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -18,47 +16,46 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.tugasakhir.api.response.BengkelItem
 import com.example.tugasakhir.data.factory.BengkelModelFactory
+import com.example.tugasakhir.data.pref.UserModel
+import com.example.tugasakhir.data.pref.UserPreference
+import com.example.tugasakhir.data.pref.dataStore
 import com.example.tugasakhir.ui.components.bengkel.BengkelItem
-import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
-import com.maxkeppeler.sheets.calendar.CalendarDialog
-import com.maxkeppeler.sheets.calendar.models.CalendarConfig
-import com.maxkeppeler.sheets.calendar.models.CalendarSelection
-import com.maxkeppeler.sheets.calendar.models.CalendarStyle
-import java.time.LocalDate
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.BengkelDetailScreenDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination<RootGraph>
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun BengkelScreen(
-    navController: NavHostController = rememberNavController(),
+    navigator: DestinationsNavigator,
     modifier: Modifier = Modifier,
     viewModel: BengkelViewModel = viewModel(
         factory = BengkelModelFactory.getInstance(LocalContext.current)
     ),
-    navigateToDetailBengkel: (Int) -> Unit,
+    userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore)
 ){
     val bengkelListState = viewModel.bengkelList.observeAsState()
     val statusState by viewModel.status.observeAsState(false)
+    val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.getBengkel()
     }
-    
+
     Surface(
         modifier = modifier
             .fillMaxSize(),
@@ -87,7 +84,7 @@ fun BengkelScreen(
                         numberBengkel = data?.numberBengkel ?: "",
                         modifier = modifier
                             .clickable {
-                                data?.id?.let { navigateToDetailBengkel(it) }
+                                data?.id?.let { navigator.navigate(BengkelDetailScreenDestination(bengkelId = it)) }
                             }
                             .animateItemPlacement(tween(durationMillis = 100))
                     )
@@ -96,3 +93,4 @@ fun BengkelScreen(
         }
     }
 }
+

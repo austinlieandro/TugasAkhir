@@ -1,6 +1,7 @@
 package com.example.tugasakhir.api.retrofit
 
 import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.tugasakhir.BuildConfig
 import com.example.tugasakhir.data.pref.UserPreference
 import okhttp3.OkHttpClient
@@ -13,6 +14,7 @@ class ApiConfig {
         fun getApiService(pref: UserPreference, context: Context): ApiService{
             val loginInterceptor = if(BuildConfig.DEBUG) { HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY) }else { HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE) }
             val client = OkHttpClient.Builder()
+                .addInterceptor(ChuckerInterceptor(context))
                 .addInterceptor(loginInterceptor)
                 .build()
             val baseURL = BuildConfig.BASE_URL

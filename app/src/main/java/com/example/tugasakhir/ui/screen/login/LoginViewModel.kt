@@ -33,9 +33,9 @@ class LoginViewModel(private val repository: UserRepository): ViewModel() {
             }catch (e: HttpException){
                 _loading.value = false
                 val jsonInString = e.response()?.errorBody()?.string()
-                val errorBody = Gson().fromJson(jsonInString, ResponseLogin::class.java)
-                val errorMessage = errorBody?.message ?: "Terjadi kesalahan saat login"
-                error.postValue(errorMessage)
+//                val errorBody = Gson().fromJson(jsonInString, ResponseLogin::class.java)
+//                val errorMessage = errorBody?.message ?: "Terjadi kesalahan saat login"
+//                error.postValue(errorMessage)
                 status.postValue(false)
                 Log.d("LOGIN", "$e")
             } catch (e: Exception) {

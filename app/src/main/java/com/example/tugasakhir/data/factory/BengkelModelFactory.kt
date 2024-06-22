@@ -17,7 +17,6 @@ class BengkelModelFactory(private val repository: BengkelRepository): ViewModelP
             modelClass.isAssignableFrom(BengkelDetailViewModel::class.java) -> {
                 BengkelDetailViewModel(repository) as T
             }
-
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }
     }

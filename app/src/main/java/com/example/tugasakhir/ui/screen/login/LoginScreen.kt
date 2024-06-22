@@ -45,20 +45,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.tugasakhir.data.factory.UserModelFactory
-import com.example.tugasakhir.ui.navigation.Screen
-import com.example.tugasakhir.ui.theme.TugasAkhirTheme
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.BengkelScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.WelcomeScreenDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination<RootGraph>
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    navController: NavHostController = rememberNavController(),
+    navigator: DestinationsNavigator,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = viewModel(
         factory = UserModelFactory.getInstance(LocalContext.current)
@@ -76,7 +77,7 @@ fun LoginScreen(
     val errorState by viewModel.error.observeAsState(null)
 
     BackHandler(enabled = true) {
-        navController.navigate(Screen.Welcome.route)
+        navigator.navigate(WelcomeScreenDestination)
     }
 
     Surface(
@@ -194,7 +195,7 @@ fun LoginScreen(
             }
             LaunchedEffect(statusState) {
                 if (statusState) {
-                    navController.navigate(Screen.Home.route)
+                    navigator.navigate(BengkelScreenDestination)
                 }
             }
             errorState?.let { errorMsg ->
@@ -210,13 +211,5 @@ fun LoginScreen(
                 CircularProgressIndicator()
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewLogin(){
-    TugasAkhirTheme {
-        LoginScreen()
     }
 }
