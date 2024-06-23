@@ -1,5 +1,6 @@
 package com.example.tugasakhir.ui.screen.daftarbengkel
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,8 +24,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TimePicker
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,31 +39,35 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.tugasakhir.ui.theme.TugasAkhirTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tugasakhir.data.factory.BengkelModelFactory
+import com.example.tugasakhir.data.pref.UserModel
+import com.example.tugasakhir.data.pref.UserPreference
+import com.example.tugasakhir.data.pref.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.util.Locale
 
 @Destination<RootGraph>
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DaftarBengkelScreen(
     navigator: DestinationsNavigator,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: DaftarBengkelViewModel = viewModel(
+        factory = BengkelModelFactory.getInstance(LocalContext.current)
+    ),
+    userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ) {
+    val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
+
     val localFocusManager = LocalFocusManager.current
     val context = LocalContext.current
 
@@ -362,11 +367,67 @@ fun DaftarBengkelScreen(
                 modifier = Modifier
                     .padding(top = 14.dp)
                     .fillMaxWidth()
+            ){
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .background(color = Color.White)
+                        .padding(8.dp)
+                ){
+                    Column {
+                        Text(
+                            text = "Jenis Kendaraan Yang Dilayani",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(bottom = 8.dp)
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Checkbox(
+                                checked = isMotorChecked,
+                                onCheckedChange = { isMotorChecked = it }
+                            )
+                            Text(text = "Motor")
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Checkbox(
+                                        checked = isMobilChecked,
+                                        onCheckedChange = { isMobilChecked = it },
+                                    )
+                                    Text(text = "Mobil")
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .padding(top = 14.dp)
+                    .fillMaxWidth()
             ) {
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(10.dp))
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(10.dp)
+                        )
                         .background(color = Color.White)
                         .padding(8.dp)
                 ) {
@@ -431,7 +492,11 @@ fun DaftarBengkelScreen(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(10.dp))
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(10.dp)
+                        )
                         .background(color = Color.White)
                         .padding(8.dp)
                 ) {
@@ -557,6 +622,7 @@ fun DaftarBengkelScreen(
                     pickedTimeTutup = it
                 }
             }
+
             Button(
                 onClick = {
                     if (namaBengkel.isBlank() || lokasiBengkel.isBlank() || numberBengkel.isBlank() ||
@@ -567,6 +633,18 @@ fun DaftarBengkelScreen(
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
+                        viewModel.daftarBengkel(
+                            namaBengkel,
+                            lokasiBengkel,
+                            numberBengkel,
+                            alamatBengkel,
+                            gmapsBengkel,
+                            selectedKendaraan.toList(),
+                            selectedLayanan.toList(),
+                            selectedHari.toList(),
+                            formattedTimeBuka,
+                            formattedTimeTutup,
+                            userModel.id)
                         Toast.makeText(
                             context,
                             "Data berhasil disimpan",

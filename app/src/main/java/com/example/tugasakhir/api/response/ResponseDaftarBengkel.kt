@@ -13,6 +13,9 @@ data class ResponseDaftarBengkel(
 	@field:SerializedName("bengkel")
 	val bengkel: DaftarBengkel? = null,
 
+	@field:SerializedName("user")
+	val user: UserDaftar? = null,
+
 	@field:SerializedName("status")
 	val status: Boolean? = null
 ) : Parcelable
@@ -55,4 +58,29 @@ data class DaftarBengkel(
 
 	@field:SerializedName("hari_operasional")
 	val hariOperasional: List<String?>? = null
+) : Parcelable
+
+@Parcelize
+data class UserDaftar(
+
+	@field:SerializedName("password")
+	val password: String? = null,
+
+	@field:SerializedName("phone")
+	val phone: String? = null,
+
+	@field:SerializedName("name")
+	val name: String? = null,
+
+	@field:SerializedName("user_bengkel")
+	val userBengkel: String? = null,
+
+	@field:SerializedName("id")
+	val id: Int? = null,
+
+	@field:SerializedName("email")
+	val email: String? = null,
+
+	@field:SerializedName("username")
+	val username: String? = null
 ) : Parcelable

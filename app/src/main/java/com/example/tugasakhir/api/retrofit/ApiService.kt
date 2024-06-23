@@ -1,5 +1,6 @@
 package com.example.tugasakhir.api.retrofit
 
+import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseLogin
@@ -7,11 +8,14 @@ import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseRiwayatReservasi
+import okhttp3.Request
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import java.util.HashMap
 
 interface ApiService{
     @FormUrlEncoded
@@ -60,4 +64,9 @@ interface ApiService{
     suspend fun profile(
         @Path("usersId") usersId: Int
     ): ResponseProfile
+
+    @POST("daftarBengkel")
+    suspend fun daftarBengkel(
+        @Body request: HashMap<String, Any>
+    ): ResponseDaftarBengkel
 }
