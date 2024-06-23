@@ -39,6 +39,7 @@ import com.example.tugasakhir.data.pref.UserPreference
 import com.example.tugasakhir.data.pref.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.DaftarBengkelScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.WelcomeScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -68,16 +69,22 @@ fun ProfileScreen(
             Text(
                 text = profileState.value?.name ?: "",
                 fontSize = 24.sp,
+                modifier = modifier
+                    .padding(start = 16.dp)
             )
             Text(
-                text = profileState.value?.phone ?: ""
+                text = profileState.value?.phone ?: "",
+                modifier = modifier
+                    .padding(start = 16.dp)
             )
             Text(
-                text = profileState.value?.userBengkel ?: ""
+                text = profileState.value?.userBengkel ?: "",
+                modifier = modifier
+                    .padding(start = 16.dp)
             )
             Row(
                 modifier = modifier
-                    .padding(5.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                     .fillMaxWidth()
                     .clickable {
 
@@ -111,7 +118,7 @@ fun ProfileScreen(
             }
             Row(
                 modifier = modifier
-                    .padding(5.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp)
                     .fillMaxWidth()
                     .clickable {
 
@@ -145,10 +152,14 @@ fun ProfileScreen(
             }
             Row(
                 modifier = modifier
-                    .padding(5.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp)
                     .fillMaxWidth()
                     .clickable {
+                        if (userModel.user_bengkel.lowercase() == "pelanggan"){
+                            navigator.navigate(DaftarBengkelScreenDestination)
+                        }else {
 
+                        }
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
