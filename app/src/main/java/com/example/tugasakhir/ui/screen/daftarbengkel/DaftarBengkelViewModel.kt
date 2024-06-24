@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tugasakhir.api.response.DaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.data.pref.UserModel
@@ -18,6 +19,8 @@ class DaftarBengkelViewModel(private val repository: BengkelRepository, private 
     val error = MutableLiveData<String?>()
     val status: MutableLiveData<Boolean> = MutableLiveData()
 
+    val daftarBengkel = MutableLiveData<DaftarBengkel?>()
+
     fun daftarBengkel(nama_bengkel: String, lokasi_bengkel: String, number_bengkel: String, alamat_bengkel: String, gmaps_bengkel: String, jenis_kendaraan: List<String>, jenis_layanan: List<String>, hari_operasional: List<String>, jam_buka: String, jam_tutup: String, users_id: Int){
         viewModelScope.launch {
             try {
@@ -25,6 +28,7 @@ class DaftarBengkelViewModel(private val repository: BengkelRepository, private 
                 val idUser = daftarBengkelResponse.user?.id
                 val statusUser = daftarBengkelResponse.user?.userBengkel
                 val usernameUser = daftarBengkelResponse.user?.username
+                daftarBengkel.postValue(daftarBengkelResponse.bengkel)
                 status.postValue(true)
                 runBlocking { repositoryUser.logout() }
                 runBlocking { repositoryUser.saveSession(UserModel(usernameUser ?: "", true, idUser ?: 0, statusUser ?: "")) }

@@ -1,5 +1,6 @@
 package com.example.tugasakhir.ui.screen.daftarbengkel
 
+import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -25,9 +26,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,6 +51,7 @@ import com.example.tugasakhir.data.pref.UserPreference
 import com.example.tugasakhir.data.pref.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.JamOperasionalScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
@@ -66,6 +70,8 @@ fun DaftarBengkelScreen(
     ),
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ) {
+    val daftarBengkelState = viewModel.daftarBengkel.observeAsState()
+
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
 
     val localFocusManager = LocalFocusManager.current
@@ -650,6 +656,9 @@ fun DaftarBengkelScreen(
                             "Data berhasil disimpan",
                             Toast.LENGTH_SHORT
                         ).show()
+                        Handler().postDelayed({
+                            navigator.navigate(JamOperasionalScreenDestination(bengkelId = daftarBengkelState.value?.id ?: 0))
+                        }, 500)
                     }
                 },
                 colors = ButtonDefaults.buttonColors(Color.Red),

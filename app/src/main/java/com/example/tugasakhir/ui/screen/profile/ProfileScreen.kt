@@ -30,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,6 +70,7 @@ fun ProfileScreen(
         Column {
             Text(
                 text = profileState.value?.name ?: "",
+                fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 modifier = modifier
                     .padding(start = 16.dp)
@@ -155,7 +158,7 @@ fun ProfileScreen(
                     .padding(start = 16.dp, end = 16.dp, top = 12.dp)
                     .fillMaxWidth()
                     .clickable {
-                        if (userModel.user_bengkel.lowercase() == "pelanggan"){
+                        if (profileState.value?.userBengkel?.toLowerCase() == "pelanggan"){
                             navigator.navigate(DaftarBengkelScreenDestination)
                         }else {
 

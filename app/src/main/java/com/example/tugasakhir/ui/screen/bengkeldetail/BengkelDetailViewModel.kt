@@ -23,8 +23,6 @@ class BengkelDetailViewModel(private val repository: BengkelRepository): ViewMod
     val detailBengkel = MutableLiveData<Bengkel?>()
     val jamOperasionalList = MutableLiveData<List<JamOperasionalItem?>?>()
 
-
-
     fun getDetailBengkel(id: Int){
         viewModelScope.launch {
             try {

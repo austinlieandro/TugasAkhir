@@ -3,6 +3,8 @@ package com.example.tugasakhir.api.retrofit
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
+import com.example.tugasakhir.api.response.ResponseInputKaryawan
+import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
 import com.example.tugasakhir.api.response.ResponseLogin
 import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
@@ -69,4 +71,16 @@ interface ApiService{
     suspend fun daftarBengkel(
         @Body request: HashMap<String, Any>
     ): ResponseDaftarBengkel
+
+    @POST("jamOperasional")
+    suspend fun daftarJamOperasional(
+        @Body request: HashMap<String, Any>
+    ): ResponseJamOperasionalBengkel
+
+    @FormUrlEncoded
+    @POST("daftarKaryawan")
+    suspend fun inputKaryawanbengkel(
+        @Field("nama_karyawan") nama_karyawan: String,
+        @Field("bengkels_id") bengkels_id: Int
+    ): ResponseInputKaryawan
 }

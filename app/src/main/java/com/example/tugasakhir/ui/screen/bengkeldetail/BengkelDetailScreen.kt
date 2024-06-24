@@ -176,7 +176,9 @@ fun BengkelDetailScreen(
 
                 ExposedDropdownMenu(
                     expanded = isExpendedKendaraan,
-                    onDismissRequest = { isExpendedKendaraan = false }
+                    onDismissRequest = { isExpendedKendaraan = false },
+                    modifier = modifier
+                        .background(Color.White)
                 ) {
                     bengkelState.value?.jenisKendaraan?.forEach { option ->
                         DropdownMenuItem(
@@ -220,7 +222,9 @@ fun BengkelDetailScreen(
 
                 ExposedDropdownMenu(
                     expanded = isExpendedLayanan,
-                    onDismissRequest = { isExpendedLayanan = false }
+                    onDismissRequest = { isExpendedLayanan = false },
+                    modifier = modifier
+                        .background(Color.White)
                 ) {
                     bengkelState.value?.jenisLayanan?.forEach { option ->
                         DropdownMenuItem(
@@ -330,6 +334,8 @@ fun BengkelDetailScreen(
                 ExposedDropdownMenu(
                     expanded = isExpendedJamOperasional,
                     onDismissRequest = { isExpendedJamOperasional = false },
+                    modifier = modifier
+                        .background(Color.White)
                 ) {
                     jamOperasionalState.value?.filter { it?.hariOperasional?.equals(selectedHariOperasional, ignoreCase = true) ?: false }?.forEach { option ->
                         DropdownMenuItem(
