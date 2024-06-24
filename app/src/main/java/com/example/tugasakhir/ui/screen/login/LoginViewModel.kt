@@ -28,7 +28,8 @@ class LoginViewModel(private val repository: UserRepository): ViewModel() {
                 status.postValue(true)
                 val idUser = loginResponse.user?.id
                 val userBengkel = loginResponse.user?.userBengkel
-                runBlocking { repository.saveSession(UserModel(username, true, idUser ?: 0, userBengkel ?: "") ) }
+                val idBengkelUser = loginResponse.bengkelsId
+                runBlocking { repository.saveSession(UserModel(username, true, idUser ?: 0, userBengkel ?: "", idBengkelUser ?: 0) ) }
                 Log.d("LOGIN", "$loginResponse")
             }catch (e: HttpException){
                 _loading.value = false

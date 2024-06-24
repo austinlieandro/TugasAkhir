@@ -21,6 +21,7 @@ class UserPreference constructor(private val dataStore: DataStore<Preferences>) 
             preference[IS_LOGIN_KEY] = true
             preference[ID_KEY] = user.id
             preference[BENGKEL_KEY] = user.user_bengkel
+            preference[BENGKELID_KEY] = user.bengkels_id
         }
     }
 
@@ -30,7 +31,8 @@ class UserPreference constructor(private val dataStore: DataStore<Preferences>) 
                 preferences[USERNAME_KEY] ?: "",
                 preferences[IS_LOGIN_KEY] ?: false,
                 preferences[ID_KEY] ?: 0,
-                preferences[BENGKEL_KEY] ?: ""
+                preferences[BENGKEL_KEY] ?: "",
+                preferences[BENGKELID_KEY] ?: 0
             )
         }
     }
@@ -49,6 +51,7 @@ class UserPreference constructor(private val dataStore: DataStore<Preferences>) 
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
         private val ID_KEY = intPreferencesKey("id")
         private val BENGKEL_KEY = stringPreferencesKey("user_bengkel")
+        private val BENGKELID_KEY = intPreferencesKey("bengkels_id")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
             return INSTANCE ?: synchronized(this) {

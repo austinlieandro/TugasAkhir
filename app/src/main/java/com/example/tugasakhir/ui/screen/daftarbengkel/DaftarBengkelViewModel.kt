@@ -28,10 +28,11 @@ class DaftarBengkelViewModel(private val repository: BengkelRepository, private 
                 val idUser = daftarBengkelResponse.user?.id
                 val statusUser = daftarBengkelResponse.user?.userBengkel
                 val usernameUser = daftarBengkelResponse.user?.username
+                val idBengkelUser = daftarBengkelResponse.bengkel?.id
                 daftarBengkel.postValue(daftarBengkelResponse.bengkel)
                 status.postValue(true)
                 runBlocking { repositoryUser.logout() }
-                runBlocking { repositoryUser.saveSession(UserModel(usernameUser ?: "", true, idUser ?: 0, statusUser ?: "")) }
+                runBlocking { repositoryUser.saveSession(UserModel(usernameUser ?: "", true, idUser ?: 0, statusUser ?: "", idBengkelUser ?: 0)) }
                 Log.d("DAFTAR BENGKEL", "$daftarBengkelResponse")
             }catch (e: HttpException){
                 val jsonInString = e.response()?.errorBody()?.string()

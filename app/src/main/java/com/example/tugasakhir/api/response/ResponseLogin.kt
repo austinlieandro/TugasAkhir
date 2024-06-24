@@ -14,7 +14,10 @@ data class ResponseLogin(
 	val message: String? = null,
 
 	@field:SerializedName("user")
-	val user: UserLogin? = null
+	val user: UserLogin? = null,
+
+	@field:SerializedName("bengkels_id")
+	val bengkelsId: Int? = null
 ) : Parcelable
 
 @Parcelize

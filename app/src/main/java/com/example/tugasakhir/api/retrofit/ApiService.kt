@@ -1,8 +1,10 @@
 package com.example.tugasakhir.api.retrofit
 
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
+import com.example.tugasakhir.api.response.ResponseDeleteKaryawan
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
+import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
 import com.example.tugasakhir.api.response.ResponseInputKaryawan
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
 import com.example.tugasakhir.api.response.ResponseLogin
@@ -10,11 +12,14 @@ import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseRiwayatReservasi
+import com.example.tugasakhir.api.response.ResponseUpdateBengkel
+import com.example.tugasakhir.api.response.ResponseUpdateKaryawan
 import okhttp3.Request
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import java.util.HashMap
@@ -72,6 +77,13 @@ interface ApiService{
         @Body request: HashMap<String, Any>
     ): ResponseDaftarBengkel
 
+    @POST("updateBengkel/{usersId}/{id}")
+    suspend fun updateBengkel(
+        @Path("usersId") bengkelId: Int,
+        @Path("id") id: Int,
+        @Body request: HashMap<Any, Any>
+    ): ResponseUpdateBengkel
+
     @POST("jamOperasional")
     suspend fun daftarJamOperasional(
         @Body request: HashMap<String, Any>
@@ -83,4 +95,23 @@ interface ApiService{
         @Field("nama_karyawan") nama_karyawan: String,
         @Field("bengkels_id") bengkels_id: Int
     ): ResponseInputKaryawan
+
+    @GET("karyawan/{id}")
+    suspend fun displayKaryawan(
+        @Path("id") id: Int
+    ): ResponseDisplayKaryawan
+
+    @FormUrlEncoded
+    @POST("updateKaryawan/{bengkelId}/{id}")
+    suspend fun updateKaryawan(
+        @Path("bengkelId") bengkelId: Int,
+        @Path("id") id: Int,
+        @Field("nama_karyawan") nama_karyawan: String
+    ): ResponseUpdateKaryawan
+
+    @POST("deleteKaryawan/{bengkelId}/{id}")
+    suspend fun deleteKaryawan(
+        @Path("bengkelId") bengkelId: Int,
+        @Path("id") id: Int,
+    ): ResponseDeleteKaryawan
 }

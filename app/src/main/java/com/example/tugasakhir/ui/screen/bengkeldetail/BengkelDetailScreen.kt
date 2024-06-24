@@ -403,6 +403,7 @@ fun BengkelDetailScreen(
                         selectedTextKendaraan.toString(),
                         bengkelId,
                         userModel.id)
+                    Toast.makeText(context, "Berhasil Melakukan Reservasi", Toast.LENGTH_SHORT).show()
                 },
                 colors = ButtonDefaults.buttonColors(Color.Red),
                 shape = RoundedCornerShape(10.dp),

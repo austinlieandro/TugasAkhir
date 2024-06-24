@@ -6,6 +6,7 @@ import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
+import com.example.tugasakhir.api.response.ResponseUpdateBengkel
 import com.example.tugasakhir.api.retrofit.ApiService
 import com.example.tugasakhir.data.pref.UserPreference
 
@@ -37,6 +38,21 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         requestBody["jam_tutup"] = jam_tutup
         requestBody["users_id"] = users_id
         return apiService.daftarBengkel(requestBody)
+    }
+
+    suspend fun updateBengkel(usersId: Int, id: Int,nama_bengkel: String, lokasi_bengkel: String, number_bengkel: String, alamat_bengkel: String, gmaps_bengkel: String, jenis_kendaraan: List<String>, jenis_layanan: List<String>, hari_operasional: List<String>, jam_buka: String, jam_tutup: String): ResponseUpdateBengkel{
+        val requestBody = HashMap<Any, Any>()
+        requestBody["nama_bengkel"] = nama_bengkel
+        requestBody["lokasi_bengkel"] = lokasi_bengkel
+        requestBody["number_bengkel"] = number_bengkel
+        requestBody["alamat_bengkel"] = alamat_bengkel
+        requestBody["gmaps_bengkel"] = gmaps_bengkel
+        requestBody["jenis_kendaraan"] = jenis_kendaraan
+        requestBody["jenis_layanan"] = jenis_layanan
+        requestBody["hari_operasional"] = hari_operasional
+        requestBody["jam_buka"] = jam_buka
+        requestBody["jam_tutup"] = jam_tutup
+        return apiService.updateBengkel(usersId, id, requestBody)
     }
 
     suspend fun daftarJamOperasional(jam_operasional: List<String>, hari_operasional: List<String>, slot: List<Int>, bengkels_id: Int): ResponseJamOperasionalBengkel{
