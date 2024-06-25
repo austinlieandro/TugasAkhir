@@ -22,7 +22,7 @@ class BengkelModelFactory(private val repository: BengkelRepository, private val
                 BengkelViewModel(repository) as T
             }
             modelClass.isAssignableFrom(BengkelDetailViewModel::class.java) -> {
-                BengkelDetailViewModel(repository) as T
+                BengkelDetailViewModel(repository, repositoryUser) as T
             }
             modelClass.isAssignableFrom(DaftarBengkelViewModel::class.java) -> {
                 DaftarBengkelViewModel(repository, repositoryUser) as T

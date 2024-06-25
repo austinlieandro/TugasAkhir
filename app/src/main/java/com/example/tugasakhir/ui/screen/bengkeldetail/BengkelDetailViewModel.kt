@@ -9,26 +9,32 @@ import com.example.tugasakhir.api.response.JamOperasionalItem
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseRegister
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
+import com.example.tugasakhir.api.response.ResponseTogleFavorit
 import com.example.tugasakhir.data.repository.BengkelRepository
+import com.example.tugasakhir.data.repository.UserRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class BengkelDetailViewModel(private val repository: BengkelRepository): ViewModel() {
+class BengkelDetailViewModel(private val repository: BengkelRepository, private val repositoryUser: UserRepository): ViewModel() {
     val error = MutableLiveData<String?>()
     val status: MutableLiveData<Boolean> = MutableLiveData()
     val errorReservasi = MutableLiveData<String?>()
     val statusReservasi: MutableLiveData<Boolean> = MutableLiveData()
+    val errorTogle = MutableLiveData<String?>()
+    val statusTogle: MutableLiveData<Boolean> = MutableLiveData()
 
     val detailBengkel = MutableLiveData<Bengkel?>()
     val jamOperasionalList = MutableLiveData<List<JamOperasionalItem?>?>()
+    val statusFavorit = MutableLiveData<String?>()
 
-    fun getDetailBengkel(id: Int){
+    fun getDetailBengkel(idUser: Int, id: Int){
         viewModelScope.launch {
             try {
-                val detailBengkelResponse = repository.getDetailBengkel(id)
+                val detailBengkelResponse = repository.getDetailBengkel(idUser, id)
                 detailBengkel.postValue(detailBengkelResponse.bengkel)
                 jamOperasionalList.postValue(detailBengkelResponse.jamOperasional)
+                statusFavorit.postValue(detailBengkelResponse.statusFavorit)
                 status.postValue(true)
                 Log.d("DETAIL BENGKEL", "Bengkel: ${detailBengkel.value} Jam Operasional: ${jamOperasionalList.value}")
             }catch (e: HttpException){
@@ -63,6 +69,27 @@ class BengkelDetailViewModel(private val repository: BengkelRepository): ViewMod
                 errorReservasi.postValue("Terjadi kesalahan saat reservasi")
                 statusReservasi.postValue(false)
                 Log.d("RESERVASI", "$e")
+            }
+        }
+    }
+
+    fun togleFavorit(idUser: Int, idBengkel: Int){
+        viewModelScope.launch {
+            try {
+                val togleFavoritResponse = repositoryUser.togleFavorite(idUser, idBengkel)
+                statusTogle.postValue(true)
+                Log.d("TOGLE FAVORIT", "$togleFavoritResponse")
+            }catch (e: HttpException){
+                val jsonInString = e.response()?.errorBody()?.string()
+                val errorBody = Gson().fromJson(jsonInString, ResponseTogleFavorit::class.java)
+                val errorMessage = errorBody?.message ?: "Terjadi kesalahan saat reservasi"
+                errorTogle.postValue(errorMessage)
+                statusTogle.postValue(false)
+                Log.d("TOGLE FAVORIT", "$e")
+            } catch (e: Exception) {
+                errorTogle.postValue("Terjadi kesalahan saat reservasi")
+                statusTogle.postValue(false)
+                Log.d("TOGLE FAVORIT", "$e")
             }
         }
     }

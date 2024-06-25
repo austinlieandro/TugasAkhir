@@ -20,9 +20,11 @@ import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseRiwayatReservasi
+import com.example.tugasakhir.api.response.ResponseTogleFavorit
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateKaryawan
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
+import com.example.tugasakhir.api.response.ResponseUpdateProfile
 import okhttp3.Request
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -54,8 +56,9 @@ interface ApiService{
     @GET("bengkel")
     suspend fun displayBengkel(): ResponseDisplayBengkel
 
-    @GET("bengkel/{bengkelId}")
+    @GET("bengkel/{usersId}/{bengkelId}")
     suspend fun detailBengkel(
+        @Path("usersId") usersId: Int,
         @Path("bengkelId") bengkelId: Int
     ): ResponseDetailBengkel
 
@@ -181,4 +184,22 @@ interface ApiService{
     suspend fun favoriteBengkel(
         @Path("id") id: Int
     ): ResponseFavoritBengkel
+
+    @FormUrlEncoded
+    @POST("updateProfile/{id}")
+    suspend fun updateProfile(
+        @Path("id") id: Int,
+        @Field("name") name: String,
+        @Field("email") email: String,
+        @Field("username") username: String,
+        @Field("password") password: String,
+        @Field("phone") phone: String,
+    ): ResponseUpdateProfile
+
+    @FormUrlEncoded
+    @POST("togleFavorite")
+    suspend fun togleFavorite(
+        @Field("users_id") users_id: Int,
+        @Field("bengkels_id") bengkels_id: Int
+    ): ResponseTogleFavorit
 }

@@ -70,7 +70,7 @@ fun UpdateBengkelScreen(
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
     val detailBengkel = viewModel.detailBengkel.observeAsState()
     LaunchedEffect(userModel.bengkels_id) {
-        viewModel.getDetailBengkel(userModel.bengkels_id)
+        viewModel.getDetailBengkel(userModel.id, userModel.bengkels_id)
     }
 
     val localFocusManager = LocalFocusManager.current

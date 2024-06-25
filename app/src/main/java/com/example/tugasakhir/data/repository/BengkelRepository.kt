@@ -18,8 +18,8 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         return apiService.displayBengkel()
     }
 
-    suspend fun getDetailBengkel(id: Int): ResponseDetailBengkel {
-        return apiService.detailBengkel(id)
+    suspend fun getDetailBengkel(idUser: Int, id: Int): ResponseDetailBengkel {
+        return apiService.detailBengkel(idUser, id)
     }
 
     suspend fun reservasiBengkel(tanggal_reservasi: String, jam_reservasi: String, jeniskendala_reservasi: String, detail_reservasi: String, kendaraan_reservasi: String, bengkels_id: Int, users_id: Int): ResponseReservasiBengkel{

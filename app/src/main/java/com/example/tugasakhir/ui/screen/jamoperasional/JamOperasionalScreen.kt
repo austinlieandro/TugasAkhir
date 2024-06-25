@@ -27,6 +27,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
@@ -42,6 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhir.data.factory.BengkelModelFactory
+import com.example.tugasakhir.data.pref.UserModel
+import com.example.tugasakhir.data.pref.UserPreference
+import com.example.tugasakhir.data.pref.dataStore
 import com.example.tugasakhir.ui.theme.TugasAkhirTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -57,8 +61,11 @@ fun JamOperasionalScreen(
     modifier: Modifier = Modifier,
     viewModel: JamOperasionalViewModel = viewModel(
         factory = BengkelModelFactory.getInstance(LocalContext.current)
-    )
+    ),
+    userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ){
+    val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
+
     var jamOperasionalMulai = remember { mutableStateListOf("") }
     var jamOperasionalSelesai = remember { mutableStateListOf("") }
     var listHari = remember { mutableStateListOf<String>() }
@@ -76,8 +83,8 @@ fun JamOperasionalScreen(
 
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        viewModel.detailBengkel(bengkelId)
+    LaunchedEffect(userModel.id) {
+        viewModel.detailBengkel(userModel.id, bengkelId)
     }
 
     Surface(

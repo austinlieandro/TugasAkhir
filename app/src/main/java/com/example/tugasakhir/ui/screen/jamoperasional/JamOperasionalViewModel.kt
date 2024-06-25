@@ -21,10 +21,10 @@ class JamOperasionalViewModel(private val repository: BengkelRepository): ViewMo
 
     val detailBengkel = MutableLiveData<Bengkel?>()
 
-    fun detailBengkel(id: Int){
+    fun detailBengkel(idUser: Int, id: Int){
         viewModelScope.launch {
             try {
-                val detailResponse = repository.getDetailBengkel(id)
+                val detailResponse = repository.getDetailBengkel(idUser, id)
                 detailBengkel.postValue(detailResponse.bengkel)
                 status.postValue(true)
                 Log.d("JAM OPERASIONAL", "$detailResponse")

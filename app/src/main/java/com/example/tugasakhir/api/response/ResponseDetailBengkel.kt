@@ -17,7 +17,10 @@ data class ResponseDetailBengkel(
 	val bengkel: Bengkel? = null,
 
 	@field:SerializedName("status")
-	val status: Boolean? = null
+	val status: Boolean? = null,
+
+	@field:SerializedName("status_favorit")
+	val statusFavorit: String? = null
 ) : Parcelable
 
 @Parcelize

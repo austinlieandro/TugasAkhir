@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +20,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -42,6 +45,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
@@ -74,6 +78,7 @@ import java.util.Locale
 @Composable
 fun BengkelDetailScreen(
     navigator: DestinationsNavigator,
+    userId: Int,
     bengkelId: Int,
     modifier: Modifier = Modifier,
     viewModel: BengkelDetailViewModel = viewModel(
@@ -82,11 +87,20 @@ fun BengkelDetailScreen(
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ) {
     val bengkelState = viewModel.detailBengkel.observeAsState()
+    val statusFavorit = viewModel.statusFavorit.observeAsState()
+    var holdFavorit by remember { mutableStateOf("") }
+
+    var favorit by remember { mutableStateOf(holdFavorit == "1") }
+
     val jamOperasionalState = viewModel.jamOperasionalList.observeAsState()
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
 
-    LaunchedEffect(Unit) {
-        viewModel.getDetailBengkel(bengkelId)
+    LaunchedEffect(userModel.id) {
+        viewModel.getDetailBengkel(userId, bengkelId)
+    }
+
+    LaunchedEffect(statusFavorit.value) {
+        favorit = statusFavorit.value == "0"
     }
 
     val context = LocalContext.current
@@ -112,7 +126,6 @@ fun BengkelDetailScreen(
             .format(pickerDate)
     } }
 
-
     Surface(
         modifier = modifier
             .fillMaxSize()
@@ -123,14 +136,34 @@ fun BengkelDetailScreen(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            Text(
-                text = bengkelState.value?.namaBengkel ?: "",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "${bengkelState.value?.lokasiBengkel}, ${bengkelState.value?.alamatBengkel}"
-            )
+            Row {
+                Column {
+                    Text(
+                        text = bengkelState.value?.namaBengkel ?: "",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "${bengkelState.value?.lokasiBengkel}, ${bengkelState.value?.alamatBengkel}"
+                    )
+                }
+                Box(
+                    contentAlignment = Alignment.BottomEnd,
+                    modifier = modifier
+                        .padding(top = 16.dp, end = 16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Icon(
+                        imageVector = if (favorit) Icons.Outlined.Bookmarks else Icons.Filled.Bookmarks,
+                        contentDescription = "Favorit Bengkel",
+                        modifier = modifier
+                            .clickable {
+                                viewModel.togleFavorit(userModel.id, bengkelId)
+                                favorit = !favorit
+                            }
+                    )
+                }
+            }
             Text(
                 text = bengkelState.value?.numberBengkel ?: ""
             )

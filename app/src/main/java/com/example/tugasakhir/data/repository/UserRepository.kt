@@ -8,7 +8,9 @@ import com.example.tugasakhir.api.response.ResponseInputKendaraan
 import com.example.tugasakhir.api.response.ResponseLogin
 import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
+import com.example.tugasakhir.api.response.ResponseTogleFavorit
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
+import com.example.tugasakhir.api.response.ResponseUpdateProfile
 import com.example.tugasakhir.api.retrofit.ApiService
 import com.example.tugasakhir.data.pref.UserModel
 import com.example.tugasakhir.data.pref.UserPreference
@@ -45,6 +47,14 @@ class UserRepository(private val apiService: ApiService, private val userPrefere
 
     suspend fun favoriteBengkel(id: Int): ResponseFavoritBengkel{
         return apiService.favoriteBengkel(id)
+    }
+
+    suspend fun updateProfile(id: Int, name: String, email: String, username: String, password: String, phone: String): ResponseUpdateProfile{
+        return apiService.updateProfile(id, name, email, username, password, phone)
+    }
+
+    suspend fun togleFavorite(users_id: Int, bengkels_id: Int): ResponseTogleFavorit{
+        return apiService.togleFavorite(users_id, bengkels_id)
     }
 
     suspend fun profile(id: Int): ResponseProfile{

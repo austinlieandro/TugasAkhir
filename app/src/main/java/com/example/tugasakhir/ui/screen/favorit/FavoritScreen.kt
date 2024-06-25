@@ -95,7 +95,7 @@ fun FavoritScreen(
                             numberBengkel = data?.numberBengkel ?: "",
                             modifier = modifier
                                 .clickable {
-                                    data?.id?.let { navigator.navigate(BengkelDetailScreenDestination(bengkelId = it)) }
+                                    data?.id?.let { navigator.navigate(BengkelDetailScreenDestination(userModel.id, bengkelId = it)) }
                                 }
                                 .animateItemPlacement(tween(durationMillis = 100))
                         )
