@@ -1,10 +1,13 @@
 package com.example.tugasakhir.api.retrofit
 
+import com.example.tugasakhir.api.response.ResponseAsignKaryawan
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDeleteKaryawan
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
+import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
+import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseInputKaryawan
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
@@ -120,4 +123,22 @@ interface ApiService{
     suspend fun displayReservasiBengkel(
         @Path("bengkelId") bengkelId: Int
     ): ResponseDisplayReservasiBengkel
+
+    @GET("detailReservasiBengkel/{id}")
+    suspend fun detailReservasiBengkel(
+        @Path("id") id: Int
+    ): ResponseDetailReservasiBengkel
+
+    @FormUrlEncoded
+    @POST("assignKaryawan")
+    suspend fun assignKaryawan(
+        @Field("id") id: Int,
+        @Field("karyawan_id") karyawan_id: Int,
+        @Field("status_reservasi") status_reservasi: String
+    ): ResponseAsignKaryawan
+
+    @GET("kendaraan/{id}")
+    suspend fun displayKendaraan(
+        @Path("id") id: Int
+    ): ResponseDisplayKendaraan
 }

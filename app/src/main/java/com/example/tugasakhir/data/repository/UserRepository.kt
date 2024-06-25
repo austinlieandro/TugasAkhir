@@ -1,5 +1,6 @@
 package com.example.tugasakhir.data.repository
 
+import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
 import com.example.tugasakhir.api.response.ResponseLogin
 import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
@@ -15,6 +16,10 @@ class UserRepository(private val apiService: ApiService, private val userPrefere
 
     suspend fun login(username: String, password: String): ResponseLogin{
         return apiService.login(username, password)
+    }
+
+    suspend fun displayKendaraan(id: Int): ResponseDisplayKendaraan{
+        return apiService.displayKendaraan(id)
     }
 
     suspend fun profile(id: Int): ResponseProfile{

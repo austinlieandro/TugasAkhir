@@ -1,8 +1,10 @@
 package com.example.tugasakhir.data.repository
 
 import android.util.Log
+import com.example.tugasakhir.api.response.ResponseAsignKaryawan
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
+import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
@@ -67,6 +69,14 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
 
     suspend fun displayReservasiBengkel(bengkelId: Int): ResponseDisplayReservasiBengkel{
         return apiService.displayReservasiBengkel(bengkelId)
+    }
+
+    suspend fun detailReservasiBengkel(id: Int): ResponseDetailReservasiBengkel{
+        return apiService.detailReservasiBengkel(id)
+    }
+
+    suspend fun assignReservasi(id: Int, karyawan_id: Int, status_reservasi: String): ResponseAsignKaryawan{
+        return apiService.assignKaryawan(id, karyawan_id, status_reservasi)
     }
 
     companion object{

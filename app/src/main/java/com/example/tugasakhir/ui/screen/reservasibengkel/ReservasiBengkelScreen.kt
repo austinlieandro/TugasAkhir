@@ -23,10 +23,13 @@ import com.example.tugasakhir.data.factory.BengkelModelFactory
 import com.example.tugasakhir.ui.components.reservasibengkel.ReservasiBengkelItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.DetailReservasiBengkelScreenDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
 @Composable
 fun ReservasiBengkelScreen(
+    navigator: DestinationsNavigator,
     bengkelId: Int,
     modifier: Modifier = Modifier,
     viewModel: ReservasiBengkelViewModel = viewModel(
@@ -72,7 +75,7 @@ fun ReservasiBengkelScreen(
                         tanggalReservasi = data?.tanggalReservasi ?: "",
                         modifier = modifier
                             .clickable {
-
+                                navigator.navigate(DetailReservasiBengkelScreenDestination(bengkelId, data?.id ?: 0))
                             }
                     )
                 }

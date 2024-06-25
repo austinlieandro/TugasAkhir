@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.tugasakhir.data.repository.UserRepository
 import com.example.tugasakhir.di.Injection
+import com.example.tugasakhir.ui.screen.kendaraan.KendaraanViewModel
 import com.example.tugasakhir.ui.screen.login.LoginViewModel
 import com.example.tugasakhir.ui.screen.profile.ProfileViewModel
 import com.example.tugasakhir.ui.screen.register.RegisterViewModel
@@ -24,6 +25,9 @@ class UserModelFactory(private val repository: UserRepository): ViewModelProvide
             }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(KendaraanViewModel::class.java) -> {
+                KendaraanViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }
