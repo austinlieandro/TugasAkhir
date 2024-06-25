@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
+import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
@@ -62,6 +63,10 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         requestBody["slot"] = slot
         requestBody["bengkels_id"] = bengkels_id
         return apiService.daftarJamOperasional(requestBody)
+    }
+
+    suspend fun displayReservasiBengkel(bengkelId: Int): ResponseDisplayReservasiBengkel{
+        return apiService.displayReservasiBengkel(bengkelId)
     }
 
     companion object{

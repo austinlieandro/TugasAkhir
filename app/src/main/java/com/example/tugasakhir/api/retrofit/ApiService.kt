@@ -5,6 +5,7 @@ import com.example.tugasakhir.api.response.ResponseDeleteKaryawan
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
+import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseInputKaryawan
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
 import com.example.tugasakhir.api.response.ResponseLogin
@@ -114,4 +115,9 @@ interface ApiService{
         @Path("bengkelId") bengkelId: Int,
         @Path("id") id: Int,
     ): ResponseDeleteKaryawan
+
+    @GET("showReservasiBengkel/{bengkelId}")
+    suspend fun displayReservasiBengkel(
+        @Path("bengkelId") bengkelId: Int
+    ): ResponseDisplayReservasiBengkel
 }

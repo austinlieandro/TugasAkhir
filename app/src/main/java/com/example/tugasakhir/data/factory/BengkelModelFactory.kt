@@ -10,6 +10,7 @@ import com.example.tugasakhir.ui.screen.bengkel.BengkelViewModel
 import com.example.tugasakhir.ui.screen.bengkeldetail.BengkelDetailViewModel
 import com.example.tugasakhir.ui.screen.daftarbengkel.DaftarBengkelViewModel
 import com.example.tugasakhir.ui.screen.jamoperasional.JamOperasionalViewModel
+import com.example.tugasakhir.ui.screen.reservasibengkel.ReservasiBengkelViewModel
 import com.example.tugasakhir.ui.screen.updatebengkel.UpdateBengkelViewModel
 
 class BengkelModelFactory(private val repository: BengkelRepository, private val repositoryUser: UserRepository): ViewModelProvider.NewInstanceFactory() {
@@ -29,6 +30,9 @@ class BengkelModelFactory(private val repository: BengkelRepository, private val
             }
             modelClass.isAssignableFrom(UpdateBengkelViewModel::class.java) -> {
                 UpdateBengkelViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(ReservasiBengkelViewModel::class.java) -> {
+                ReservasiBengkelViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }

@@ -28,6 +28,7 @@ import com.example.tugasakhir.ui.theme.TugasAkhirTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.KarayawanScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.ReservasiBengkelScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.UpdateBengkelScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -57,7 +58,7 @@ fun DasbboardScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .clickable {
-
+                        navigator.navigate(ReservasiBengkelScreenDestination(idBengkel))
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
