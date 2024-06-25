@@ -3,13 +3,16 @@ package com.example.tugasakhir.api.retrofit
 import com.example.tugasakhir.api.response.ResponseAsignKaryawan
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDeleteKaryawan
+import com.example.tugasakhir.api.response.ResponseDeleteKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
+import com.example.tugasakhir.api.response.ResponseDetailKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
 import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseInputKaryawan
+import com.example.tugasakhir.api.response.ResponseInputKendaraan
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
 import com.example.tugasakhir.api.response.ResponseLogin
 import com.example.tugasakhir.api.response.ResponseProfile
@@ -18,6 +21,7 @@ import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseRiwayatReservasi
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateKaryawan
+import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
 import okhttp3.Request
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -141,4 +145,34 @@ interface ApiService{
     suspend fun displayKendaraan(
         @Path("id") id: Int
     ): ResponseDisplayKendaraan
+
+    @FormUrlEncoded
+    @POST("kendaraan")
+    suspend fun inputKendaraan(
+        @Field("jenis_kendaraan") jenis_kendaraan: String,
+        @Field("plat_kendaraan") plat_kendaraan: String,
+        @Field("merek_kendaraan") merek_kendaraan: String,
+        @Field("users_id") users_id: Int
+    ): ResponseInputKendaraan
+
+    @GET("detailKendaraan/{usersId}/{kendaraan_id}")
+    suspend fun detailKendaraan(
+        @Path("usersId") usersId: Int,
+        @Path("kendaraan_id") kendaraan_id: Int,
+    ): ResponseDetailKendaraan
+
+    @FormUrlEncoded
+    @POST("kendaraan/{usersId}/{kendaraan_id}")
+    suspend fun updateKendaraan(
+        @Path("usersId") usersId: Int,
+        @Path("kendaraan_id") kendaraan_id: Int,
+        @Field("plat_kendaraan") plat_kendaraan: String,
+        @Field("merek_kendaraan") merek_kendaraan: String
+    ): ResponseUpdateKendaraan
+
+    @POST("deleteKendaraan/{usersId}/{kendaraan_id}")
+    suspend fun deleteKendaraan(
+        @Path("usersId") usersId: Int,
+        @Path("kendaraan_id") kendaraan_id: Int,
+    ): ResponseDeleteKendaraan
 }

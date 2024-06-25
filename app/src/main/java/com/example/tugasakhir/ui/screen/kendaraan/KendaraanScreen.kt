@@ -33,6 +33,8 @@ import com.example.tugasakhir.data.factory.UserModelFactory
 import com.example.tugasakhir.ui.components.kendaraan.KendaraanItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.DetailKendaraanScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.InputKendaraanScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
@@ -82,7 +84,7 @@ fun KendaraanScreen(
                         contentDescription = "Add Kendaraan",
                         modifier = modifier
                             .clickable {
-
+                                navigator.navigate(InputKendaraanScreenDestination)
                             }
                     )
                 }
@@ -95,12 +97,45 @@ fun KendaraanScreen(
                 modifier = modifier
                     .padding(horizontal = 16.dp)
             ){
+                item {
+                    Row(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "List Kendaraan",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = modifier
+                                .padding(8.dp)
+                        )
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.BottomEnd
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Add Kendaraan",
+                                modifier = modifier
+                                    .clickable {
+                                        navigator.navigate(InputKendaraanScreenDestination)
+                                    }
+                            )
+                        }
+                    }
+                }
                 if (statusState) {
                     items(kendaraanListState.value ?: emptyList()){ data ->
                         KendaraanItem(
                             jenisKendaraan = data?.jenisKendaraan ?: "",
                             merekKendaraan = data?.merekKendaraan ?: "",
-                            platKendaraan = data?.platKendaraan ?: ""
+                            platKendaraan = data?.platKendaraan ?: "",
+                            modifier = modifier
+                                .clickable {
+                                    navigator.navigate(DetailKendaraanScreenDestination(data?.id ?: 0, idUser))
+                                }
                         )
                     }
                 }
