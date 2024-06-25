@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
@@ -75,17 +77,22 @@ fun ProfileScreen(
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 modifier = modifier
-                    .padding(start = 16.dp)
+                    .padding(start = 16.dp, top = 8.dp)
             )
             Text(
                 text = profileState.value?.phone ?: "",
+                fontSize = 18.sp,
                 modifier = modifier
                     .padding(start = 16.dp)
             )
             Text(
                 text = profileState.value?.userBengkel ?: "",
+                fontSize = 18.sp,
                 modifier = modifier
-                    .padding(start = 16.dp)
+                    .padding(start = 16.dp, bottom = 16.dp)
+            )
+            Divider(
+                color = Color.Black
             )
             Row(
                 modifier = modifier
@@ -160,9 +167,9 @@ fun ProfileScreen(
                     .padding(start = 16.dp, end = 16.dp, top = 12.dp)
                     .fillMaxWidth()
                     .clickable {
-                        if (profileState.value?.userBengkel?.toLowerCase() == "pelanggan"){
+                        if (profileState.value?.userBengkel?.toLowerCase() == "pelanggan") {
                             navigator.navigate(DaftarBengkelScreenDestination)
-                        }else {
+                        } else {
                             navigator.navigate(DasbboardScreenDestination(idBengkel = userModel.bengkels_id))
                         }
                     },
@@ -181,6 +188,40 @@ fun ProfileScreen(
                         }else {
                             "Dashboard bengkel"
                     },
+                    color = colorScheme.onSurface,
+                    modifier = modifier
+                        .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                )
+                Box(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.NavigateNext,
+                        contentDescription = "Navigate to Daftar Bengkel",
+                        tint = colorScheme.onSurface,
+                    )
+                }
+            }
+            Row(
+                modifier = modifier
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                    .fillMaxWidth()
+                    .clickable {
+
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Bookmarks,
+                    contentDescription = "Icon Favorit Bengkel",
+                    tint = colorScheme.onSurface,
+                    modifier = modifier
+                        .padding(0.dp, 10.dp)
+                )
+                Text(
+                    text = "Favorit Bengkel",
                     color = colorScheme.onSurface,
                     modifier = modifier
                         .padding(8.dp, 0.dp, 8.dp, 0.dp)
