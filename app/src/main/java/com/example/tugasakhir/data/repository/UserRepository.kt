@@ -3,6 +3,7 @@ package com.example.tugasakhir.data.repository
 import com.example.tugasakhir.api.response.ResponseDeleteKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
+import com.example.tugasakhir.api.response.ResponseFavoritBengkel
 import com.example.tugasakhir.api.response.ResponseInputKendaraan
 import com.example.tugasakhir.api.response.ResponseLogin
 import com.example.tugasakhir.api.response.ResponseProfile
@@ -40,6 +41,10 @@ class UserRepository(private val apiService: ApiService, private val userPrefere
 
     suspend fun deleteKendaraan(usersId: Int, kendaraan_id: Int): ResponseDeleteKendaraan{
         return apiService.deleteKendaraan(usersId, kendaraan_id)
+    }
+
+    suspend fun favoriteBengkel(id: Int): ResponseFavoritBengkel{
+        return apiService.favoriteBengkel(id)
     }
 
     suspend fun profile(id: Int): ResponseProfile{

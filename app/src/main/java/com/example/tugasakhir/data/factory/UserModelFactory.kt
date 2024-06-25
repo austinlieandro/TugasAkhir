@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tugasakhir.data.repository.UserRepository
 import com.example.tugasakhir.di.Injection
 import com.example.tugasakhir.ui.screen.detailkendaraan.DetailKendaraanViewModel
+import com.example.tugasakhir.ui.screen.favorit.FavoritViewModel
 import com.example.tugasakhir.ui.screen.inputkendaraan.InputKendaraanViewModel
 import com.example.tugasakhir.ui.screen.kendaraan.KendaraanViewModel
 import com.example.tugasakhir.ui.screen.login.LoginViewModel
@@ -36,6 +37,9 @@ class UserModelFactory(private val repository: UserRepository): ViewModelProvide
             }
             modelClass.isAssignableFrom(DetailKendaraanViewModel::class.java) -> {
                 DetailKendaraanViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(FavoritViewModel::class.java) -> {
+                FavoritViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }

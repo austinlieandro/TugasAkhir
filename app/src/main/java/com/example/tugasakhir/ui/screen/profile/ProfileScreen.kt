@@ -45,6 +45,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.DaftarBengkelScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.DasbboardScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.FavoritScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.KendaraanScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.WelcomeScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -209,7 +210,7 @@ fun ProfileScreen(
                     .padding(start = 16.dp, end = 16.dp, top = 12.dp)
                     .fillMaxWidth()
                     .clickable {
-
+                        navigator.navigate(FavoritScreenDestination)
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {

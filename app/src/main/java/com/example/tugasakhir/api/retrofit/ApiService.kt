@@ -11,6 +11,7 @@ import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
 import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
+import com.example.tugasakhir.api.response.ResponseFavoritBengkel
 import com.example.tugasakhir.api.response.ResponseInputKaryawan
 import com.example.tugasakhir.api.response.ResponseInputKendaraan
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
@@ -175,4 +176,9 @@ interface ApiService{
         @Path("usersId") usersId: Int,
         @Path("kendaraan_id") kendaraan_id: Int,
     ): ResponseDeleteKendaraan
+
+    @GET("displayUserFavorit/{id}")
+    suspend fun favoriteBengkel(
+        @Path("id") id: Int
+    ): ResponseFavoritBengkel
 }
