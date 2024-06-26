@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhir.api.response.DaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
-import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.data.pref.UserModel
 import com.example.tugasakhir.data.repository.BengkelRepository
 import com.example.tugasakhir.data.repository.UserRepository

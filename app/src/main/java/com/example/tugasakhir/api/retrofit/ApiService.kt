@@ -26,15 +26,12 @@ import com.example.tugasakhir.api.response.ResponseUpdateJamOperasional
 import com.example.tugasakhir.api.response.ResponseUpdateKaryawan
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdateProfile
-import okhttp3.Request
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
-import java.util.HashMap
 
 interface ApiService{
     @FormUrlEncoded

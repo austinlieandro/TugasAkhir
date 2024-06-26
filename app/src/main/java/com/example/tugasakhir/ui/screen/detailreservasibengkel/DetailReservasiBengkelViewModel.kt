@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.tugasakhir.api.response.DetailReservasi
 import com.example.tugasakhir.api.response.KaryawanItem
 import com.example.tugasakhir.api.response.ResponseAsignKaryawan
-import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
 import com.example.tugasakhir.data.repository.BengkelRepository

@@ -1,6 +1,5 @@
 package com.example.tugasakhir.data.repository
 
-import android.util.Log
 import com.example.tugasakhir.api.response.ResponseAsignKaryawan
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDetailBengkel

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.network.HttpException
 import com.example.tugasakhir.api.response.ResponseRegister
 import com.example.tugasakhir.data.repository.UserRepository
 import com.google.gson.Gson

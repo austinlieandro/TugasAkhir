@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.tugasakhir.api.response.DetailKendaraan
 import com.example.tugasakhir.api.response.ResponseDeleteKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailKendaraan
-import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
 import com.example.tugasakhir.data.repository.UserRepository
 import com.google.gson.Gson
