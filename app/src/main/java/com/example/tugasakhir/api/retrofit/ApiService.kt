@@ -22,6 +22,7 @@ import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseRiwayatReservasi
 import com.example.tugasakhir.api.response.ResponseTogleFavorit
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
+import com.example.tugasakhir.api.response.ResponseUpdateJamOperasional
 import com.example.tugasakhir.api.response.ResponseUpdateKaryawan
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdateProfile
@@ -71,7 +72,8 @@ interface ApiService{
         @Field("detail_reservasi") detail_reservasi: String,
         @Field("kendaraan_reservasi") kendaraan_reservasi:String,
         @Field("bengkels_id") bengkels_id: Int,
-        @Field("users_id") users_id: Int
+        @Field("users_id") users_id: Int,
+        @Field("kendaraan_id") kendaraan_id: Int,
     ): ResponseReservasiBengkel
 
     @GET("showReservasiUser/{usersId}")
@@ -202,4 +204,13 @@ interface ApiService{
         @Field("users_id") users_id: Int,
         @Field("bengkels_id") bengkels_id: Int
     ): ResponseTogleFavorit
+
+    @FormUrlEncoded
+    @POST("updateOperasional/{bengkelId}/{id}")
+    suspend fun updateJamOperasional(
+        @Path("bengkelId") bengkelId: Int,
+        @Path("id") id: Int,
+        @Field("jam_operasional") jam_operasional: String,
+        @Field("slot") slot: Int
+    ): ResponseUpdateJamOperasional
 }

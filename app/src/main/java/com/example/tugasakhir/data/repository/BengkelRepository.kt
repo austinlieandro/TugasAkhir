@@ -10,6 +10,7 @@ import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
+import com.example.tugasakhir.api.response.ResponseUpdateJamOperasional
 import com.example.tugasakhir.api.retrofit.ApiService
 import com.example.tugasakhir.data.pref.UserPreference
 
@@ -22,9 +23,8 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         return apiService.detailBengkel(idUser, id)
     }
 
-    suspend fun reservasiBengkel(tanggal_reservasi: String, jam_reservasi: String, jeniskendala_reservasi: String, detail_reservasi: String, kendaraan_reservasi: String, bengkels_id: Int, users_id: Int): ResponseReservasiBengkel{
-        Log.d("DEBUG", "$tanggal_reservasi, $jam_reservasi, $jeniskendala_reservasi, $detail_reservasi, $kendaraan_reservasi, $bengkels_id, $users_id")
-        return apiService.reservasiBengkel(tanggal_reservasi, jam_reservasi, jeniskendala_reservasi, detail_reservasi, kendaraan_reservasi, bengkels_id, users_id)
+    suspend fun reservasiBengkel(tanggal_reservasi: String, jam_reservasi: String, jeniskendala_reservasi: String, detail_reservasi: String, kendaraan_reservasi: String, bengkels_id: Int, users_id: Int, kendaraan_id: Int): ResponseReservasiBengkel{
+        return apiService.reservasiBengkel(tanggal_reservasi, jam_reservasi, jeniskendala_reservasi, detail_reservasi, kendaraan_reservasi, bengkels_id, users_id, kendaraan_id)
     }
 
     suspend fun daftarBengkel(nama_bengkel: String, lokasi_bengkel: String, number_bengkel: String, alamat_bengkel: String, gmaps_bengkel: String, jenis_kendaraan: List<String>, jenis_layanan: List<String>, hari_operasional: List<String>, jam_buka: String, jam_tutup: String, users_id: Int): ResponseDaftarBengkel{
@@ -77,6 +77,10 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
 
     suspend fun assignReservasi(id: Int, karyawan_id: Int, status_reservasi: String): ResponseAsignKaryawan{
         return apiService.assignKaryawan(id, karyawan_id, status_reservasi)
+    }
+
+    suspend fun updateJamOperasional(bengkelId: Int, id: Int, jam_operasional: String, slot: Int): ResponseUpdateJamOperasional{
+        return apiService.updateJamOperasional(bengkelId, id, jam_operasional, slot)
     }
 
     companion object{

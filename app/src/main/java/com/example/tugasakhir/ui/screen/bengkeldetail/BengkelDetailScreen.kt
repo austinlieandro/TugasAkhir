@@ -88,8 +88,8 @@ fun BengkelDetailScreen(
 ) {
     val bengkelState = viewModel.detailBengkel.observeAsState()
     val statusFavorit = viewModel.statusFavorit.observeAsState()
+    val kendaraanState = viewModel.kendaraanList.observeAsState()
     var holdFavorit by remember { mutableStateOf("") }
-
     var favorit by remember { mutableStateOf(holdFavorit == "1") }
 
     val jamOperasionalState = viewModel.jamOperasionalList.observeAsState()
@@ -97,6 +97,7 @@ fun BengkelDetailScreen(
 
     LaunchedEffect(userModel.id) {
         viewModel.getDetailBengkel(userId, bengkelId)
+        viewModel.getKendaraan(userId)
     }
 
     LaunchedEffect(statusFavorit.value) {
@@ -106,13 +107,18 @@ fun BengkelDetailScreen(
     val context = LocalContext.current
 
     var selectedTextKendaraan by remember { mutableStateOf("") }
+    var selectedTextKendaraanUser by remember { mutableStateOf("") }
     var selectedTextLayanan by remember { mutableStateOf("") }
     var selectedTextJamOperasional by remember { mutableStateOf("") }
+
     var selectedHariOperasional by remember { mutableStateOf<String?>(null) }
 
     var isExpendedKendaraan by remember { mutableStateOf(false) }
+    var isExpendedKendaraanUser by remember { mutableStateOf(false) }
     var isExpendedLayanan by remember { mutableStateOf(false) }
     var isExpendedJamOperasional by remember { mutableStateOf(false) }
+
+    var idSelectedKendaraanUser by remember { mutableStateOf(0) }
 
     val localFocusManager = LocalFocusManager.current
 
@@ -226,7 +232,58 @@ fun BengkelDetailScreen(
                     }
                 }
             }
+            ExposedDropdownMenuBox(
+                expanded = isExpendedKendaraanUser,
+                onExpandedChange = { isExpendedKendaraanUser = !isExpendedKendaraanUser }
+            ) {
+                val filteredKendaraanUser = kendaraanState?.let { kendaraanList ->
+                    kendaraanList.value?.filter { kendaraan ->
+                        kendaraan?.jenisKendaraan.equals(selectedTextKendaraan, ignoreCase = true)
+                    }
+                }
+                TextField(
+                    value = selectedTextKendaraanUser,
+                    onValueChange = {},
+                    readOnly = true,
+                    shape = RoundedCornerShape(10.dp),
+                    label = { Text("Pilih Kendaraan Kamu") },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        containerColor = Color.White,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    ),
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKendaraanUser)
+                    },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                )
 
+                ExposedDropdownMenu(
+                    expanded = isExpendedKendaraanUser,
+                    onDismissRequest = { isExpendedKendaraanUser = false },
+                    modifier = Modifier
+                        .background(Color.White)
+                ) {
+                    filteredKendaraanUser?.forEach { option ->
+                        var teksKendaraan = "${option?.merekKendaraan ?: ""} - ${option?.platKendaraan ?: ""}"
+                        DropdownMenuItem(
+                            text = { Text(teksKendaraan) },
+                            onClick = {
+                                option?.id?.let { idSelectedKendaraanUser = it }
+                                teksKendaraan.let { selectedTextKendaraanUser = it }
+                                isExpendedKendaraanUser = false
+                            },
+                            modifier = Modifier
+                                .background(Color.White)
+                        )
+                    }
+                }
+            }
             ExposedDropdownMenuBox(
                 expanded = isExpendedLayanan,
                 onExpandedChange = { isExpendedLayanan = !isExpendedLayanan }
@@ -435,7 +492,8 @@ fun BengkelDetailScreen(
                         kendala.toString(),
                         selectedTextKendaraan.toString(),
                         bengkelId,
-                        userModel.id)
+                        userModel.id,
+                        idSelectedKendaraanUser)
                     Toast.makeText(context, "Berhasil Melakukan Reservasi", Toast.LENGTH_SHORT).show()
                 },
                 colors = ButtonDefaults.buttonColors(Color.Red),

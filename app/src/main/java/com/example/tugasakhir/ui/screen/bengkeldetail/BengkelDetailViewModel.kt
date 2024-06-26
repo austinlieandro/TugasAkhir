@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhir.api.response.Bengkel
 import com.example.tugasakhir.api.response.JamOperasionalItem
+import com.example.tugasakhir.api.response.KendaraanItem
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
+import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
 import com.example.tugasakhir.api.response.ResponseRegister
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseTogleFavorit
@@ -23,10 +25,14 @@ class BengkelDetailViewModel(private val repository: BengkelRepository, private 
     val statusReservasi: MutableLiveData<Boolean> = MutableLiveData()
     val errorTogle = MutableLiveData<String?>()
     val statusTogle: MutableLiveData<Boolean> = MutableLiveData()
+    val errorKendaraan = MutableLiveData<String?>()
+    val statusKendaraan: MutableLiveData<Boolean> = MutableLiveData()
 
     val detailBengkel = MutableLiveData<Bengkel?>()
     val jamOperasionalList = MutableLiveData<List<JamOperasionalItem?>?>()
     val statusFavorit = MutableLiveData<String?>()
+
+    val kendaraanList = MutableLiveData<List<KendaraanItem?>?>()
 
     fun getDetailBengkel(idUser: Int, id: Int){
         viewModelScope.launch {
@@ -52,10 +58,10 @@ class BengkelDetailViewModel(private val repository: BengkelRepository, private 
         }
     }
 
-    fun reservasiBengkel(tanggal_reservasi: String, jam_reservasi: String, jeniskendala_reservasi: String, detail_reservasi: String, kendaraan_reservasi: String, bengkels_id: Int, users_id: Int){
+    fun reservasiBengkel(tanggal_reservasi: String, jam_reservasi: String, jeniskendala_reservasi: String, detail_reservasi: String, kendaraan_reservasi: String, bengkels_id: Int, users_id: Int, kendaraan_id: Int){
         viewModelScope.launch {
             try {
-                val reservasiResponse = repository.reservasiBengkel(tanggal_reservasi, jam_reservasi, jeniskendala_reservasi, detail_reservasi, kendaraan_reservasi, bengkels_id, users_id)
+                val reservasiResponse = repository.reservasiBengkel(tanggal_reservasi, jam_reservasi, jeniskendala_reservasi, detail_reservasi, kendaraan_reservasi, bengkels_id, users_id, kendaraan_id)
                 statusReservasi.postValue(true)
                 Log.d("RESERVASI", "$reservasiResponse")
             }catch (e: HttpException){
@@ -90,6 +96,28 @@ class BengkelDetailViewModel(private val repository: BengkelRepository, private 
                 errorTogle.postValue("Terjadi kesalahan saat reservasi")
                 statusTogle.postValue(false)
                 Log.d("TOGLE FAVORIT", "$e")
+            }
+        }
+    }
+
+    fun getKendaraan(id: Int){
+        viewModelScope.launch {
+            try {
+                val kendaraanResponse = repositoryUser.displayKendaraan(id)
+                kendaraanList.postValue(kendaraanResponse.bengkel)
+                statusKendaraan.postValue(true)
+                Log.d("KENDARAAN", "$kendaraanResponse")
+            }catch (e: HttpException){
+                val jsonInString = e.response()?.errorBody()?.string()
+                Log.e("KENDARAAN", "Error response: $jsonInString")
+                val errorBody = Gson().fromJson(jsonInString, ResponseDisplayKendaraan::class.java)
+                errorKendaraan.postValue(errorBody.message)
+                statusKendaraan.postValue(false)
+                Log.d("KENDARAAN", "$e")
+            }catch (e: Exception) {
+                errorKendaraan.postValue("Terjadi kesalahan saat membuat data")
+                statusKendaraan.postValue(false)
+                Log.d("KENDARAAN", "$e")
             }
         }
     }

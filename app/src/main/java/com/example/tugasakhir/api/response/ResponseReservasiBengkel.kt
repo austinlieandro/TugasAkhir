@@ -51,5 +51,8 @@ data class BengkelReservasi(
 	val jeniskendalaReservasi: String? = null,
 
 	@field:SerializedName("bengkels_id")
-	val bengkelsId: Int? = null
+	val bengkelsId: Int? = null,
+
+	@field:SerializedName("kendaraan_id")
+	val kendaraanId: Int? = null
 ) : Parcelable

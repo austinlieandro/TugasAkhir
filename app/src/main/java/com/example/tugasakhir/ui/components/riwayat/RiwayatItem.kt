@@ -47,6 +47,8 @@ fun RiwayatItem(
     tanggalReservasi: String,
     jamReservasi: String,
     gmapsBengkel: String,
+    merekKendaraan: String,
+    platKendaraan: String,
     modifier: Modifier = Modifier
 ){
     val context = LocalContext.current
@@ -97,8 +99,21 @@ fun RiwayatItem(
                 }
             }
             Divider(
+                color = Color.Black,
                 modifier = modifier
                     .padding(vertical = 8.dp)
+            )
+            Text(
+                text = "Merek Kendaraan: $merekKendaraan",
+                fontSize = 18.sp,
+                modifier = modifier
+                    .padding(start = 16.dp, bottom = 8.dp)
+            )
+            Text(
+                text = "Plat Kendaraan: $platKendaraan",
+                fontSize = 18.sp,
+                modifier = modifier
+                    .padding(start = 16.dp, bottom = 8.dp)
             )
             Text(
                 text = "Tanggal: $tanggalReservasi",
@@ -124,8 +139,10 @@ fun RiwayatItem(
                         .clip(RoundedCornerShape(12.dp))
                         .background(
                             if (statusBengkel.lowercase() == "menunggu") {
+                                Color.Red
+                            } else if(statusBengkel.lowercase() == "proses") {
                                 Color.Yellow
-                            } else {
+                            }else{
                                 Color.Green
                             }
                         )
@@ -134,6 +151,12 @@ fun RiwayatItem(
                     Text(
                         text = statusBengkel,
                         fontSize = 18.sp,
+                        color =
+                        if (statusBengkel.lowercase() == "menunggu") {
+                            Color.White
+                        } else{
+                            Color.Black
+                        },
                     )
                 }
             }
@@ -153,7 +176,9 @@ fun PreviewRiwayatItem() {
             statusBengkel = "Menunggu",
             tanggalReservasi = "22-06-2024",
             jamReservasi = "13.00 - 15.00",
-            gmapsBengkel = ""
+            gmapsBengkel = "",
+            "Honda",
+            "L 5555 QM"
         )
     }
 }

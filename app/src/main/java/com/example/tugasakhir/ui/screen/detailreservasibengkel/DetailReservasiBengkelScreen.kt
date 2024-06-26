@@ -54,17 +54,24 @@ fun DetailReservasiBengkelScreen(
     val detailReservasiState = viewModel.detailReservasi.observeAsState()
     val listKaryawanState = viewModel.karyawanList.observeAsState()
     var isExpendedKaryawan by remember { mutableStateOf(false) }
-    var selectedTextKaryawan by remember { mutableStateOf(detailReservasiState.value?.namaKaryawan) }
+    var selectedTextKaryawan by remember { mutableStateOf("") }
     var isExpendedStatus by remember { mutableStateOf(false) }
     val listStatus = remember { mutableListOf("Menunggu", "Proses", "Selesai") }
-    var selectedTextStatus by remember { mutableStateOf(detailReservasiState.value?.statusReservasi) }
+    var selectedTextStatus by remember { mutableStateOf("") }
     var idSelectedKarywan by remember { mutableStateOf(0) }
 
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(reservasiId) {
         viewModel.detailReservasiBengkel(reservasiId)
         viewModel.getKaryawan(bengkelId)
+    }
+
+    LaunchedEffect(detailReservasiState.value) {
+        detailReservasiState.value?.let { detail ->
+            selectedTextKaryawan = detail.namaKaryawan ?: ""
+            selectedTextStatus = detail.statusReservasi ?: ""
+        }
     }
 
     Surface(
@@ -99,6 +106,16 @@ fun DetailReservasiBengkelScreen(
                     .padding(bottom = 8.dp)
             )
             Text(
+                text = "Merek kendaraan pelanggan: ${detailReservasiState.value?.merekKendaraan}",
+                modifier = modifier
+                    .padding(bottom = 8.dp)
+            )
+            Text(
+                text = "Plat kendaraan pelanggan: ${detailReservasiState.value?.platKendaraan}",
+                modifier = modifier
+                    .padding(bottom = 8.dp)
+            )
+            Text(
                 text = "Kendala Pelanggan: ${detailReservasiState.value?.jeniskendalaReservasi}",
                 modifier = modifier
                     .padding(bottom = 8.dp)
@@ -123,7 +140,7 @@ fun DetailReservasiBengkelScreen(
                 onExpandedChange = { isExpendedKaryawan = !isExpendedKaryawan }
             ) {
                 TextField(
-                    value = selectedTextKaryawan ?: "",
+                    value = selectedTextKaryawan,
                     onValueChange = {},
                     readOnly = true,
                     shape = RoundedCornerShape(10.dp),
@@ -169,7 +186,7 @@ fun DetailReservasiBengkelScreen(
                 onExpandedChange = { isExpendedStatus = !isExpendedStatus }
             ) {
                 TextField(
-                    value = selectedTextStatus ?: "",
+                    value = selectedTextStatus,
                     onValueChange = {},
                     readOnly = true,
                     shape = RoundedCornerShape(10.dp),
@@ -182,7 +199,7 @@ fun DetailReservasiBengkelScreen(
                         unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                     ),
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKaryawan)
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedStatus)
                     },
                     modifier = Modifier
                         .menuAnchor()
@@ -214,7 +231,7 @@ fun DetailReservasiBengkelScreen(
                     viewModel.assignReservasi(
                         detailReservasiState.value?.id ?: 0,
                         idSelectedKarywan,
-                        selectedTextStatus?.toLowerCase() ?: ""
+                        selectedTextStatus.lowercase()
                     )
                     Toast.makeText(context, "Berhasil Assign Karyawan", Toast.LENGTH_SHORT).show()
                 },

@@ -72,5 +72,11 @@ data class ReservasiItem(
 	val detailReservasi: String? = null,
 
 	@field:SerializedName("bengkels_id")
-	val bengkelsId: Int? = null
+	val bengkelsId: Int? = null,
+
+	@field:SerializedName("merek_kendaraan")
+	val merekKendaraan: String? = null,
+
+	@field:SerializedName("plat_kendaraan")
+	val platKendaraan: String? = null,
 ) : Parcelable
