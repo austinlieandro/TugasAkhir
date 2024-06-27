@@ -485,16 +485,20 @@ fun BengkelDetailScreen(
             )
             Button(
                 onClick = {
-                    viewModel.reservasiBengkel(
-                        formattedDate.toString(),
-                        selectedTextJamOperasional.toString(),
-                        selectedTextLayanan.toString(),
-                        kendala.toString(),
-                        selectedTextKendaraan.toString(),
-                        bengkelId,
-                        userModel.id,
-                        idSelectedKendaraanUser)
-                    Toast.makeText(context, "Berhasil Melakukan Reservasi", Toast.LENGTH_SHORT).show()
+                    if(sisaSlot == 0){
+                        Toast.makeText(context, "Slot tidak tersedia", Toast.LENGTH_SHORT).show()
+                    }else{
+                        viewModel.reservasiBengkel(
+                            formattedDate.toString(),
+                            selectedTextJamOperasional.toString(),
+                            selectedTextLayanan.toString(),
+                            kendala.toString(),
+                            selectedTextKendaraan.toString(),
+                            bengkelId,
+                            userModel.id,
+                            idSelectedKendaraanUser)
+                        Toast.makeText(context, "Berhasil Melakukan Reservasi", Toast.LENGTH_SHORT).show()
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(Color.Red),
                 shape = RoundedCornerShape(10.dp),
