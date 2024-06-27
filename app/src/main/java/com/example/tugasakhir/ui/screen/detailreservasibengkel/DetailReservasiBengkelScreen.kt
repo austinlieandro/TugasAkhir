@@ -56,7 +56,7 @@ fun DetailReservasiBengkelScreen(
     var isExpendedKaryawan by remember { mutableStateOf(false) }
     var selectedTextKaryawan by remember { mutableStateOf("") }
     var isExpendedStatus by remember { mutableStateOf(false) }
-    val listStatus = remember { mutableListOf("Menunggu", "Proses", "Selesai") }
+    val listStatus = remember { mutableListOf("Menunggu", "Proses", "Selesai", "Dibatalkan") }
     var selectedTextStatus by remember { mutableStateOf("") }
     var idSelectedKarywan by remember { mutableStateOf(0) }
 
