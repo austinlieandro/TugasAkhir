@@ -110,9 +110,11 @@ fun ReservasiBengkelItem(
                         .padding(start = 16.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .background(
-                            if (statusReservasi.lowercase() == "menunggu") {
+                            if (statusReservasi.lowercase() == "menunggu" || statusReservasi.lowercase() == "dibatalkan") {
+                                Color.Red
+                            } else if(statusReservasi.lowercase() == "proses") {
                                 Color.Yellow
-                            } else {
+                            }else{
                                 Color.Green
                             }
                         )
@@ -121,6 +123,12 @@ fun ReservasiBengkelItem(
                     Text(
                         text = statusReservasi,
                         fontSize = 18.sp,
+                        color =
+                        if (statusReservasi.lowercase() == "menunggu") {
+                            Color.White
+                        } else{
+                            Color.Black
+                        },
                     )
                 }
             }

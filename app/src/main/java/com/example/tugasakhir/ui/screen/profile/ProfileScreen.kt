@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -72,194 +73,203 @@ fun ProfileScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column {
-            Text(
-                text = profileState.value?.name ?: "",
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                modifier = modifier
-                    .padding(start = 16.dp, top = 8.dp)
-            )
-            Text(
-                text = profileState.value?.phone ?: "",
-                fontSize = 18.sp,
-                modifier = modifier
-                    .padding(start = 16.dp)
-            )
-            Text(
-                text = profileState.value?.userBengkel ?: "",
-                fontSize = 18.sp,
-                modifier = modifier
-                    .padding(start = 16.dp, bottom = 16.dp)
-            )
-            Divider(
-                color = Color.Black
-            )
-            Row(
-                modifier = modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                    .fillMaxWidth()
-                    .clickable {
-                        navigator.navigate(UpdateProfileScreenDestination)
-                    },
-                verticalAlignment = Alignment.CenterVertically
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    contentDescription = "Icon Edit Profile",
-                    tint = colorScheme.onSurface,
+                CircularProgressIndicator()
+            }
+        }else{
+            Column {
+                Text(
+                    text = profileState.value?.name ?: "",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
                     modifier = modifier
-                        .padding(0.dp, 10.dp)
+                        .padding(start = 16.dp, top = 8.dp)
                 )
                 Text(
-                    text = "Edit Profile",
-                    color = colorScheme.onSurface,
+                    text = profileState.value?.phone ?: "",
+                    fontSize = 18.sp,
                     modifier = modifier
-                        .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                        .padding(start = 16.dp)
                 )
-                Box(
+                Text(
+                    text = profileState.value?.userBengkel ?: "",
+                    fontSize = 18.sp,
                     modifier = modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.TopEnd
+                        .padding(start = 16.dp, bottom = 16.dp)
+                )
+                Divider(
+                    color = Color.Black
+                )
+                Row(
+                    modifier = modifier
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                        .fillMaxWidth()
+                        .clickable {
+                            navigator.navigate(UpdateProfileScreenDestination)
+                        },
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.NavigateNext,
-                        contentDescription = "Navigate to Edit Profile",
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = "Icon Edit Profile",
                         tint = colorScheme.onSurface,
+                        modifier = modifier
+                            .padding(0.dp, 10.dp)
                     )
+                    Text(
+                        text = "Edit Profile",
+                        color = colorScheme.onSurface,
+                        modifier = modifier
+                            .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                    )
+                    Box(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.NavigateNext,
+                            contentDescription = "Navigate to Edit Profile",
+                            tint = colorScheme.onSurface,
+                        )
+                    }
                 }
-            }
-            Row(
-                modifier = modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 12.dp)
-                    .fillMaxWidth()
-                    .clickable {
-                        navigator.navigate(KendaraanScreenDestination(idUser = userModel.id))
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.DirectionsCar,
-                    contentDescription = "Icon Kendaraan",
-                    tint = colorScheme.onSurface,
+                Row(
                     modifier = modifier
-                        .padding(0.dp, 10.dp)
-                )
-                Text(
-                    text = "List Kendaraan",
-                    color = colorScheme.onSurface,
-                    modifier = modifier
-                        .padding(8.dp, 0.dp, 8.dp, 0.dp)
-                )
-                Box(
-                    modifier = modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.TopEnd
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                        .fillMaxWidth()
+                        .clickable {
+                            navigator.navigate(KendaraanScreenDestination(idUser = userModel.id))
+                        },
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.NavigateNext,
-                        contentDescription = "Navigate to List Kendaraan",
+                        imageVector = Icons.Filled.DirectionsCar,
+                        contentDescription = "Icon Kendaraan",
                         tint = colorScheme.onSurface,
+                        modifier = modifier
+                            .padding(0.dp, 10.dp)
                     )
+                    Text(
+                        text = "List Kendaraan",
+                        color = colorScheme.onSurface,
+                        modifier = modifier
+                            .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                    )
+                    Box(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.NavigateNext,
+                            contentDescription = "Navigate to List Kendaraan",
+                            tint = colorScheme.onSurface,
+                        )
+                    }
                 }
-            }
-            Row(
-                modifier = modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 12.dp)
-                    .fillMaxWidth()
-                    .clickable {
-                        if (profileState.value?.userBengkel?.toLowerCase() == "pelanggan") {
-                            navigator.navigate(DaftarBengkelScreenDestination)
-                        } else {
-                            navigator.navigate(DasbboardScreenDestination(idBengkel = userModel.bengkels_id))
-                        }
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ManageAccounts,
-                    contentDescription = "Icon Daftar Bengkel",
-                    tint = colorScheme.onSurface,
+                Row(
                     modifier = modifier
-                        .padding(0.dp, 10.dp)
-                )
-                Text(
-                    text = if (userModel.user_bengkel.lowercase() == "pelanggan"){
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                        .fillMaxWidth()
+                        .clickable {
+                            if (profileState.value?.userBengkel?.toLowerCase() == "pelanggan") {
+                                navigator.navigate(DaftarBengkelScreenDestination)
+                            } else {
+                                navigator.navigate(DasbboardScreenDestination(idBengkel = userModel.bengkels_id))
+                            }
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ManageAccounts,
+                        contentDescription = "Icon Daftar Bengkel",
+                        tint = colorScheme.onSurface,
+                        modifier = modifier
+                            .padding(0.dp, 10.dp)
+                    )
+                    Text(
+                        text = if (userModel.user_bengkel.lowercase() == "pelanggan"){
                             "Daftar pemilik Bengkel"
                         }else {
                             "Dashboard bengkel"
-                    },
-                    color = colorScheme.onSurface,
-                    modifier = modifier
-                        .padding(8.dp, 0.dp, 8.dp, 0.dp)
-                )
-                Box(
-                    modifier = modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.TopEnd
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.NavigateNext,
-                        contentDescription = "Navigate to Daftar Bengkel",
-                        tint = colorScheme.onSurface,
+                        },
+                        color = colorScheme.onSurface,
+                        modifier = modifier
+                            .padding(8.dp, 0.dp, 8.dp, 0.dp)
                     )
+                    Box(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.NavigateNext,
+                            contentDescription = "Navigate to Daftar Bengkel",
+                            tint = colorScheme.onSurface,
+                        )
+                    }
                 }
-            }
-            Row(
-                modifier = modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 12.dp)
-                    .fillMaxWidth()
-                    .clickable {
-                        navigator.navigate(FavoritScreenDestination)
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Bookmarks,
-                    contentDescription = "Icon Favorit Bengkel",
-                    tint = colorScheme.onSurface,
+                Row(
                     modifier = modifier
-                        .padding(0.dp, 10.dp)
-                )
-                Text(
-                    text = "Favorit Bengkel",
-                    color = colorScheme.onSurface,
-                    modifier = modifier
-                        .padding(8.dp, 0.dp, 8.dp, 0.dp)
-                )
-                Box(
-                    modifier = modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.TopEnd
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.NavigateNext,
-                        contentDescription = "Navigate to Daftar Bengkel",
-                        tint = colorScheme.onSurface,
-                    )
-                }
-            }
-            Box(
-                modifier = modifier
-                    .padding(20.dp, 25.dp)
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                contentAlignment = Alignment.BottomEnd
-            ) {
-                Button(
-                    colors = ButtonDefaults.buttonColors(Color.Transparent),
-                    onClick = {
-                        viewModel.logout()
-                        navigator.navigate(WelcomeScreenDestination)
-                    },
-                    modifier = modifier
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp)
                         .fillMaxWidth()
-                        .border(2.dp, color = Color.Red, RoundedCornerShape(10.dp))
+                        .clickable {
+                            navigator.navigate(FavoritScreenDestination)
+                        },
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "Logout",
-                        color = Color.Red
+                    Icon(
+                        imageVector = Icons.Filled.Bookmarks,
+                        contentDescription = "Icon Favorit Bengkel",
+                        tint = colorScheme.onSurface,
+                        modifier = modifier
+                            .padding(0.dp, 10.dp)
                     )
+                    Text(
+                        text = "Favorit Bengkel",
+                        color = colorScheme.onSurface,
+                        modifier = modifier
+                            .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                    )
+                    Box(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.NavigateNext,
+                            contentDescription = "Navigate to Daftar Bengkel",
+                            tint = colorScheme.onSurface,
+                        )
+                    }
+                }
+                Box(
+                    modifier = modifier
+                        .padding(20.dp, 25.dp)
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    contentAlignment = Alignment.BottomEnd
+                ) {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        onClick = {
+                            viewModel.logout()
+                            navigator.navigate(WelcomeScreenDestination)
+                        },
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .border(2.dp, color = Color.Red, RoundedCornerShape(10.dp))
+                    ) {
+                        Text(
+                            text = "Logout",
+                            color = Color.Red
+                        )
+                    }
                 }
             }
         }

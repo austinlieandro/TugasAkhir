@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -28,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -71,72 +74,80 @@ fun BengkelScreen(
         modifier = modifier
             .fillMaxSize(),
     ){
-        Column {
-            Text(
-                text = "List Bengkel",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = modifier
-                    .padding(16.dp)
-            )
-            LazyColumn(
-                contentPadding = PaddingValues(bottom = 30.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = modifier
-                    .padding(horizontal = 16.dp)
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                item {
-                    SearchBar(
-                        query = query,
-                        onQueryChange = viewModel::search,
-                        onSearch = {},
-                        active = false,
-                        onActiveChange = {},
-                        shape = RoundedCornerShape(10.dp),
-                        colors = SearchBarDefaults.colors(containerColor = Color.White),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = "",
-                                tint = colorScheme.onSurface
-                            )
-                        },
-                        placeholder = {
-                            Text(
-                                text = "Cari Bengkel",
-                                fontSize = 14.sp,
-                            )
-                        },
-                        modifier = modifier
-                            .fillMaxWidth()
-                    ) {
-                    }
-                }
-                if (statusState) {
-                    items(bengkelListState.value ?: emptyList()) { data ->
-                        BengkelItem(
-                            namaBengkel = data?.namaBengkel ?: "",
-                            lokasiBengkel = data?.lokasiBengkel ?: "",
-                            alamatBengkel = data?.alamatBengkel ?: "",
-                            numberBengkel = data?.numberBengkel ?: "",
+                CircularProgressIndicator()
+            }
+        }else{
+            Column {
+                Text(
+                    text = "List Bengkel",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = modifier
+                        .padding(16.dp)
+                )
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 30.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = modifier
+                        .padding(horizontal = 16.dp)
+                ) {
+                    item {
+                        SearchBar(
+                            query = query,
+                            onQueryChange = viewModel::search,
+                            onSearch = {},
+                            active = false,
+                            onActiveChange = {},
+                            shape = RoundedCornerShape(10.dp),
+                            colors = SearchBarDefaults.colors(containerColor = Color.White),
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "",
+                                    tint = colorScheme.onSurface
+                                )
+                            },
+                            placeholder = {
+                                Text(
+                                    text = "Cari Bengkel",
+                                    fontSize = 14.sp,
+                                )
+                            },
                             modifier = modifier
-                                .clickable {
-                                    data?.id?.let {
-                                        navigator.navigate(
-                                            BengkelDetailScreenDestination(
-                                                userModel.id,
-                                                bengkelId = it
+                                .fillMaxWidth()
+                        ) {
+                        }
+                    }
+                    if (statusState) {
+                        items(bengkelListState.value ?: emptyList()) { data ->
+                            BengkelItem(
+                                namaBengkel = data?.namaBengkel ?: "",
+                                lokasiBengkel = data?.lokasiBengkel ?: "",
+                                alamatBengkel = data?.alamatBengkel ?: "",
+                                numberBengkel = data?.numberBengkel ?: "",
+                                modifier = modifier
+                                    .clickable {
+                                        data?.id?.let {
+                                            navigator.navigate(
+                                                BengkelDetailScreenDestination(
+                                                    userModel.id,
+                                                    bengkelId = it
+                                                )
                                             )
-                                        )
+                                        }
                                     }
-                                }
-                                .animateItemPlacement(tween(durationMillis = 100))
-                        )
+                                    .animateItemPlacement(tween(durationMillis = 100))
+                            )
+                        }
                     }
                 }
             }
         }
-
     }
 }
 

@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -58,52 +59,61 @@ fun KarayawanScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        LazyColumn(
-            contentPadding = PaddingValues(bottom = 30.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-        ){
-            item{
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "List Karyawan",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = modifier
-                            .padding(8.dp)
-                    )
-                    Box(
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }else{
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 30.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = modifier
+                    .padding(horizontal = 16.dp)
+            ){
+                item{
+                    Row(
                         modifier = modifier
                             .fillMaxWidth(),
-                        contentAlignment = Alignment.BottomEnd
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Add Karyawan",
+                        Text(
+                            text = "List Karyawan",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = modifier
+                                .padding(8.dp)
+                        )
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.BottomEnd
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Add Karyawan",
+                                modifier = modifier
+                                    .clickable {
+                                        navigator.navigate(InputKaryawanScerenDestination(bengkelId = idBengkel))
+                                    }
+                            )
+                        }
+                    }
+
+                }
+                if (statusState) {
+                    items(karyawanListState.value ?: emptyList()){ data ->
+                        KaryawanItem(
+                            namaKaryawan = data?.namaKaryawan ?: "",
                             modifier = modifier
                                 .clickable {
-                                    navigator.navigate(InputKaryawanScerenDestination(bengkelId = idBengkel))
+                                    navigator.navigate(EditKaryawanScreenDestination(data?.bengkelsId ?: 0, data?.id ?: 0, data?.namaKaryawan ?: ""))
                                 }
+                                .animateItemPlacement(tween(durationMillis = 100))
                         )
                     }
-                }
-
-            }
-            if (statusState) {
-                items(karyawanListState.value ?: emptyList()){ data ->
-                    KaryawanItem(
-                        namaKaryawan = data?.namaKaryawan ?: "",
-                        modifier = modifier
-                            .clickable {
-                                navigator.navigate(EditKaryawanScreenDestination(data?.bengkelsId ?: 0, data?.id ?: 0, data?.namaKaryawan ?: ""))
-                            }
-                            .animateItemPlacement(tween(durationMillis = 100))
-                    )
                 }
             }
         }

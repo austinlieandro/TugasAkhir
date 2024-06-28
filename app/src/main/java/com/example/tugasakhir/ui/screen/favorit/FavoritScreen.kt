@@ -4,12 +4,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,63 +60,72 @@ fun FavoritScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column(
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-        ){
-            Text(
-                text = "List Favorit Bengkel",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = modifier
-                    .padding(8.dp)
-            )
-        }
-        if (favoritListState.value?.isNotEmpty() == true) {
-            LazyColumn(
-                contentPadding = PaddingValues(bottom = 30.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = modifier
-                    .padding(horizontal = 16.dp)
-            ){
-                item {
-                    Text(
-                        text = "List Favorit Bengkel",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = modifier
-                            .padding(8.dp)
-                    )
-                }
-                if (statusState) {
-                    items(favoritListState.value ?: emptyList()){ data ->
-                        BengkelItem(
-                            namaBengkel = data?.namaBengkel ?: "",
-                            lokasiBengkel = data?.lokasiBengkel ?: "",
-                            alamatBengkel = data?.alamatBengkel ?: "",
-                            numberBengkel = data?.numberBengkel ?: "",
-                            modifier = modifier
-                                .clickable {
-                                    data?.id?.let { navigator.navigate(BengkelDetailScreenDestination(userModel.id, bengkelId = it)) }
-                                }
-                                .animateItemPlacement(tween(durationMillis = 100))
-                        )
-                    }
-                }
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
         }else{
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
                 modifier = modifier
-                    .fillMaxSize()
-            ) {
+                    .padding(horizontal = 16.dp)
+            ){
                 Text(
-                    text = "Kamu tidak memiliki favorit bengkel",
+                    text = "List Favorit Bengkel",
                     fontSize = 24.sp,
-                    textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
+                    modifier = modifier
+                        .padding(8.dp)
                 )
+            }
+            if (favoritListState.value?.isNotEmpty() == true) {
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 30.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = modifier
+                        .padding(horizontal = 16.dp)
+                ){
+                    item {
+                        Text(
+                            text = "List Favorit Bengkel",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = modifier
+                                .padding(8.dp)
+                        )
+                    }
+                    if (statusState) {
+                        items(favoritListState.value ?: emptyList()){ data ->
+                            BengkelItem(
+                                namaBengkel = data?.namaBengkel ?: "",
+                                lokasiBengkel = data?.lokasiBengkel ?: "",
+                                alamatBengkel = data?.alamatBengkel ?: "",
+                                numberBengkel = data?.numberBengkel ?: "",
+                                modifier = modifier
+                                    .clickable {
+                                        data?.id?.let { navigator.navigate(BengkelDetailScreenDestination(userModel.id, bengkelId = it)) }
+                                    }
+                                    .animateItemPlacement(tween(durationMillis = 100))
+                            )
+                        }
+                    }
+                }
+            }else{
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = modifier
+                        .fillMaxSize()
+                ) {
+                    Text(
+                        text = "Kamu tidak memiliki favorit bengkel",
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
             }
         }
     }

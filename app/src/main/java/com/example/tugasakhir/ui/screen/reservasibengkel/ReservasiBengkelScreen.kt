@@ -2,17 +2,20 @@ package com.example.tugasakhir.ui.screen.reservasibengkel
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -47,37 +50,46 @@ fun ReservasiBengkelScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        LazyColumn(
-            contentPadding = PaddingValues(bottom = 30.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-        ){
-            item {
-                Text(
-                    text = "List Reservasi",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                        .padding(8.dp)
-                )
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
-            if (statusState){
-                items(reservasiListState.value ?: emptyList()){data ->
-                    ReservasiBengkelItem(
-                        namaUser = data?.userName ?: "",
-                        numberUser = data?.userPhone ?: "",
-                        namaKaryawan = data?.namaKaryawan ?: "",
-                        statusReservasi = data?.statusReservasi ?: "",
-                        jenisKendalaReservasi = data?. jeniskendalaReservasi ?: "",
-                        kendaraanReservasi = data?.kendaraanReservasi ?: "",
-                        jamReservasi = data?.jamReservasi ?: "",
-                        tanggalReservasi = data?.tanggalReservasi ?: "",
+        }else{
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 30.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = modifier
+                    .padding(horizontal = 16.dp)
+            ){
+                item {
+                    Text(
+                        text = "List Reservasi",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
                         modifier = modifier
-                            .clickable {
-                                navigator.navigate(DetailReservasiBengkelScreenDestination(bengkelId, data?.id ?: 0))
-                            }
+                            .padding(8.dp)
                     )
+                }
+                if (statusState){
+                    items(reservasiListState.value ?: emptyList()){data ->
+                        ReservasiBengkelItem(
+                            namaUser = data?.userName ?: "",
+                            numberUser = data?.userPhone ?: "",
+                            namaKaryawan = data?.namaKaryawan ?: "",
+                            statusReservasi = data?.statusReservasi ?: "",
+                            jenisKendalaReservasi = data?. jeniskendalaReservasi ?: "",
+                            kendaraanReservasi = data?.kendaraanReservasi ?: "",
+                            jamReservasi = data?.jamReservasi ?: "",
+                            tanggalReservasi = data?.tanggalReservasi ?: "",
+                            modifier = modifier
+                                .clickable {
+                                    navigator.navigate(DetailReservasiBengkelScreenDestination(bengkelId, data?.id ?: 0))
+                                }
+                        )
+                    }
                 }
             }
         }

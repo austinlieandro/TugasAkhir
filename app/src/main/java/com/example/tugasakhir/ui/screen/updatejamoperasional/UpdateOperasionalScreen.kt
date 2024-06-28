@@ -2,6 +2,7 @@ package com.example.tugasakhir.ui.screen.updatejamoperasional
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,14 +11,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +56,7 @@ fun UpdateOperasionalScreen(
     var jamSelesai by remember { mutableStateOf(jamSelesaiInitial) }
     var slotState by remember { mutableStateOf(slot.toString()) }
     var updatedJamOperasional by remember { mutableStateOf("") }
+    val statusState by viewModel.status.observeAsState(false)
 
     val context = LocalContext.current
 
@@ -59,77 +64,86 @@ fun UpdateOperasionalScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column(
-            modifier = modifier
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Edit Jam Operasional",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = modifier
-            )
-            Text(
-                text = hariOperasional,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = modifier
-                    .padding(top = 16.dp)
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                Column(
-                    modifier = modifier.weight(1f)
-                ) {
-                    OutlinedTextField(
-                        value = jamMulai,
-                        onValueChange = { jamMulai = it },
-                        label = { Text("Jam Mulai") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp)
-                    )
-                }
-                Column(
-                    modifier = modifier.weight(1f)
-                ){
-                    OutlinedTextField(
-                        value = jamSelesai,
-                        onValueChange = { jamSelesai = it },
-                        label = { Text("Jam Selesai") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp)
-                    )
-                }
-                Column(
-                    modifier = modifier.weight(1f)
-                ){
-                    OutlinedTextField(
-                        value = slotState,
-                        onValueChange = { slotState = it },
-                        label = { Text("Slot") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp)
-                    )
-                }
+                CircularProgressIndicator()
             }
-            Button(
-                onClick = {
-                    updatedJamOperasional = "$jamMulai - $jamSelesai"
-                    viewModel.updateJamOperasional(bengkelId, jamId, updatedJamOperasional, slotState.toInt())
-                    Toast.makeText(context, "Berhasil Update Jam Operasional", Toast.LENGTH_SHORT).show()
-                },
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(Color.Red),
+        }else{
+            Column(
                 modifier = modifier
-                    .padding(top = 16.dp)
-                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                Text(text = "Simpan Perubahan")
+                Text(
+                    text = "Edit Jam Operasional",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = modifier
+                )
+                Text(
+                    text = hariOperasional,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = modifier
+                        .padding(top = 16.dp)
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(
+                        modifier = modifier.weight(1f)
+                    ) {
+                        OutlinedTextField(
+                            value = jamMulai,
+                            onValueChange = { jamMulai = it },
+                            label = { Text("Jam Mulai") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp)
+                        )
+                    }
+                    Column(
+                        modifier = modifier.weight(1f)
+                    ){
+                        OutlinedTextField(
+                            value = jamSelesai,
+                            onValueChange = { jamSelesai = it },
+                            label = { Text("Jam Selesai") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp)
+                        )
+                    }
+                    Column(
+                        modifier = modifier.weight(1f)
+                    ){
+                        OutlinedTextField(
+                            value = slotState,
+                            onValueChange = { slotState = it },
+                            label = { Text("Slot") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp)
+                        )
+                    }
+                }
+                Button(
+                    onClick = {
+                        updatedJamOperasional = "$jamMulai - $jamSelesai"
+                        viewModel.updateJamOperasional(bengkelId, jamId, updatedJamOperasional, slotState.toInt())
+                        Toast.makeText(context, "Berhasil Update Jam Operasional", Toast.LENGTH_SHORT).show()
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(Color.Red),
+                    modifier = modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Simpan Perubahan")
+                }
             }
         }
     }

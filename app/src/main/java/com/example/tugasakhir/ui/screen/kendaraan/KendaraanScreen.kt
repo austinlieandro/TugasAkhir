@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -57,101 +58,110 @@ fun KendaraanScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column(
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-        ) {
-            Row(
-                modifier = modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "List Kendaraan",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                        .padding(8.dp)
-                )
-                Box(
-                    modifier = modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.BottomEnd
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add Kendaraan",
-                        modifier = modifier
-                            .clickable {
-                                navigator.navigate(InputKendaraanScreenDestination)
-                            }
-                    )
-                }
+                CircularProgressIndicator()
             }
-        }
-        if (kendaraanListState.value?.isNotEmpty() == true) {
-            LazyColumn(
-                contentPadding = PaddingValues(bottom = 30.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+        }else{
+            Column(
                 modifier = modifier
                     .padding(horizontal = 16.dp)
-            ){
-                item {
-                    Row(
+            ) {
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "List Kendaraan",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = modifier
+                            .padding(8.dp)
+                    )
+                    Box(
                         modifier = modifier
                             .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        contentAlignment = Alignment.BottomEnd
                     ) {
-                        Text(
-                            text = "List Kendaraan",
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = modifier
-                                .padding(8.dp)
-                        )
-                        Box(
-                            modifier = modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.BottomEnd
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Add Kendaraan",
-                                modifier = modifier
-                                    .clickable {
-                                        navigator.navigate(InputKendaraanScreenDestination)
-                                    }
-                            )
-                        }
-                    }
-                }
-                if (statusState) {
-                    items(kendaraanListState.value ?: emptyList()){ data ->
-                        KendaraanItem(
-                            jenisKendaraan = data?.jenisKendaraan ?: "",
-                            merekKendaraan = data?.merekKendaraan ?: "",
-                            platKendaraan = data?.platKendaraan ?: "",
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add Kendaraan",
                             modifier = modifier
                                 .clickable {
-                                    navigator.navigate(DetailKendaraanScreenDestination(data?.id ?: 0, idUser))
+                                    navigator.navigate(InputKendaraanScreenDestination)
                                 }
                         )
                     }
                 }
             }
-        }else{
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = modifier
-                    .fillMaxSize()
-            ) {
-                Text(
-                    text = "Kamu tidak memiliki kendaraan",
-                    fontSize = 24.sp,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                )
+            if (kendaraanListState.value?.isNotEmpty() == true) {
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 30.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = modifier
+                        .padding(horizontal = 16.dp)
+                ){
+                    item {
+                        Row(
+                            modifier = modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "List Kendaraan",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = modifier
+                                    .padding(8.dp)
+                            )
+                            Box(
+                                modifier = modifier
+                                    .fillMaxWidth(),
+                                contentAlignment = Alignment.BottomEnd
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "Add Kendaraan",
+                                    modifier = modifier
+                                        .clickable {
+                                            navigator.navigate(InputKendaraanScreenDestination)
+                                        }
+                                )
+                            }
+                        }
+                    }
+                    if (statusState) {
+                        items(kendaraanListState.value ?: emptyList()){ data ->
+                            KendaraanItem(
+                                jenisKendaraan = data?.jenisKendaraan ?: "",
+                                merekKendaraan = data?.merekKendaraan ?: "",
+                                platKendaraan = data?.platKendaraan ?: "",
+                                modifier = modifier
+                                    .clickable {
+                                        navigator.navigate(DetailKendaraanScreenDestination(data?.id ?: 0, idUser))
+                                    }
+                            )
+                        }
+                    }
+                }
+            }else{
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = modifier
+                        .fillMaxSize()
+                ) {
+                    Text(
+                        text = "Kamu tidak memiliki kendaraan",
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
             }
         }
     }

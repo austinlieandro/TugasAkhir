@@ -1,6 +1,7 @@
 package com.example.tugasakhir.ui.screen.editkaryawan
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -15,9 +17,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -44,6 +48,7 @@ fun EditKaryawanScreen(
         factory = KaryawanModelFactory.getInstance(LocalContext.current)
     )
 ){
+    val statusState by viewModel.status.observeAsState(false)
     var nama_karyawan by remember { mutableStateOf(namaKaryawan) }
     val context = LocalContext.current
 
@@ -51,67 +56,76 @@ fun EditKaryawanScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column(
-            modifier = modifier
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Edit Karyawan",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-            )
-            OutlinedTextField(
-                value = nama_karyawan,
-                onValueChange = { nama_karyawan = it },
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Nama Karyawan",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                label = {
-                    Text(
-                        text = "Nama Karyawan",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    containerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-            Button(
-                onClick = {
-                    viewModel.editKaryawan(idBengkel, idKaryawan, nama_karyawan)
-                    Toast.makeText(context, "Berhasil update karyawan", Toast.LENGTH_SHORT).show()
-                },
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(Color.Red),
-                modifier = modifier
-                    .fillMaxWidth()
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                Text(text = "Update Data Karyawan")
+                CircularProgressIndicator()
             }
-            Button(
-                onClick = {
-                    viewModel.deleteKaryawan(idBengkel, idKaryawan)
-                    Toast.makeText(context, "Berhasil delete karyawan", Toast.LENGTH_SHORT).show()
-                    navigator.navigate(KarayawanScreenDestination(idBengkel))
-                },
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(Color.Red),
+        }else{
+            Column(
                 modifier = modifier
-                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                Text(text = "Hapus Data Karyawan")
+                Text(
+                    text = "Edit Karyawan",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                OutlinedTextField(
+                    value = nama_karyawan,
+                    onValueChange = { nama_karyawan = it },
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Nama Karyawan",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = "Nama Karyawan",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Black,
+                        containerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .fillMaxWidth()
+                )
+                Button(
+                    onClick = {
+                        viewModel.editKaryawan(idBengkel, idKaryawan, nama_karyawan)
+                        Toast.makeText(context, "Berhasil update karyawan", Toast.LENGTH_SHORT).show()
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(Color.Red),
+                    modifier = modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Update Data Karyawan")
+                }
+                Button(
+                    onClick = {
+                        viewModel.deleteKaryawan(idBengkel, idKaryawan)
+                        Toast.makeText(context, "Berhasil delete karyawan", Toast.LENGTH_SHORT).show()
+                        navigator.navigate(KarayawanScreenDestination(idBengkel))
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(Color.Red),
+                    modifier = modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Hapus Data Karyawan")
+                }
             }
         }
     }

@@ -2,11 +2,13 @@ package com.example.tugasakhir.ui.screen.listjamoperasional
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +44,7 @@ fun ListOperasionalScreen(
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ){
     val jamOperasionalState = viewModel.listOperasional.observeAsState()
+    val statusState by viewModel.status.observeAsState(false)
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
 
     LaunchedEffect(userModel.id) {
@@ -51,37 +55,46 @@ fun ListOperasionalScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        LazyColumn(
-            contentPadding = PaddingValues(bottom = 30.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-        ) {
-            item {
-                Text(
-                    text = "List Jam Operasional",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                        .padding(8.dp)
-                )
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
-            items(jamOperasionalState.value ?: emptyList()){ data->
-                JamOperasionalItem(
-                    jam = data?.jamOperasional ?: "",
-                    hari = data?.hariOperasional ?: "",
-                    slot = data?.slot ?: 0,
-                    modifier = modifier
-                        .clickable {
-                            navigator.navigate(UpdateOperasionalScreenDestination(
-                                userModel.bengkels_id,
-                                data?.id ?: 0,
-                                data?.hariOperasional ?: "",
-                                data?.jamOperasional ?: "",
-                                data?.slot ?: 0)
-                            )
-                        }
-                )
+        }else{
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 30.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = modifier
+                    .padding(horizontal = 16.dp)
+            ) {
+                item {
+                    Text(
+                        text = "List Jam Operasional",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = modifier
+                            .padding(8.dp)
+                    )
+                }
+                items(jamOperasionalState.value ?: emptyList()){ data->
+                    JamOperasionalItem(
+                        jam = data?.jamOperasional ?: "",
+                        hari = data?.hariOperasional ?: "",
+                        slot = data?.slot ?: 0,
+                        modifier = modifier
+                            .clickable {
+                                navigator.navigate(UpdateOperasionalScreenDestination(
+                                    userModel.bengkels_id,
+                                    data?.id ?: 0,
+                                    data?.hariOperasional ?: "",
+                                    data?.jamOperasional ?: "",
+                                    data?.slot ?: 0)
+                                )
+                            }
+                    )
+                }
             }
         }
     }

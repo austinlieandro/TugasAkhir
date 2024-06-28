@@ -1,6 +1,7 @@
 package com.example.tugasakhir.ui.screen.updateprofile
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -21,6 +23,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -54,6 +57,7 @@ fun UpdateProfileScreen(
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
+    val statusState by viewModel.status.observeAsState(false)
 
     val context = LocalContext.current
 
@@ -74,170 +78,179 @@ fun UpdateProfileScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column(
-            modifier = modifier
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Edit Profile",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }else{
+            Column(
                 modifier = modifier
-                    .padding(bottom = 16.dp)
-            )
-            OutlinedTextField(
-                value = nama,
-                onValueChange = { nama = it },
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Nama",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                label = {
-                    Text(
-                        text = "Nama",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    containerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Email",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                label = {
-                    Text(
-                        text = "Email",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    containerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Username",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                label = {
-                    Text(
-                        text = "Username",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    containerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = phone,
-                onValueChange = { phone = it },
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Phone Number",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                label = {
-                    Text(
-                        text = "Phone Number",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    containerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Password",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                label = {
-                    Text(
-                        text = "Password",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    containerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-            Button(
-                onClick = {
-                    viewModel.updateProfile(userModel.id, nama, email, username, password, phone)
-                    Toast.makeText(context, "Berhasil update data kendaraan", Toast.LENGTH_SHORT).show()
-                },
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(Color.Red),
-                modifier = modifier
-                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
                 Text(
-                    text = "Update Profile"
+                    text = "Edit Profile",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = modifier
+                        .padding(bottom = 16.dp)
                 )
+                OutlinedTextField(
+                    value = nama,
+                    onValueChange = { nama = it },
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Nama",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = "Nama",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Black,
+                        containerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Email",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = "Email",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Black,
+                        containerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Username",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = "Username",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Black,
+                        containerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = { phone = it },
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Phone Number",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = "Phone Number",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Black,
+                        containerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Password",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = "Password",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Black,
+                        containerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .fillMaxWidth()
+                )
+                Button(
+                    onClick = {
+                        viewModel.updateProfile(userModel.id, nama, email, username, password, phone)
+                        Toast.makeText(context, "Berhasil update data kendaraan", Toast.LENGTH_SHORT).show()
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(Color.Red),
+                    modifier = modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Update Profile"
+                    )
+                }
             }
         }
     }

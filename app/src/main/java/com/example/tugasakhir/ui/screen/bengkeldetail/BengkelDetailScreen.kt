@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -87,6 +88,7 @@ fun BengkelDetailScreen(
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ) {
     val bengkelState = viewModel.detailBengkel.observeAsState()
+    val statusState by viewModel.status.observeAsState(false)
     val statusFavorit = viewModel.statusFavorit.observeAsState()
     val kendaraanState = viewModel.kendaraanList.observeAsState()
     var holdFavorit by remember { mutableStateOf("") }
@@ -136,275 +138,349 @@ fun BengkelDetailScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column(
-            modifier = modifier
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize()
-        ) {
-            Row {
-                Column {
-                    Text(
-                        text = bengkelState.value?.namaBengkel ?: "",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "${bengkelState.value?.lokasiBengkel}, ${bengkelState.value?.alamatBengkel}"
-                    )
+        if (!statusState){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }else{
+            Column(
+                modifier = modifier
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+            ) {
+                Row {
+                    Column {
+                        Text(
+                            text = bengkelState.value?.namaBengkel ?: "",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "${bengkelState.value?.lokasiBengkel}, ${bengkelState.value?.alamatBengkel}"
+                        )
+                    }
+                    Box(
+                        contentAlignment = Alignment.BottomEnd,
+                        modifier = modifier
+                            .padding(top = 16.dp, end = 16.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Icon(
+                            imageVector = if (favorit) Icons.Outlined.Bookmarks else Icons.Filled.Bookmarks,
+                            contentDescription = "Favorit Bengkel",
+                            modifier = modifier
+                                .clickable {
+                                    viewModel.togleFavorit(userModel.id, bengkelId)
+                                    favorit = !favorit
+                                }
+                        )
+                    }
                 }
-                Box(
-                    contentAlignment = Alignment.BottomEnd,
+                Text(
+                    text = bengkelState.value?.numberBengkel ?: ""
+                )
+                Row(
                     modifier = modifier
-                        .padding(top = 16.dp, end = 16.dp)
-                        .fillMaxWidth()
+                        .clickable {
+                            openGmaps(context, bengkelState.value?.gmapsBengkel ?: "")
+                        }
                 ) {
                     Icon(
-                        imageVector = if (favorit) Icons.Outlined.Bookmarks else Icons.Filled.Bookmarks,
-                        contentDescription = "Favorit Bengkel",
-                        modifier = modifier
-                            .clickable {
-                                viewModel.togleFavorit(userModel.id, bengkelId)
-                                favorit = !favorit
-                            }
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = "GMAPS BENGKEL"
                     )
-                }
-            }
-            Text(
-                text = bengkelState.value?.numberBengkel ?: ""
-            )
-            Row(
-                modifier = modifier
-                    .clickable {
-                        openGmaps(context, bengkelState.value?.gmapsBengkel ?: "")
-                    }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = "GMAPS BENGKEL"
-                )
-                Text(
-                    text = "Lokasi Bengkel Pada Gmaps"
-                )
-            }
-            ExposedDropdownMenuBox(
-                expanded = isExpendedKendaraan,
-                onExpandedChange = { isExpendedKendaraan = !isExpendedKendaraan }
-            ) {
-                TextField(
-                    value = selectedTextKendaraan,
-                    onValueChange = {},
-                    readOnly = true,
-                    shape = RoundedCornerShape(10.dp),
-                    label = { Text("Jenis Kendaraan") },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = MaterialTheme.colorScheme.outline,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                        containerColor = Color.White,
-                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    ),
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKendaraan)
-                    },
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                )
-
-                ExposedDropdownMenu(
-                    expanded = isExpendedKendaraan,
-                    onDismissRequest = { isExpendedKendaraan = false },
-                    modifier = modifier
-                        .background(Color.White)
-                ) {
-                    bengkelState.value?.jenisKendaraan?.forEach { option ->
-                        DropdownMenuItem(
-                            text = { option?.let { Text(it) } },
-                            onClick = {
-                                option?.let { selectedTextKendaraan = it }
-                                isExpendedKendaraan = false
-                            },
-                            modifier = modifier
-                                .background(Color.White)
-                        )
-                    }
-                }
-            }
-            ExposedDropdownMenuBox(
-                expanded = isExpendedKendaraanUser,
-                onExpandedChange = { isExpendedKendaraanUser = !isExpendedKendaraanUser }
-            ) {
-                val filteredKendaraanUser = kendaraanState?.let { kendaraanList ->
-                    kendaraanList.value?.filter { kendaraan ->
-                        kendaraan?.jenisKendaraan.equals(selectedTextKendaraan, ignoreCase = true)
-                    }
-                }
-                TextField(
-                    value = selectedTextKendaraanUser,
-                    onValueChange = {},
-                    readOnly = true,
-                    shape = RoundedCornerShape(10.dp),
-                    label = { Text("Pilih Kendaraan Kamu") },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = MaterialTheme.colorScheme.outline,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                        containerColor = Color.White,
-                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    ),
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKendaraanUser)
-                    },
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
-                        .padding(top = 8.dp)
-                )
-
-                ExposedDropdownMenu(
-                    expanded = isExpendedKendaraanUser,
-                    onDismissRequest = { isExpendedKendaraanUser = false },
-                    modifier = Modifier
-                        .background(Color.White)
-                ) {
-                    filteredKendaraanUser?.forEach { option ->
-                        var teksKendaraan = "${option?.merekKendaraan ?: ""} - ${option?.platKendaraan ?: ""}"
-                        DropdownMenuItem(
-                            text = { Text(teksKendaraan) },
-                            onClick = {
-                                option?.id?.let { idSelectedKendaraanUser = it }
-                                teksKendaraan.let { selectedTextKendaraanUser = it }
-                                isExpendedKendaraanUser = false
-                            },
-                            modifier = Modifier
-                                .background(Color.White)
-                        )
-                    }
-                }
-            }
-            ExposedDropdownMenuBox(
-                expanded = isExpendedLayanan,
-                onExpandedChange = { isExpendedLayanan = !isExpendedLayanan }
-            ) {
-                TextField(
-                    value = selectedTextLayanan,
-                    onValueChange = {},
-                    readOnly = true,
-                    shape = RoundedCornerShape(10.dp),
-                    label = { Text("Jenis Layanan") },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = MaterialTheme.colorScheme.outline,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                        containerColor = Color.White,
-                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    ),
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedLayanan)
-                    },
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp)
-                )
-
-                ExposedDropdownMenu(
-                    expanded = isExpendedLayanan,
-                    onDismissRequest = { isExpendedLayanan = false },
-                    modifier = modifier
-                        .background(Color.White)
-                ) {
-                    bengkelState.value?.jenisLayanan?.forEach { option ->
-                        DropdownMenuItem(
-                            text = { option?.let { Text(it) } },
-                            onClick = {
-                                option?.let { selectedTextLayanan = it }
-                                isExpendedLayanan = false
-                            },
-                            modifier = modifier
-                                .background(Color.White)
-                        )
-                    }
-                }
-            }
-
-            val dateDialogState = rememberMaterialDialogState()
-
-            OutlinedTextField(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        dateDialogState.show()
-                    }
-                ,
-                label = {
                     Text(
-                        text = "Pilih Tanggal",
-                        color = Color.Black
+                        text = "Lokasi Bengkel Pada Gmaps"
                     )
-                },
-                value = "Selected Date: $formattedDate",
-                onValueChange = {},
-                readOnly = true,
-                singleLine = true,
-                enabled = false,
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    disabledBorderColor = Color.Black,
-                    disabledTextColor = Color.Black,
-                    containerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(10.dp),
-            )
+                }
+                ExposedDropdownMenuBox(
+                    expanded = isExpendedKendaraan,
+                    onExpandedChange = { isExpendedKendaraan = !isExpendedKendaraan }
+                ) {
+                    TextField(
+                        value = selectedTextKendaraan,
+                        onValueChange = {},
+                        readOnly = true,
+                        shape = RoundedCornerShape(10.dp),
+                        label = { Text("Jenis Kendaraan") },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MaterialTheme.colorScheme.outline,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            containerColor = Color.White,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKendaraan)
+                        },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                    )
 
-            MaterialDialog(
-                dialogState = dateDialogState,
-                buttons = {
-                    positiveButton("Ok"){
-                        val hariOperasional = bengkelState.value?.hariOperasional ?: emptyList()
-                        val selectedDate = pickerDate
-                        val dayOfWeek = selectedDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale("id")).toLowerCase(Locale.getDefault())
+                    ExposedDropdownMenu(
+                        expanded = isExpendedKendaraan,
+                        onDismissRequest = { isExpendedKendaraan = false },
+                        modifier = modifier
+                            .background(Color.White)
+                    ) {
+                        bengkelState.value?.jenisKendaraan?.forEach { option ->
+                            DropdownMenuItem(
+                                text = { option?.let { Text(it) } },
+                                onClick = {
+                                    option?.let { selectedTextKendaraan = it }
+                                    isExpendedKendaraan = false
+                                },
+                                modifier = modifier
+                                    .background(Color.White)
+                            )
+                        }
+                    }
+                }
+                ExposedDropdownMenuBox(
+                    expanded = isExpendedKendaraanUser,
+                    onExpandedChange = { isExpendedKendaraanUser = !isExpendedKendaraanUser }
+                ) {
+                    val filteredKendaraanUser = kendaraanState?.let { kendaraanList ->
+                        kendaraanList.value?.filter { kendaraan ->
+                            kendaraan?.jenisKendaraan.equals(selectedTextKendaraan, ignoreCase = true)
+                        }
+                    }
+                    TextField(
+                        value = selectedTextKendaraanUser,
+                        onValueChange = {},
+                        readOnly = true,
+                        shape = RoundedCornerShape(10.dp),
+                        label = { Text("Pilih Kendaraan Kamu") },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MaterialTheme.colorScheme.outline,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            containerColor = Color.White,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKendaraanUser)
+                        },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
+                    )
 
-                        if (dayOfWeek in hariOperasional.map { it?.toLowerCase(Locale.getDefault()) ?: "" }) {
-                            selectedHariOperasional = dayOfWeek
-                            pickerDate = selectedDate
-                        } else {
-                            Toast.makeText(context, "Bengkel tidak buka pada tanggal ini", Toast.LENGTH_SHORT).show()
+                    ExposedDropdownMenu(
+                        expanded = isExpendedKendaraanUser,
+                        onDismissRequest = { isExpendedKendaraanUser = false },
+                        modifier = Modifier
+                            .background(Color.White)
+                    ) {
+                        filteredKendaraanUser?.forEach { option ->
+                            var teksKendaraan = "${option?.merekKendaraan ?: ""} - ${option?.platKendaraan ?: ""}"
+                            DropdownMenuItem(
+                                text = { Text(teksKendaraan) },
+                                onClick = {
+                                    option?.id?.let { idSelectedKendaraanUser = it }
+                                    teksKendaraan.let { selectedTextKendaraanUser = it }
+                                    isExpendedKendaraanUser = false
+                                },
+                                modifier = Modifier
+                                    .background(Color.White)
+                            )
+                        }
+                    }
+                }
+                ExposedDropdownMenuBox(
+                    expanded = isExpendedLayanan,
+                    onExpandedChange = { isExpendedLayanan = !isExpendedLayanan }
+                ) {
+                    TextField(
+                        value = selectedTextLayanan,
+                        onValueChange = {},
+                        readOnly = true,
+                        shape = RoundedCornerShape(10.dp),
+                        label = { Text("Jenis Layanan") },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MaterialTheme.colorScheme.outline,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            containerColor = Color.White,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedLayanan)
+                        },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp)
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = isExpendedLayanan,
+                        onDismissRequest = { isExpendedLayanan = false },
+                        modifier = modifier
+                            .background(Color.White)
+                    ) {
+                        bengkelState.value?.jenisLayanan?.forEach { option ->
+                            DropdownMenuItem(
+                                text = { option?.let { Text(it) } },
+                                onClick = {
+                                    option?.let { selectedTextLayanan = it }
+                                    isExpendedLayanan = false
+                                },
+                                modifier = modifier
+                                    .background(Color.White)
+                            )
+                        }
+                    }
+                }
+
+                val dateDialogState = rememberMaterialDialogState()
+
+                OutlinedTextField(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .clickable {
                             dateDialogState.show()
                         }
-                    }
-                    negativeButton("Cancel")
-                }
-            ){
-                datepicker(
-                    initialDate = LocalDate.now(),
-                    title = "Pick a date",
-                    allowedDateValidator = { date ->
-                        val startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY)
-                        val endOfWeek = startOfWeek.plusDays(6)
-                        val hariOperasional = bengkelState.value?.hariOperasional ?: emptyList()
-                        val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale("id")).toLowerCase(Locale.getDefault())
-                        dayOfWeek in hariOperasional.map { it?.toLowerCase(Locale.getDefault()) }
-                        date in startOfWeek..endOfWeek
-                    }
-                ){
-                    pickerDate = it
-                }
-            }
-
-            ExposedDropdownMenuBox(
-                expanded = isExpendedJamOperasional,
-                onExpandedChange = { isExpendedJamOperasional = !isExpendedJamOperasional },
-            ) {
-                TextField(
-                    value = selectedTextJamOperasional,
+                    ,
+                    label = {
+                        Text(
+                            text = "Pilih Tanggal",
+                            color = Color.Black
+                        )
+                    },
+                    value = "Selected Date: $formattedDate",
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Jam Operasional") },
+                    singleLine = true,
+                    enabled = false,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        disabledBorderColor = Color.Black,
+                        disabledTextColor = Color.Black,
+                        containerColor = Color.White,
+                    ),
                     shape = RoundedCornerShape(10.dp),
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedJamOperasional)
+                )
+
+                MaterialDialog(
+                    dialogState = dateDialogState,
+                    buttons = {
+                        positiveButton("Ok"){
+                            val hariOperasional = bengkelState.value?.hariOperasional ?: emptyList()
+                            val selectedDate = pickerDate
+                            val dayOfWeek = selectedDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale("id")).toLowerCase(Locale.getDefault())
+
+                            if (dayOfWeek in hariOperasional.map { it?.toLowerCase(Locale.getDefault()) ?: "" }) {
+                                selectedHariOperasional = dayOfWeek
+                                pickerDate = selectedDate
+                            } else {
+                                Toast.makeText(context, "Bengkel tidak buka pada tanggal ini", Toast.LENGTH_SHORT).show()
+                                dateDialogState.show()
+                            }
+                        }
+                        negativeButton("Cancel")
+                    }
+                ){
+                    datepicker(
+                        initialDate = LocalDate.now(),
+                        title = "Pick a date",
+                        allowedDateValidator = { date ->
+                            val startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY)
+                            val endOfWeek = startOfWeek.plusDays(6)
+                            val hariOperasional = bengkelState.value?.hariOperasional ?: emptyList()
+                            val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale("id")).toLowerCase(Locale.getDefault())
+                            dayOfWeek in hariOperasional.map { it?.toLowerCase(Locale.getDefault()) }
+                            date in startOfWeek..endOfWeek
+                        }
+                    ){
+                        pickerDate = it
+                    }
+                }
+
+                ExposedDropdownMenuBox(
+                    expanded = isExpendedJamOperasional,
+                    onExpandedChange = { isExpendedJamOperasional = !isExpendedJamOperasional },
+                ) {
+                    TextField(
+                        value = selectedTextJamOperasional,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Jam Operasional") },
+                        shape = RoundedCornerShape(10.dp),
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedJamOperasional)
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MaterialTheme.colorScheme.outline,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            containerColor = Color.White,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp)
+                            .clickable {
+                                isExpendedJamOperasional = true
+                            }
+                    )
+                    ExposedDropdownMenu(
+                        expanded = isExpendedJamOperasional,
+                        onDismissRequest = { isExpendedJamOperasional = false },
+                        modifier = modifier
+                            .background(Color.White)
+                    ) {
+                        jamOperasionalState.value?.filter { it?.hariOperasional?.equals(selectedHariOperasional, ignoreCase = true) ?: false }?.forEach { option ->
+                            DropdownMenuItem(
+                                text = { option?.jamOperasional?.let { Text(it) } },
+                                onClick = {
+                                    option?.jamOperasional?.let {
+                                        selectedTextJamOperasional = it
+                                        sisaSlot = option.slot ?: 0
+                                    }
+                                    isExpendedJamOperasional = false
+                                },
+                                modifier = modifier
+                                    .background(Color.White)
+                            )
+                        }
+                    }
+                }
+
+                Text(
+                    text = "Sisa Slot: $sisaSlot",
+                    modifier = modifier
+                        .padding(bottom = 4.dp)
+                )
+
+                OutlinedTextField(
+                    value = kendala,
+                    onValueChange = { kendala = it },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Masukan Rincian Kendala",
+                            color = Color(0xFF86888D)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = "Masukan Rincian Kendala",
+                            color = Color(0xFF86888D)
+                        )
                     },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = MaterialTheme.colorScheme.outline,
@@ -413,102 +489,37 @@ fun BengkelDetailScreen(
                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                     ),
+                    shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
-                        .menuAnchor()
                         .fillMaxWidth()
-                        .padding(vertical = 16.dp)
-                        .clickable {
-                            isExpendedJamOperasional = true
+                )
+                Button(
+                    onClick = {
+                        if(sisaSlot == 0){
+                            Toast.makeText(context, "Slot tidak tersedia", Toast.LENGTH_SHORT).show()
+                        }else{
+                            viewModel.reservasiBengkel(
+                                formattedDate.toString(),
+                                selectedTextJamOperasional.toString(),
+                                selectedTextLayanan.toString(),
+                                kendala.toString(),
+                                selectedTextKendaraan.toString(),
+                                bengkelId,
+                                userModel.id,
+                                idSelectedKendaraanUser)
+                            Toast.makeText(context, "Berhasil Melakukan Reservasi", Toast.LENGTH_SHORT).show()
                         }
-                )
-                ExposedDropdownMenu(
-                    expanded = isExpendedJamOperasional,
-                    onDismissRequest = { isExpendedJamOperasional = false },
+                    },
+                    colors = ButtonDefaults.buttonColors(Color.Red),
+                    shape = RoundedCornerShape(10.dp),
                     modifier = modifier
-                        .background(Color.White)
-                ) {
-                    jamOperasionalState.value?.filter { it?.hariOperasional?.equals(selectedHariOperasional, ignoreCase = true) ?: false }?.forEach { option ->
-                        DropdownMenuItem(
-                            text = { option?.jamOperasional?.let { Text(it) } },
-                            onClick = {
-                                option?.jamOperasional?.let {
-                                    selectedTextJamOperasional = it
-                                    sisaSlot = option.slot ?: 0
-                                }
-                                isExpendedJamOperasional = false
-                            },
-                            modifier = modifier
-                                .background(Color.White)
-                        )
-                    }
+                        .padding(vertical = 16.dp)
+                        .fillMaxWidth()
+                ){
+                    Text(
+                        text = "Reservasi"
+                    )
                 }
-            }
-
-            Text(
-                text = "Sisa Slot: $sisaSlot",
-                modifier = modifier
-                    .padding(bottom = 4.dp)
-            )
-
-            OutlinedTextField(
-                value = kendala,
-                onValueChange = { kendala = it },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
-                ),
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Masukan Rincian Kendala",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                label = {
-                    Text(
-                        text = "Masukan Rincian Kendala",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colorScheme.outline,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                    containerColor = Color.White,
-                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-            Button(
-                onClick = {
-                    if(sisaSlot == 0){
-                        Toast.makeText(context, "Slot tidak tersedia", Toast.LENGTH_SHORT).show()
-                    }else{
-                        viewModel.reservasiBengkel(
-                            formattedDate.toString(),
-                            selectedTextJamOperasional.toString(),
-                            selectedTextLayanan.toString(),
-                            kendala.toString(),
-                            selectedTextKendaraan.toString(),
-                            bengkelId,
-                            userModel.id,
-                            idSelectedKendaraanUser)
-                        Toast.makeText(context, "Berhasil Melakukan Reservasi", Toast.LENGTH_SHORT).show()
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(Color.Red),
-                shape = RoundedCornerShape(10.dp),
-                modifier = modifier
-                    .padding(vertical = 16.dp)
-                    .fillMaxWidth()
-            ){
-                Text(
-                    text = "Reservasi"
-                )
             }
         }
     }
