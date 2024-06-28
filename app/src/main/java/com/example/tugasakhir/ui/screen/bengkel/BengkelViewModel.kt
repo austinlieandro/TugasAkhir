@@ -1,6 +1,8 @@
 package com.example.tugasakhir.ui.screen.bengkel
 
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +18,9 @@ class BengkelViewModel(private val repository: BengkelRepository): ViewModel() {
     val status: MutableLiveData<Boolean> = MutableLiveData()
 
     val bengkelList = MutableLiveData<List<BengkelItem?>?>()
+
+    private val _query = mutableStateOf("")
+    val query: State<String> get() = _query
 
     init {
         getBengkel()
@@ -40,6 +45,14 @@ class BengkelViewModel(private val repository: BengkelRepository): ViewModel() {
                 status.postValue(false)
                 Log.d("BENGKEL", "$e")
             }
+        }
+    }
+
+    fun search(newQuery: String) {
+        viewModelScope.launch {
+            _query.value = newQuery
+            val shopSearch = repository.searchBengkel(_query.value)
+            bengkelList.postValue(shopSearch)
         }
     }
 }

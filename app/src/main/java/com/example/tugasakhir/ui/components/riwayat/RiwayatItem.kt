@@ -132,7 +132,7 @@ fun RiwayatItem(
                         .padding(start = 16.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .background(
-                            if (statusBengkel.lowercase() == "menunggu") {
+                            if (statusBengkel.lowercase() == "menunggu" || statusBengkel.lowercase() == "dibatalkan") {
                                 Color.Red
                             } else if(statusBengkel.lowercase() == "proses") {
                                 Color.Yellow

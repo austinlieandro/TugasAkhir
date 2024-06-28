@@ -1,5 +1,6 @@
 package com.example.tugasakhir.data.repository
 
+import com.example.tugasakhir.api.response.BengkelItem
 import com.example.tugasakhir.api.response.ResponseAsignKaryawan
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
@@ -80,6 +81,12 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
 
     suspend fun updateJamOperasional(bengkelId: Int, id: Int, jam_operasional: String, slot: Int): ResponseUpdateJamOperasional{
         return apiService.updateJamOperasional(bengkelId, id, jam_operasional, slot)
+    }
+
+    suspend fun searchBengkel(query: String): List<BengkelItem?>?{
+        return apiService.displayBengkel().bengkel?.filter {
+            it?.namaBengkel?.contains(query, ignoreCase = true) == true
+        }
     }
 
     companion object{

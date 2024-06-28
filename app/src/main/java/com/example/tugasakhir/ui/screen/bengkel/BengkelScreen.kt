@@ -6,12 +6,21 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -48,6 +58,7 @@ fun BengkelScreen(
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore)
 ){
     val bengkelListState = viewModel.bengkelList.observeAsState()
+    val query by viewModel.query
     val statusState by viewModel.status.observeAsState(false)
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
     val context = LocalContext.current
@@ -60,37 +71,72 @@ fun BengkelScreen(
         modifier = modifier
             .fillMaxSize(),
     ){
-        LazyColumn(
-            contentPadding = PaddingValues(bottom = 30.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-        ) {
-            item {
-                Text(
-                    text = "List Bengkel",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                        .padding(8.dp)
-                )
-            }
-            if (statusState) {
-                items(bengkelListState.value ?: emptyList()) { data ->
-                    BengkelItem(
-                        namaBengkel = data?.namaBengkel ?: "",
-                        lokasiBengkel = data?.lokasiBengkel ?: "",
-                        alamatBengkel = data?.alamatBengkel ?: "",
-                        numberBengkel = data?.numberBengkel ?: "",
+        Column {
+            Text(
+                text = "List Bengkel",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = modifier
+                    .padding(16.dp)
+            )
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 30.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = modifier
+                    .padding(horizontal = 16.dp)
+            ) {
+                item {
+                    SearchBar(
+                        query = query,
+                        onQueryChange = viewModel::search,
+                        onSearch = {},
+                        active = false,
+                        onActiveChange = {},
+                        shape = RoundedCornerShape(10.dp),
+                        colors = SearchBarDefaults.colors(containerColor = Color.White),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "",
+                                tint = colorScheme.onSurface
+                            )
+                        },
+                        placeholder = {
+                            Text(
+                                text = "Cari Bengkel",
+                                fontSize = 14.sp,
+                            )
+                        },
                         modifier = modifier
-                            .clickable {
-                                data?.id?.let { navigator.navigate(BengkelDetailScreenDestination(userModel.id, bengkelId = it)) }
-                            }
-                            .animateItemPlacement(tween(durationMillis = 100))
-                    )
+                            .fillMaxWidth()
+                    ) {
+                    }
+                }
+                if (statusState) {
+                    items(bengkelListState.value ?: emptyList()) { data ->
+                        BengkelItem(
+                            namaBengkel = data?.namaBengkel ?: "",
+                            lokasiBengkel = data?.lokasiBengkel ?: "",
+                            alamatBengkel = data?.alamatBengkel ?: "",
+                            numberBengkel = data?.numberBengkel ?: "",
+                            modifier = modifier
+                                .clickable {
+                                    data?.id?.let {
+                                        navigator.navigate(
+                                            BengkelDetailScreenDestination(
+                                                userModel.id,
+                                                bengkelId = it
+                                            )
+                                        )
+                                    }
+                                }
+                                .animateItemPlacement(tween(durationMillis = 100))
+                        )
+                    }
                 }
             }
         }
+
     }
 }
 

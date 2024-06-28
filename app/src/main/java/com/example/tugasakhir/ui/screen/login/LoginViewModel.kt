@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tugasakhir.api.response.ResponseLogin
 import com.example.tugasakhir.data.pref.UserModel
 import com.example.tugasakhir.data.repository.UserRepository
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
@@ -32,9 +34,9 @@ class LoginViewModel(private val repository: UserRepository): ViewModel() {
             }catch (e: HttpException){
                 _loading.value = false
                 val jsonInString = e.response()?.errorBody()?.string()
-//                val errorBody = Gson().fromJson(jsonInString, ResponseLogin::class.java)
-//                val errorMessage = errorBody?.message ?: "Terjadi kesalahan saat login"
-//                error.postValue(errorMessage)
+                val errorBody = Gson().fromJson(jsonInString, ResponseLogin::class.java)
+                val errorMessage = errorBody?.message ?: "Terjadi kesalahan saat login"
+                error.postValue(errorMessage)
                 status.postValue(false)
                 Log.d("LOGIN", "$e")
             } catch (e: Exception) {
