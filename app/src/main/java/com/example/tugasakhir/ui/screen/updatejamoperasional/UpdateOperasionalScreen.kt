@@ -34,6 +34,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+fun isValidTimeFormat(time: String): Boolean {
+    val regex = Regex("^([01]?[0-9]|2[0-3])\\.[0-5][0-9]\$")
+    return time.matches(regex)
+}
+
 @Destination<RootGraph>
 @Composable
 fun UpdateOperasionalScreen(
@@ -64,86 +69,94 @@ fun UpdateOperasionalScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        if (!statusState){
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        }else{
-            Column(
+        Column(
+            modifier = modifier
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Edit Jam Operasional",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = modifier
-                    .padding(16.dp)
+            )
+            Text(
+                text = hariOperasional,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                modifier = modifier
+                    .padding(top = 16.dp)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "Edit Jam Operasional",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                )
-                Text(
-                    text = hariOperasional,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    modifier = modifier
-                        .padding(top = 16.dp)
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                Column(
+                    modifier = modifier.weight(1f)
                 ) {
-                    Column(
-                        modifier = modifier.weight(1f)
-                    ) {
-                        OutlinedTextField(
-                            value = jamMulai,
-                            onValueChange = { jamMulai = it },
-                            label = { Text("Jam Mulai") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp)
-                        )
-                    }
-                    Column(
-                        modifier = modifier.weight(1f)
-                    ){
-                        OutlinedTextField(
-                            value = jamSelesai,
-                            onValueChange = { jamSelesai = it },
-                            label = { Text("Jam Selesai") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp)
-                        )
-                    }
-                    Column(
-                        modifier = modifier.weight(1f)
-                    ){
-                        OutlinedTextField(
-                            value = slotState,
-                            onValueChange = { slotState = it },
-                            label = { Text("Slot") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp)
-                        )
-                    }
+                    OutlinedTextField(
+                        value = jamMulai,
+                        onValueChange = { jamMulai = it },
+                        label = { Text("Jam Mulai") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
+                    )
                 }
-                Button(
-                    onClick = {
+                Column(
+                    modifier = modifier.weight(1f)
+                ){
+                    OutlinedTextField(
+                        value = jamSelesai,
+                        onValueChange = { jamSelesai = it },
+                        label = { Text("Jam Selesai") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
+                    )
+                }
+                Column(
+                    modifier = modifier.weight(1f)
+                ){
+                    OutlinedTextField(
+                        value = slotState,
+                        onValueChange = { slotState = it },
+                        label = { Text("Slot") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
+                    )
+                }
+            }
+            Button(
+                onClick = {
+                    var isValid = true
+                    if (jamMulai.isBlank() || jamSelesai.isBlank() || slotState.isBlank()) {
+                        isValid = false
+                        Toast.makeText(context, "Harap lengkapi semua kolom yang diperlukan", Toast.LENGTH_SHORT).show()
+                    } else {
+                        if (!isValidTimeFormat(jamMulai)) {
+                            isValid = false
+                            Toast.makeText(context, "Format jam mulai tidak valid: $jamMulai", Toast.LENGTH_SHORT).show()
+                        }
+                        if (!isValidTimeFormat(jamSelesai)) {
+                            isValid = false
+                            Toast.makeText(context, "Format jam selesai tidak valid: $jamSelesai", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    if (isValid) {
                         updatedJamOperasional = "$jamMulai - $jamSelesai"
                         viewModel.updateJamOperasional(bengkelId, jamId, updatedJamOperasional, slotState.toInt())
                         Toast.makeText(context, "Berhasil Update Jam Operasional", Toast.LENGTH_SHORT).show()
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Red),
-                    modifier = modifier
-                        .padding(top = 16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(text = "Simpan Perubahan")
-                }
+                    }
+                },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(Color.Red),
+                modifier = modifier
+                    .padding(top = 16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = "Simpan Perubahan")
             }
         }
     }

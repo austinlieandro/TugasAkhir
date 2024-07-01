@@ -76,151 +76,148 @@ fun InputKendaraanScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        if (!statusState){
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        }else{
-            Column(
+        Column(
+            modifier = modifier
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Input Kendaraan",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = modifier
-                    .padding(16.dp)
+                    .padding(bottom = 16.dp)
+            )
+            ExposedDropdownMenuBox(
+                expanded = isExpendedKendaraan,
+                onExpandedChange = { isExpendedKendaraan = !isExpendedKendaraan }
             ) {
-                Text(
-                    text = "Input Kendaraan",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                        .padding(bottom = 16.dp)
+                TextField(
+                    value = selectedTextKendaraan ?: "",
+                    onValueChange = {},
+                    readOnly = true,
+                    shape = RoundedCornerShape(10.dp),
+                    label = { Text("Pilih Jenis Kendaraan") },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        containerColor = Color.White,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    ),
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKendaraan)
+                    },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 16.dp)
                 )
-                ExposedDropdownMenuBox(
+                ExposedDropdownMenu(
                     expanded = isExpendedKendaraan,
-                    onExpandedChange = { isExpendedKendaraan = !isExpendedKendaraan }
+                    onDismissRequest = { isExpendedKendaraan = false },
+                    modifier = Modifier
+                        .background(Color.White)
                 ) {
-                    TextField(
-                        value = selectedTextKendaraan ?: "",
-                        onValueChange = {},
-                        readOnly = true,
-                        shape = RoundedCornerShape(10.dp),
-                        label = { Text("Pilih Jenis Kendaraan") },
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = MaterialTheme.colorScheme.outline,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                            containerColor = Color.White,
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        ),
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKendaraan)
-                        },
-                        modifier = Modifier
-                            .menuAnchor()
-                            .fillMaxWidth()
-                            .padding(top = 16.dp, bottom = 16.dp)
-                    )
-                    ExposedDropdownMenu(
-                        expanded = isExpendedKendaraan,
-                        onDismissRequest = { isExpendedKendaraan = false },
-                        modifier = Modifier
-                            .background(Color.White)
-                    ) {
-                        listJenisKendaraan.forEach { option ->
-                            DropdownMenuItem(
-                                text = { option.let { Text(it) } },
-                                onClick = {
-                                    option.let { selectedTextKendaraan = it }
-                                    isExpendedKendaraan = false
-                                },
-                                modifier = Modifier
-                                    .background(Color.White)
-                            )
-                        }
+                    listJenisKendaraan.forEach { option ->
+                        DropdownMenuItem(
+                            text = { option.let { Text(it) } },
+                            onClick = {
+                                option.let { selectedTextKendaraan = it }
+                                isExpendedKendaraan = false
+                            },
+                            modifier = Modifier
+                                .background(Color.White)
+                        )
                     }
                 }
-                OutlinedTextField(
-                    value = platKendaraan,
-                    onValueChange = { platKendaraan = it },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
-                    ),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Plat Kendaraan",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Plat Kendaraan",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        containerColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = merekKendaraan,
-                    onValueChange = { merekKendaraan = it },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { localFocusManager.clearFocus() }
-                    ),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Merek Kendaraan",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Merek Kendaraan",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        containerColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                )
-                Button(
-                    onClick = {
-                        viewModel.inputKendaraan(selectedTextKendaraan, platKendaraan, merekKendaraan, userModel.id)
-                        Toast.makeText(context, "Berhasil Menambahkan Kendaraan", Toast.LENGTH_SHORT).show()
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Red),
-                    modifier = modifier
-                        .fillMaxWidth()
-                ) {
+            }
+            OutlinedTextField(
+                value = platKendaraan,
+                onValueChange = { platKendaraan = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
+                ),
+                singleLine = true,
+                placeholder = {
                     Text(
-                        text = "Tambah Kendaraan"
+                        text = "Plat Kendaraan",
+                        color = Color(0xFF86888D)
                     )
-                }
+                },
+                label = {
+                    Text(
+                        text = "Plat Kendaraan",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = merekKendaraan,
+                onValueChange = { merekKendaraan = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { localFocusManager.clearFocus() }
+                ),
+                singleLine = true,
+                placeholder = {
+                    Text(
+                        text = "Merek Kendaraan",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                label = {
+                    Text(
+                        text = "Merek Kendaraan",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+            Button(
+                onClick = {
+                    if(platKendaraan.isBlank() || merekKendaraan.isBlank() || selectedTextKendaraan.isBlank()){
+                        Toast.makeText(context, "Harap masukan semua data terlebih dahulu", Toast.LENGTH_SHORT).show()
+                    }else{
+                        viewModel.inputKendaraan(selectedTextKendaraan, platKendaraan, merekKendaraan, userModel.id)
+                        platKendaraan = ""
+                        merekKendaraan = ""
+                        Toast.makeText(context, "Berhasil Menambahkan Kendaraan", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(Color.Red),
+                modifier = modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Tambah Kendaraan"
+                )
             }
         }
     }

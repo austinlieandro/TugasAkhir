@@ -188,501 +188,492 @@ fun DaftarBengkelScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        if (!statusState){
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        }else{
-            Column(
+        Column(
+            modifier = modifier
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Text(
+                text = "Daftar Bengkel",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = modifier
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
+                    .padding(8.dp)
+            )
+            OutlinedTextField(
+                value = namaBengkel,
+                onValueChange = { namaBengkel = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
+                ),
+                singleLine = true,
+                placeholder = {
+                    Text(
+                        text = "Nama Bengkel",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                label = {
+                    Text(
+                        text = "Nama Bengkel",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = lokasiBengkel,
+                onValueChange = { lokasiBengkel = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
+                ),
+                singleLine = true,
+                placeholder = {
+                    Text(
+                        text = "Domisili Bengkel",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                label = {
+                    Text(
+                        text = "Domisili Bengkel",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = numberBengkel,
+                onValueChange = { numberBengkel = it },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
+                ),
+                singleLine = true,
+                placeholder = {
+                    Text(
+                        text = "Nomor Telepon Bengkel",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                label = {
+                    Text(
+                        text = "Nomor Telepon Bengkel",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = alamatBengkel,
+                onValueChange = { alamatBengkel = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
+                ),
+                singleLine = true,
+                placeholder = {
+                    Text(
+                        text = "Alamat Bengkel",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                label = {
+                    Text(
+                        text = "Alamat Bengkel",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = gmapsBengkel,
+                onValueChange = { gmapsBengkel = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
+                ),
+                singleLine = true,
+                placeholder = {
+                    Text(
+                        text = "Google Maps Link",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                label = {
+                    Text(
+                        text = "Google Maps Link",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+            Row(
+                modifier = Modifier
+                    .padding(top = 14.dp)
+                    .fillMaxWidth()
+            ){
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .background(color = Color.White)
+                        .padding(8.dp)
+                ){
+                    Column {
+                        Text(
+                            text = "Jenis Kendaraan Yang Dilayani",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(bottom = 8.dp)
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Checkbox(
+                                checked = isMotorChecked,
+                                onCheckedChange = { isMotorChecked = it }
+                            )
+                            Text(text = "Motor")
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Checkbox(
+                                        checked = isMobilChecked,
+                                        onCheckedChange = { isMobilChecked = it },
+                                    )
+                                    Text(text = "Mobil")
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .padding(top = 14.dp)
+                    .fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .background(color = Color.White)
+                        .padding(8.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = "Jenis Layanan",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(bottom = 8.dp)
+                        )
+                        listOf(
+                            "Oli" to isOliChecked,
+                            "Rem" to isRemChecked,
+                            "Busi" to isBusiChecked,
+                            "Aki" to isAkiChecked,
+                            "Listrik" to isListrikChecked,
+                            "Suspensi" to isSuspensiChecked,
+                            "Mesin" to isMesinChecked,
+                            "Ban" to isBanChecked,
+                            "Rantai" to isRantaiChecked,
+                            "Karburator/Injektor" to isKarburatorChecked,
+                            "Body" to isBodyChecked,
+                            "Filter" to isFilterChecked,
+                            "AC" to isAcChecked,
+                            "Transmisi" to isTransmisiChecked,
+                            "Radiator" to isRadiatorChecked
+                        ).forEach { (label, isChecked) ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .padding(bottom = 8.dp)
+                            ) {
+                                Checkbox(
+                                    checked = isChecked,
+                                    onCheckedChange = {
+                                        when (label) {
+                                            "Oli" -> isOliChecked = it
+                                            "Rem" -> isRemChecked = it
+                                            "Busi" -> isBusiChecked = it
+                                            "Aki" -> isAkiChecked = it
+                                            "Listrik" -> isListrikChecked = it
+                                            "Suspensi" -> isSuspensiChecked = it
+                                            "Mesin" -> isMesinChecked = it
+                                            "Ban" -> isBanChecked = it
+                                            "Rantai" -> isRantaiChecked = it
+                                            "Karburator/Injektor" -> isKarburatorChecked = it
+                                            "Body" -> isBodyChecked = it
+                                            "Filter" -> isFilterChecked = it
+                                            "AC" -> isAcChecked = it
+                                            "Transmisi" -> isTransmisiChecked = it
+                                            "Radiator" -> isRadiatorChecked = it
+                                        }
+                                    }
+                                )
+                                Text(text = label, fontSize = 14.sp)
+                            }
+                        }
+                    }
+                }
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .background(color = Color.White)
+                        .padding(8.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = "Hari Operasional",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(bottom = 8.dp)
+                        )
+                        listOf(
+                            "Senin" to isSeninChecked,
+                            "Selasa" to isSelasaChecked,
+                            "Rabu" to isRabuChecked,
+                            "Kamis" to isKamisChecked,
+                            "Jumat" to isJumatChecked,
+                            "Sabtu" to isSabtuChecked,
+                            "Minggu" to isMingguChecked
+                        ).forEach { (label, isChecked) ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .padding(bottom = 8.dp)
+                            ) {
+                                Checkbox(
+                                    checked = isChecked,
+                                    onCheckedChange = {
+                                        when (label) {
+                                            "Senin" -> isSeninChecked = it
+                                            "Selasa" -> isSelasaChecked = it
+                                            "Rabu" -> isRabuChecked = it
+                                            "Kamis" -> isKamisChecked = it
+                                            "Jumat" -> isJumatChecked = it
+                                            "Sabtu" -> isSabtuChecked = it
+                                            "Minggu" -> isMingguChecked = it
+                                        }
+                                    }
+                                )
+                                Text(text = label, fontSize = 14.sp)
+                            }
+                        }
+                    }
+                }
+            }
+            val timeDialogStateBuka = rememberMaterialDialogState()
+            OutlinedTextField(
+                value = formattedTimeBuka,
+                onValueChange = {},
+                singleLine = true,
+                readOnly = true,
+                enabled = false,
+                label = {
+                    Text(
+                        text = "Pilih Jam Buka",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledBorderColor = Color.Black,
+                    disabledTextColor = Color.Black,
+                    containerColor = Color.White,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(top = 16.dp, bottom = 16.dp)
+                    .fillMaxWidth()
+                    .clickable {
+                        timeDialogStateBuka.show()
+                    }
+            )
+            MaterialDialog(
+                dialogState = timeDialogStateBuka,
+                buttons = {
+                    positiveButton("Ok")
+                    negativeButton("Cancel")
+                }
+            ){
+                timepicker(
+                    initialTime = LocalTime.NOON,
+                    title = "Pick a time",
+                ){
+                    pickedTimeBuka = it
+                }
+            }
+            val timeDialogStateTutup = rememberMaterialDialogState()
+            OutlinedTextField(
+                value = formattedTimeTutup,
+                onValueChange = {},
+                singleLine = true,
+                readOnly = true,
+                enabled = false,
+                label = {
+                    Text(
+                        text = "Pilih Jam Tutup",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledBorderColor = Color.Black,
+                    disabledTextColor = Color.Black,
+                    containerColor = Color.White,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+                    .clickable {
+                        timeDialogStateTutup.show()
+                    }
+            )
+            MaterialDialog(
+                dialogState = timeDialogStateTutup,
+                buttons = {
+                    positiveButton("Ok")
+                    negativeButton("Cancel")
+                }
+            ){
+                timepicker(
+                    initialTime = LocalTime.NOON,
+                    title = "Pick a time",
+                ){
+                    pickedTimeTutup = it
+                }
+            }
+
+            Button(
+                onClick = {
+                    if (namaBengkel.isBlank() || lokasiBengkel.isBlank() || numberBengkel.isBlank() ||
+                        alamatBengkel.isBlank() || selectedKendaraan.isEmpty() || selectedHari.isEmpty()) {
+                        Toast.makeText(
+                            context,
+                            "Harap lengkapi semua kolom yang diperlukan",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        viewModel.daftarBengkel(
+                            namaBengkel,
+                            lokasiBengkel,
+                            numberBengkel,
+                            alamatBengkel,
+                            gmapsBengkel,
+                            selectedKendaraan.toList(),
+                            selectedLayanan.toList(),
+                            selectedHari.toList(),
+                            formattedTimeBuka,
+                            formattedTimeTutup,
+                            userModel.id)
+                        Toast.makeText(
+                            context,
+                            "Data berhasil disimpan",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Handler().postDelayed({
+                            navigator.navigate(JamOperasionalScreenDestination(bengkelId = daftarBengkelState.value?.id ?: 0))
+                        }, 500)
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(Color.Red),
+                shape = RoundedCornerShape(10.dp),
+                modifier = modifier
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
             ) {
                 Text(
                     text = "Daftar Bengkel",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                        .padding(8.dp)
+                    color = Color.White
                 )
-                OutlinedTextField(
-                    value = namaBengkel,
-                    onValueChange = { namaBengkel = it },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
-                    ),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Nama Bengkel",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Nama Bengkel",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        containerColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = lokasiBengkel,
-                    onValueChange = { lokasiBengkel = it },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
-                    ),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Domisili Bengkel",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Domisili Bengkel",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        containerColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = numberBengkel,
-                    onValueChange = { numberBengkel = it },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Phone,
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
-                    ),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Nomor Telepon Bengkel",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Nomor Telepon Bengkel",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        containerColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = alamatBengkel,
-                    onValueChange = { alamatBengkel = it },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
-                    ),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Alamat Bengkel",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Alamat Bengkel",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        containerColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = gmapsBengkel,
-                    onValueChange = { gmapsBengkel = it },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { localFocusManager.moveFocus(FocusDirection.Down) }
-                    ),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Google Maps Link",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Google Maps Link",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        containerColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                )
-                Row(
-                    modifier = Modifier
-                        .padding(top = 14.dp)
-                        .fillMaxWidth()
-                ){
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .border(
-                                width = 1.dp,
-                                color = Color.Black,
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .background(color = Color.White)
-                            .padding(8.dp)
-                    ){
-                        Column {
-                            Text(
-                                text = "Jenis Kendaraan Yang Dilayani",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier
-                                    .padding(bottom = 8.dp)
-                            )
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Checkbox(
-                                    checked = isMotorChecked,
-                                    onCheckedChange = { isMotorChecked = it }
-                                )
-                                Text(text = "Motor")
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = modifier
-                                        .fillMaxWidth()
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Checkbox(
-                                            checked = isMobilChecked,
-                                            onCheckedChange = { isMobilChecked = it },
-                                        )
-                                        Text(text = "Mobil")
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                }
-                Row(
-                    modifier = Modifier
-                        .padding(top = 14.dp)
-                        .fillMaxWidth()
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .border(
-                                width = 1.dp,
-                                color = Color.Black,
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .background(color = Color.White)
-                            .padding(8.dp)
-                    ) {
-                        Column {
-                            Text(
-                                text = "Jenis Layanan",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier
-                                    .padding(bottom = 8.dp)
-                            )
-                            listOf(
-                                "Oli" to isOliChecked,
-                                "Rem" to isRemChecked,
-                                "Busi" to isBusiChecked,
-                                "Aki" to isAkiChecked,
-                                "Listrik" to isListrikChecked,
-                                "Suspensi" to isSuspensiChecked,
-                                "Mesin" to isMesinChecked,
-                                "Ban" to isBanChecked,
-                                "Rantai" to isRantaiChecked,
-                                "Karburator/Injektor" to isKarburatorChecked,
-                                "Body" to isBodyChecked,
-                                "Filter" to isFilterChecked,
-                                "AC" to isAcChecked,
-                                "Transmisi" to isTransmisiChecked,
-                                "Radiator" to isRadiatorChecked
-                            ).forEach { (label, isChecked) ->
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier
-                                        .padding(bottom = 8.dp)
-                                ) {
-                                    Checkbox(
-                                        checked = isChecked,
-                                        onCheckedChange = {
-                                            when (label) {
-                                                "Oli" -> isOliChecked = it
-                                                "Rem" -> isRemChecked = it
-                                                "Busi" -> isBusiChecked = it
-                                                "Aki" -> isAkiChecked = it
-                                                "Listrik" -> isListrikChecked = it
-                                                "Suspensi" -> isSuspensiChecked = it
-                                                "Mesin" -> isMesinChecked = it
-                                                "Ban" -> isBanChecked = it
-                                                "Rantai" -> isRantaiChecked = it
-                                                "Karburator/Injektor" -> isKarburatorChecked = it
-                                                "Body" -> isBodyChecked = it
-                                                "Filter" -> isFilterChecked = it
-                                                "AC" -> isAcChecked = it
-                                                "Transmisi" -> isTransmisiChecked = it
-                                                "Radiator" -> isRadiatorChecked = it
-                                            }
-                                        }
-                                    )
-                                    Text(text = label, fontSize = 14.sp)
-                                }
-                            }
-                        }
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .border(
-                                width = 1.dp,
-                                color = Color.Black,
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .background(color = Color.White)
-                            .padding(8.dp)
-                    ) {
-                        Column {
-                            Text(
-                                text = "Hari Operasional",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier
-                                    .padding(bottom = 8.dp)
-                            )
-                            listOf(
-                                "Senin" to isSeninChecked,
-                                "Selasa" to isSelasaChecked,
-                                "Rabu" to isRabuChecked,
-                                "Kamis" to isKamisChecked,
-                                "Jumat" to isJumatChecked,
-                                "Sabtu" to isSabtuChecked,
-                                "Minggu" to isMingguChecked
-                            ).forEach { (label, isChecked) ->
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier
-                                        .padding(bottom = 8.dp)
-                                ) {
-                                    Checkbox(
-                                        checked = isChecked,
-                                        onCheckedChange = {
-                                            when (label) {
-                                                "Senin" -> isSeninChecked = it
-                                                "Selasa" -> isSelasaChecked = it
-                                                "Rabu" -> isRabuChecked = it
-                                                "Kamis" -> isKamisChecked = it
-                                                "Jumat" -> isJumatChecked = it
-                                                "Sabtu" -> isSabtuChecked = it
-                                                "Minggu" -> isMingguChecked = it
-                                            }
-                                        }
-                                    )
-                                    Text(text = label, fontSize = 14.sp)
-                                }
-                            }
-                        }
-                    }
-                }
-                val timeDialogStateBuka = rememberMaterialDialogState()
-                OutlinedTextField(
-                    value = formattedTimeBuka,
-                    onValueChange = {},
-                    singleLine = true,
-                    readOnly = true,
-                    enabled = false,
-                    label = {
-                        Text(
-                            text = "Pilih Jam Buka",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        disabledBorderColor = Color.Black,
-                        disabledTextColor = Color.Black,
-                        containerColor = Color.White,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 16.dp)
-                        .fillMaxWidth()
-                        .clickable {
-                            timeDialogStateBuka.show()
-                        }
-                )
-                MaterialDialog(
-                    dialogState = timeDialogStateBuka,
-                    buttons = {
-                        positiveButton("Ok")
-                        negativeButton("Cancel")
-                    }
-                ){
-                    timepicker(
-                        initialTime = LocalTime.NOON,
-                        title = "Pick a time",
-                    ){
-                        pickedTimeBuka = it
-                    }
-                }
-                val timeDialogStateTutup = rememberMaterialDialogState()
-                OutlinedTextField(
-                    value = formattedTimeTutup,
-                    onValueChange = {},
-                    singleLine = true,
-                    readOnly = true,
-                    enabled = false,
-                    label = {
-                        Text(
-                            text = "Pilih Jam Tutup",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        disabledBorderColor = Color.Black,
-                        disabledTextColor = Color.Black,
-                        containerColor = Color.White,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                        .clickable {
-                            timeDialogStateTutup.show()
-                        }
-                )
-                MaterialDialog(
-                    dialogState = timeDialogStateTutup,
-                    buttons = {
-                        positiveButton("Ok")
-                        negativeButton("Cancel")
-                    }
-                ){
-                    timepicker(
-                        initialTime = LocalTime.NOON,
-                        title = "Pick a time",
-                    ){
-                        pickedTimeTutup = it
-                    }
-                }
-
-                Button(
-                    onClick = {
-                        if (namaBengkel.isBlank() || lokasiBengkel.isBlank() || numberBengkel.isBlank() ||
-                            alamatBengkel.isBlank() || selectedKendaraan.isEmpty() || selectedHari.isEmpty()) {
-                            Toast.makeText(
-                                context,
-                                "Harap lengkapi semua kolom yang diperlukan",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            viewModel.daftarBengkel(
-                                namaBengkel,
-                                lokasiBengkel,
-                                numberBengkel,
-                                alamatBengkel,
-                                gmapsBengkel,
-                                selectedKendaraan.toList(),
-                                selectedLayanan.toList(),
-                                selectedHari.toList(),
-                                formattedTimeBuka,
-                                formattedTimeTutup,
-                                userModel.id)
-                            Toast.makeText(
-                                context,
-                                "Data berhasil disimpan",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Handler().postDelayed({
-                                navigator.navigate(JamOperasionalScreenDestination(bengkelId = daftarBengkelState.value?.id ?: 0))
-                            }, 500)
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(Color.Red),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = modifier
-                        .padding(bottom = 16.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Daftar Bengkel",
-                        color = Color.White
-                    )
-                }
             }
         }
     }

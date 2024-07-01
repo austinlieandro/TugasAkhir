@@ -124,7 +124,7 @@ fun ReservasiBengkelItem(
                         text = statusReservasi,
                         fontSize = 18.sp,
                         color =
-                        if (statusReservasi.lowercase() == "menunggu") {
+                        if (statusReservasi.lowercase() == "menunggu" || statusReservasi.lowercase() =="dibatalkan") {
                             Color.White
                         } else{
                             Color.Black

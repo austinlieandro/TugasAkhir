@@ -169,8 +169,12 @@ fun DetailKendaraanScreen(
                 )
                 Button(
                     onClick = {
-                        viewModel.updateKendaraanUser(usersId, kendaraanId, platKendaraan, merekKendaraan)
-                        Toast.makeText(context, "Berhasil update data kendaraan", Toast.LENGTH_SHORT).show()
+                        if (platKendaraan.isBlank() || merekKendaraan.isBlank()){
+                            Toast.makeText(context, "Harap masukan semua data terlebih dahulu", Toast.LENGTH_SHORT).show()
+                        }else{
+                            viewModel.updateKendaraanUser(usersId, kendaraanId, platKendaraan, merekKendaraan)
+                            Toast.makeText(context, "Berhasil update data kendaraan", Toast.LENGTH_SHORT).show()
+                        }
                     },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(Color.Red),

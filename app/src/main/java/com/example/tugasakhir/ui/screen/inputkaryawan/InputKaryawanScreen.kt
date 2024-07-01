@@ -59,113 +59,108 @@ fun InputKaryawanSceren(
         modifier = modifier
             .fillMaxSize()
     ) {
-        if (!statusState){
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        }else{
-            Column(
+        Column(
+            modifier = modifier
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Text(
+                text = "Input Karyawan",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = modifier
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Text(
-                    text = "Input Karyawan",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                        .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 16.dp)
-                )
-                OutlinedTextField(
-                    value = namaKaryawan,
-                    onValueChange = { namaKaryawan = it },
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Nama Karyawan",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Nama Karyawan",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        containerColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                )
-                Button(
-                    onClick = {
+                    .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 16.dp)
+            )
+            OutlinedTextField(
+                value = namaKaryawan,
+                onValueChange = { namaKaryawan = it },
+                singleLine = true,
+                placeholder = {
+                    Text(
+                        text = "Nama Karyawan",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                label = {
+                    Text(
+                        text = "Nama Karyawan",
+                        color = Color(0xFF86888D)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    containerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+            Button(
+                onClick = {
+                    if (namaKaryawan.isBlank()){
+                        Toast.makeText(context, "Nama karyawan tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                    }else{
                         viewModel.inputKaryawan(namaKaryawan, bengkelId)
                         Toast.makeText(context, "Berhasil menambahkan karyawan", Toast.LENGTH_SHORT).show()
                         namaKaryawan = ""
+                    }
+                },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(Color.Red),
+                modifier = modifier
+                    .fillMaxWidth()
+            ) {
+                Text(text = "Simpan Data Karyawan")
+            }
+            Button(
+                onClick = {
+                    openAlertDialog.value = true
+                },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(Color.Red),
+                modifier = modifier
+                    .fillMaxWidth()
+            ) {
+                Text(text = "Selesai Menyimpan Data Karyawan")
+            }
+            if (openAlertDialog.value){
+                AlertDialog(
+                    onDismissRequest = { openAlertDialog.value = false },
+                    title = {
+                        Text(text = "Warning")
                     },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Red),
-                    modifier = modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(text = "Simpan Data Karyawan")
-                }
-                Button(
-                    onClick = {
-                        openAlertDialog.value = true
+                    text = {
+                        Text(text = "Apakah kamu sudah selesai input karyawan?")
                     },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Red),
-                    modifier = modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(text = "Selesai Menyimpan Data Karyawan")
-                }
-                if (openAlertDialog.value){
-                    AlertDialog(
-                        onDismissRequest = { openAlertDialog.value = false },
-                        title = {
-                            Text(text = "Warning")
-                        },
-                        text = {
-                            Text(text = "Apakah kamu sudah selesai input karyawan?")
-                        },
-                        confirmButton = {
-                            Button(
-                                shape = RoundedCornerShape(10.dp),
-                                onClick = {
-                                    openAlertDialog.value = false
-                                    navigator.navigate(BengkelScreenDestination)
-                                }
-                            ) {
-                                Text(
-                                    text = "Ya"
-                                )
+                    confirmButton = {
+                        Button(
+                            shape = RoundedCornerShape(10.dp),
+                            onClick = {
+                                openAlertDialog.value = false
+                                navigator.navigate(BengkelScreenDestination)
                             }
-                        },
-                        dismissButton = {
-                            TextButton(
-                                onClick = {
-                                    openAlertDialog.value = false
-                                }
-                            ) {
-                                Text(
-                                    text = "Belum"
-                                )
-                            }
+                        ) {
+                            Text(
+                                text = "Ya"
+                            )
                         }
-                    )
-                }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                openAlertDialog.value = false
+                            }
+                        ) {
+                            Text(
+                                text = "Belum"
+                            )
+                        }
+                    }
+                )
             }
         }
     }

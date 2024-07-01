@@ -258,8 +258,8 @@ fun ProfileScreen(
                     Button(
                         colors = ButtonDefaults.buttonColors(Color.Transparent),
                         onClick = {
-                            viewModel.logout()
                             navigator.navigate(WelcomeScreenDestination)
+                            viewModel.logout()
                         },
                         modifier = modifier
                             .fillMaxWidth()

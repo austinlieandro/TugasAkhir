@@ -51,6 +51,7 @@ fun UpdateProfileScreen(
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore)
 ){
     val profileState = viewModel.profile.observeAsState()
+    val errorState = viewModel.errorUpdate.observeAsState()
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
     var nama by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -240,7 +241,7 @@ fun UpdateProfileScreen(
                 Button(
                     onClick = {
                         viewModel.updateProfile(userModel.id, nama, email, username, password, phone)
-                        Toast.makeText(context, "Berhasil update data kendaraan", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "${errorState.value}", Toast.LENGTH_SHORT).show()
                     },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(Color.Red),

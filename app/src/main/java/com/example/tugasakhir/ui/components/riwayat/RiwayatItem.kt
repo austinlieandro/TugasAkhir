@@ -146,7 +146,7 @@ fun RiwayatItem(
                         text = statusBengkel,
                         fontSize = 18.sp,
                         color =
-                        if (statusBengkel.lowercase() == "menunggu") {
+                        if (statusBengkel.lowercase() == "menunggu" || statusBengkel.lowercase() =="dibatalkan") {
                             Color.White
                         } else{
                             Color.Black

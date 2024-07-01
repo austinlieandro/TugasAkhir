@@ -66,7 +66,7 @@ fun UpdateBengkelScreen(
     ),
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ){
-    val statusState by viewModel.status.observeAsState(false)
+    val statusState by viewModel.statusBengkel.observeAsState(false)
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
     val detailBengkel = viewModel.detailBengkel.observeAsState()
     LaunchedEffect(userModel.bengkels_id) {

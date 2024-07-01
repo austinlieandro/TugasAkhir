@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -63,13 +64,16 @@ import com.example.tugasakhir.data.pref.UserPreference
 import com.example.tugasakhir.data.pref.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.KonfirmasiScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -153,10 +157,14 @@ fun BengkelDetailScreen(
                     .fillMaxSize()
             ) {
                 Row {
-                    Column {
+                    Column(
+                        modifier = modifier
+                            .width(300.dp)
+                    ) {
                         Text(
                             text = bengkelState.value?.namaBengkel ?: "",
                             fontSize = 18.sp,
+                            maxLines = 1,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
@@ -341,12 +349,13 @@ fun BengkelDetailScreen(
                 }
 
                 val dateDialogState = rememberMaterialDialogState()
-
+                var isDateDialogOpen by remember { mutableStateOf(false) }
                 OutlinedTextField(
                     modifier = modifier
                         .fillMaxWidth()
                         .clickable {
                             dateDialogState.show()
+                            isDateDialogOpen = true
                         }
                     ,
                     label = {
@@ -355,7 +364,7 @@ fun BengkelDetailScreen(
                             color = Color.Black
                         )
                     },
-                    value = "Selected Date: $formattedDate",
+                    value = if (!isDateDialogOpen) "" else "Selected Date: $formattedDate",
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
@@ -375,16 +384,21 @@ fun BengkelDetailScreen(
                             val hariOperasional = bengkelState.value?.hariOperasional ?: emptyList()
                             val selectedDate = pickerDate
                             val dayOfWeek = selectedDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale("id")).toLowerCase(Locale.getDefault())
+                            val currentDate = LocalDate.now()
 
-                            if (dayOfWeek in hariOperasional.map { it?.toLowerCase(Locale.getDefault()) ?: "" }) {
+                            if (dayOfWeek in hariOperasional.map { it?.toLowerCase(Locale.getDefault()) ?: "" } &&
+                                !selectedDate.isBefore(currentDate)) {
                                 selectedHariOperasional = dayOfWeek
                                 pickerDate = selectedDate
                             } else {
-                                Toast.makeText(context, "Bengkel tidak buka pada tanggal ini", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Bengkel tidak buka pada tanggal ini atau tanggal sudah lewat", Toast.LENGTH_SHORT).show()
                                 dateDialogState.show()
                             }
+                            isDateDialogOpen = true
                         }
-                        negativeButton("Cancel")
+                        negativeButton("Cancel"){
+                            isDateDialogOpen = false
+                        }
                     }
                 ){
                     datepicker(
@@ -439,13 +453,29 @@ fun BengkelDetailScreen(
                     ) {
                         jamOperasionalState.value?.filter { it?.hariOperasional?.equals(selectedHariOperasional, ignoreCase = true) ?: false }?.forEach { option ->
                             DropdownMenuItem(
-                                text = { option?.jamOperasional?.let { Text(it) } },
+                                text = {
+                                    Text(option?.jamOperasional ?: "")
+                                },
                                 onClick = {
-                                    option?.jamOperasional?.let {
-                                        selectedTextJamOperasional = it
-                                        sisaSlot = option.slot ?: 0
+                                    val jamOperasionalText = option?.jamOperasional ?: ""
+                                    val jamOperasionalParts = jamOperasionalText.split(" - ")
+
+                                    if (jamOperasionalParts.size == 2) {
+                                        val startTime = jamOperasionalParts[0]
+                                        val selectedTime = LocalTime.parse(startTime, DateTimeFormatter.ofPattern("HH.mm"))
+                                        val currentDate = LocalDate.now()
+                                        val currentTime = LocalTime.now()
+
+                                        if (pickerDate == currentDate && selectedTime.isBefore(currentTime)) {
+                                            Toast.makeText(context, "Anda tidak dapat memilih jam yang telah dilewati", Toast.LENGTH_SHORT).show()
+                                            selectedTextJamOperasional = ""
+                                            sisaSlot = 0
+                                        } else {
+                                            selectedTextJamOperasional = jamOperasionalText
+                                            sisaSlot = option?.slot ?: 0
+                                            isExpendedJamOperasional = false
+                                        }
                                     }
-                                    isExpendedJamOperasional = false
                                 },
                                 modifier = modifier
                                     .background(Color.White)
@@ -497,7 +527,12 @@ fun BengkelDetailScreen(
                     onClick = {
                         if(sisaSlot == 0){
                             Toast.makeText(context, "Slot tidak tersedia", Toast.LENGTH_SHORT).show()
-                        }else{
+                        }else if(selectedTextKendaraan.isBlank() ||
+                            selectedTextKendaraanUser.isBlank() ||
+                            selectedTextLayanan.isBlank() ||
+                            selectedTextJamOperasional.isBlank()){
+                            Toast.makeText(context, "Silahkan isi data yang diperlukan", Toast.LENGTH_SHORT).show()
+                        } else{
                             viewModel.reservasiBengkel(
                                 formattedDate.toString(),
                                 selectedTextJamOperasional.toString(),
@@ -507,6 +542,11 @@ fun BengkelDetailScreen(
                                 bengkelId,
                                 userModel.id,
                                 idSelectedKendaraanUser)
+                            navigator.navigate(KonfirmasiScreenDestination(
+                                bengkelState.value?.namaBengkel ?: "",
+                                formattedDate.toString(),
+                                selectedTextJamOperasional,
+                            ))
                             Toast.makeText(context, "Berhasil Melakukan Reservasi", Toast.LENGTH_SHORT).show()
                         }
                     },

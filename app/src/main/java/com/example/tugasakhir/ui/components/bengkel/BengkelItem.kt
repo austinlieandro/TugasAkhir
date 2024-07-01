@@ -44,6 +44,7 @@ fun BengkelItem(
         ) {
             Text(
                 text = namaBengkel,
+                maxLines = 1,
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp,
                 modifier = modifier
@@ -51,6 +52,7 @@ fun BengkelItem(
             )
             Text(
                 text = "$lokasiBengkel, $alamatBengkel",
+                maxLines = 1,
                 fontSize = 18.sp,
                 modifier = modifier
                     .padding(start = 16.dp, bottom = 8.dp)

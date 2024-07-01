@@ -64,7 +64,7 @@ fun JamOperasionalScreen(
         factory = BengkelModelFactory.getInstance(LocalContext.current)
     ),
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
-){
+) {
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
 
     var jamOperasionalMulai = remember { mutableStateListOf("") }
@@ -88,18 +88,23 @@ fun JamOperasionalScreen(
         viewModel.detailBengkel(userModel.id, bengkelId)
     }
 
+    fun isValidTimeFormat(time: String): Boolean {
+        val regex = Regex(pattern = """\d{2}\.\d{2}""")
+        return time.matches(regex)
+    }
+
     Surface(
         modifier = modifier
             .fillMaxSize()
     ) {
-        if (!statusState){
+        if (!statusState) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
             }
-        }else{
+        } else {
             Column(
                 modifier = modifier
                     .padding(16.dp)
@@ -152,7 +157,7 @@ fun JamOperasionalScreen(
                                     option?.let {
                                         selectedHari = it
                                         listHari.clear()
-                                        repeat(jamOperasionalMulai.size){
+                                        repeat(jamOperasionalMulai.size) {
                                             listHari.add(selectedHari)
                                         }
                                     }
@@ -257,29 +262,46 @@ fun JamOperasionalScreen(
                 }
                 Button(
                     onClick = {
-                        repeat(jamOperasionalMulai.size){ index ->
-                            val jamMulai = jamOperasionalMulai[index]
-                            val jamSelesai = jamOperasionalSelesai[index]
-                            jamOperasional.add("$jamMulai - $jamSelesai")
+                        var isValid = true
+                        jamOperasionalMulai.forEach { jamMulai ->
+                            if (!isValidTimeFormat(jamMulai)) {
+                                isValid = false
+                                Toast.makeText(context, "Format jam mulai tidak valid: $jamMulai", Toast.LENGTH_SHORT).show()
+                                return@forEach
+                            }
                         }
-
-                        repeat(jamOperasionalMulai.size){
-                            hari.add(selectedHari)
-                        }
-                        slot.forEach { data ->
-                            val intValue = data.toIntOrNull()
-                            if (intValue != null)
-                            {
-                                listSlot.add(intValue)
+                        jamOperasionalSelesai.forEach { jamSelesai ->
+                            if (!isValidTimeFormat(jamSelesai)) {
+                                isValid = false
+                                Toast.makeText(context, "Format jam selesai tidak valid: $jamSelesai", Toast.LENGTH_SHORT).show()
+                                return@forEach
                             }
                         }
 
-                        jamOperasionalMulai.clear()
-                        jamOperasionalSelesai.clear()
-                        slot.clear()
-                        listHari.clear()
-                        selectedHari = ""
-                        Toast.makeText(context, "Data pada hari $selectedHari telah disimpan", Toast.LENGTH_SHORT).show()
+                        if (isValid) {
+                            repeat(jamOperasionalMulai.size) { index ->
+                                val jamMulai = jamOperasionalMulai[index]
+                                val jamSelesai = jamOperasionalSelesai[index]
+                                jamOperasional.add("$jamMulai - $jamSelesai")
+                            }
+
+                            repeat(jamOperasionalMulai.size) {
+                                hari.add(selectedHari)
+                            }
+                            slot.forEach { data ->
+                                val intValue = data.toIntOrNull()
+                                if (intValue != null) {
+                                    listSlot.add(intValue)
+                                }
+                            }
+
+                            jamOperasionalMulai.clear()
+                            jamOperasionalSelesai.clear()
+                            slot.clear()
+                            listHari.clear()
+                            Toast.makeText(context, "Data pada hari $selectedHari telah disimpan", Toast.LENGTH_SHORT).show()
+                            selectedHari = ""
+                        }
                     },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(Color.Red),
@@ -291,8 +313,12 @@ fun JamOperasionalScreen(
                 }
                 Button(
                     onClick = {
-                        viewModel.daftarJamOperasional(jamOperasional, hari, listSlot, bengkelId)
-                        navigator.navigate(InputKaryawanScerenDestination(bengkelId = bengkelId))
+                        if (jamOperasional.isEmpty()) {
+                            Toast.makeText(context, "Silahkan tambah jam operasional terlebih dahulu", Toast.LENGTH_SHORT).show()
+                        } else {
+                            viewModel.daftarJamOperasional(jamOperasional, hari, listSlot, bengkelId)
+                            navigator.navigate(InputKaryawanScerenDestination(bengkelId = bengkelId))
+                        }
                     },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(Color.Red),
