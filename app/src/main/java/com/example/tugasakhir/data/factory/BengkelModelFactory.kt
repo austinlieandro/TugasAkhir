@@ -11,11 +11,14 @@ import com.example.tugasakhir.ui.screen.bengkel.BengkelViewModel
 import com.example.tugasakhir.ui.screen.bengkeldetail.BengkelDetailViewModel
 import com.example.tugasakhir.ui.screen.daftarbengkel.DaftarBengkelViewModel
 import com.example.tugasakhir.ui.screen.detailreservasibengkel.DetailReservasiBengkelViewModel
+import com.example.tugasakhir.ui.screen.inputjenislayanan.InputJenisLayananViewModel
 import com.example.tugasakhir.ui.screen.jamoperasional.JamOperasionalViewModel
+import com.example.tugasakhir.ui.screen.jenislayanan.JenisLayananViewModel
 import com.example.tugasakhir.ui.screen.listjamoperasional.ListOperasionalViewModel
 import com.example.tugasakhir.ui.screen.reservasibengkel.ReservasiBengkelViewModel
 import com.example.tugasakhir.ui.screen.updatebengkel.UpdateBengkelViewModel
 import com.example.tugasakhir.ui.screen.updatejamoperasional.UpdateOperasionalViewModel
+import com.example.tugasakhir.ui.screen.updatejenislayanan.UpdateJenisLayananViewModel
 
 class BengkelModelFactory(private val repository: BengkelRepository, private val repositoryUser: UserRepository, private val repositoryKaryawan: KaryawanRepository): ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T{
@@ -46,6 +49,15 @@ class BengkelModelFactory(private val repository: BengkelRepository, private val
             }
             modelClass.isAssignableFrom(ListOperasionalViewModel::class.java) -> {
                 ListOperasionalViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(InputJenisLayananViewModel::class.java) -> {
+                InputJenisLayananViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(JenisLayananViewModel::class.java) -> {
+                JenisLayananViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(UpdateJenisLayananViewModel::class.java) -> {
+                UpdateJenisLayananViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }

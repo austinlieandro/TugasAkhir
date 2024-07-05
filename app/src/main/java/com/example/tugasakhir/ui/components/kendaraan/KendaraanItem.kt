@@ -42,7 +42,8 @@ fun KendaraanItem(
                 .padding(16.dp)
         ) {
             Text(
-                text = jenisKendaraan,
+                text = merekKendaraan,
+                maxLines = 1,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp
             )
@@ -50,7 +51,7 @@ fun KendaraanItem(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Merek Kendaraan: $merekKendaraan",
+                    text = "jenis Kendaraan: $jenisKendaraan",
                     fontSize = 18.sp
                 )
                 Box(

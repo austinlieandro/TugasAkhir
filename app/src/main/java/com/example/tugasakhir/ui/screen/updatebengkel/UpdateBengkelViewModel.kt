@@ -20,10 +20,32 @@ class UpdateBengkelViewModel(private val repository: BengkelRepository): ViewMod
 
     val detailBengkel = MutableLiveData<Bengkel?>()
 
-    fun updateBengkel(usersId: Int, id: Int,nama_bengkel: String, lokasi_bengkel: String, number_bengkel: String, alamat_bengkel: String, gmaps_bengkel: String, jenis_kendaraan: List<String>, jenis_layanan: List<String>, hari_operasional: List<String>, jam_buka: String, jam_tutup: String){
+    fun updateBengkel(
+        usersId: Int,
+        id: Int,
+        nama_bengkel: String,
+        lokasi_bengkel: String,
+        number_bengkel: String,
+        alamat_bengkel: String,
+        gmaps_bengkel: String,
+        jenis_kendaraan: List<String>,
+        hari_operasional: List<String>,
+        jam_buka: String,
+        jam_tutup: String){
         viewModelScope.launch {
             try {
-                val updateBengkelResponse = repository.updateBengkel(usersId, id,nama_bengkel, lokasi_bengkel, number_bengkel, alamat_bengkel, gmaps_bengkel, jenis_kendaraan, jenis_layanan, hari_operasional, jam_buka, jam_tutup)
+                val updateBengkelResponse = repository.updateBengkel(
+                    usersId,
+                    id,
+                    nama_bengkel,
+                    lokasi_bengkel,
+                    number_bengkel,
+                    alamat_bengkel,
+                    gmaps_bengkel,
+                    jenis_kendaraan,
+                    hari_operasional,
+                    jam_buka,
+                    jam_tutup)
                 status.postValue(true)
                 Log.d("UPDATE BANGKEL", "$updateBengkelResponse")
             }catch (e: HttpException){

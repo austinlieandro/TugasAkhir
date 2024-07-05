@@ -4,13 +4,17 @@ import com.example.tugasakhir.api.response.BengkelItem
 import com.example.tugasakhir.api.response.ResponseAsignKaryawan
 import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
+import com.example.tugasakhir.api.response.ResponseDetailJenisLayanan
 import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
+import com.example.tugasakhir.api.response.ResponseInputJenisLayanan
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
+import com.example.tugasakhir.api.response.ResponseJenisLayanan
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateJamOperasional
+import com.example.tugasakhir.api.response.ResponseUpdateJenisLayanan
 import com.example.tugasakhir.api.retrofit.ApiService
 import com.example.tugasakhir.data.pref.UserPreference
 
@@ -27,7 +31,19 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         return apiService.reservasiBengkel(tanggal_reservasi, jam_reservasi, jeniskendala_reservasi, detail_reservasi, kendaraan_reservasi, bengkels_id, users_id, kendaraan_id)
     }
 
-    suspend fun daftarBengkel(nama_bengkel: String, lokasi_bengkel: String, number_bengkel: String, alamat_bengkel: String, gmaps_bengkel: String, jenis_kendaraan: List<String>, jenis_layanan: List<String>, hari_operasional: List<String>, jam_buka: String, jam_tutup: String, users_id: Int): ResponseDaftarBengkel{
+    suspend fun daftarBengkel(
+        nama_bengkel: String,
+        lokasi_bengkel: String,
+        number_bengkel: String,
+        alamat_bengkel: String,
+        gmaps_bengkel: String,
+        jenis_kendaraan: List<String>,
+//      jenis_layanan: List<String>,
+        hari_operasional: List<String>,
+        jam_buka: String,
+        jam_tutup: String,
+        users_id: Int
+    ): ResponseDaftarBengkel{
         val requestBody = HashMap<String, Any>()
         requestBody["nama_bengkel"] = nama_bengkel
         requestBody["lokasi_bengkel"] = lokasi_bengkel
@@ -35,7 +51,7 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         requestBody["alamat_bengkel"] = alamat_bengkel
         requestBody["gmaps_bengkel"] = gmaps_bengkel
         requestBody["jenis_kendaraan"] = jenis_kendaraan
-        requestBody["jenis_layanan"] = jenis_layanan
+//        requestBody["jenis_layanan"] = jenis_layanan
         requestBody["hari_operasional"] = hari_operasional
         requestBody["jam_buka"] = jam_buka
         requestBody["jam_tutup"] = jam_tutup
@@ -43,7 +59,20 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         return apiService.daftarBengkel(requestBody)
     }
 
-    suspend fun updateBengkel(usersId: Int, id: Int,nama_bengkel: String, lokasi_bengkel: String, number_bengkel: String, alamat_bengkel: String, gmaps_bengkel: String, jenis_kendaraan: List<String>, jenis_layanan: List<String>, hari_operasional: List<String>, jam_buka: String, jam_tutup: String): ResponseUpdateBengkel{
+    suspend fun updateBengkel(
+        usersId: Int,
+        id: Int,
+        nama_bengkel: String,
+        lokasi_bengkel: String,
+        number_bengkel: String,
+        alamat_bengkel: String,
+        gmaps_bengkel: String,
+        jenis_kendaraan: List<String>,
+//                              jenis_layanan: List<String>,
+        hari_operasional: List<String>,
+        jam_buka: String,
+        jam_tutup: String
+    ): ResponseUpdateBengkel{
         val requestBody = HashMap<Any, Any>()
         requestBody["nama_bengkel"] = nama_bengkel
         requestBody["lokasi_bengkel"] = lokasi_bengkel
@@ -51,7 +80,7 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         requestBody["alamat_bengkel"] = alamat_bengkel
         requestBody["gmaps_bengkel"] = gmaps_bengkel
         requestBody["jenis_kendaraan"] = jenis_kendaraan
-        requestBody["jenis_layanan"] = jenis_layanan
+//        requestBody["jenis_layanan"] = jenis_layanan
         requestBody["hari_operasional"] = hari_operasional
         requestBody["jam_buka"] = jam_buka
         requestBody["jam_tutup"] = jam_tutup
@@ -87,6 +116,44 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         return apiService.displayBengkel().bengkel?.filter {
             it?.namaBengkel?.contains(query, ignoreCase = true) == true
         }
+    }
+
+    suspend fun inputJenisLayanan(
+        nama_layanan: String,
+        jenis_layanan: List<String>,
+        harga_layanan: Int,
+        bengkels_id: Int
+    ):ResponseInputJenisLayanan{
+        val requestBody = HashMap<String, Any>()
+        requestBody["nama_layanan"] = nama_layanan
+        requestBody["jenis_layanan"] = jenis_layanan
+        requestBody["harga_layanan"] = harga_layanan
+        requestBody["bengkels_id"] = bengkels_id
+        return apiService.inputJenisLayanan(requestBody)
+    }
+
+    suspend fun getJenisLayanan(bengkels_id: Int): ResponseJenisLayanan{
+        return apiService.getJenisLayanan(bengkels_id)
+    }
+
+    suspend fun updateJenisLayanan(
+        bengkelId: Int,
+        id: Int,
+        nama_layanan: String,
+        jenis_layanan: List<String>,
+        harga_layanan: Int
+    ): ResponseUpdateJenisLayanan{
+        val requestBody = HashMap<Any, Any>()
+        requestBody["nama_layanan"] = nama_layanan
+        requestBody["jenis_layanan"] = jenis_layanan
+        requestBody["harga_layanan"] = harga_layanan
+        return apiService.updateJenisLayanan(bengkelId, id, requestBody)
+    }
+
+    suspend fun detailJenisLayanan(
+        id: Int
+    ): ResponseDetailJenisLayanan{
+        return apiService.detailJenisLayanan(id)
     }
 
     companion object{

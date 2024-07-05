@@ -8,10 +8,13 @@ import com.example.tugasakhir.di.Injection
 import com.example.tugasakhir.ui.screen.detailkendaraan.DetailKendaraanViewModel
 import com.example.tugasakhir.ui.screen.favorit.FavoritViewModel
 import com.example.tugasakhir.ui.screen.inputkendaraan.InputKendaraanViewModel
+import com.example.tugasakhir.ui.screen.inputmerekkendaraan.InputMerekKendaraanViewModel
 import com.example.tugasakhir.ui.screen.kendaraan.KendaraanViewModel
 import com.example.tugasakhir.ui.screen.login.LoginViewModel
+import com.example.tugasakhir.ui.screen.merekkendaraan.MerekKendaraanViewMoel
 import com.example.tugasakhir.ui.screen.profile.ProfileViewModel
 import com.example.tugasakhir.ui.screen.register.RegisterViewModel
+import com.example.tugasakhir.ui.screen.updatemerekkendaraan.UpdateMerekKendaraanViewModel
 import com.example.tugasakhir.ui.screen.updateprofile.UpdateProfileViewModel
 import com.example.tugasakhir.ui.screen.welcome.WelcomeViewModel
 
@@ -45,6 +48,16 @@ class UserModelFactory(private val repository: UserRepository): ViewModelProvide
             modelClass.isAssignableFrom(UpdateProfileViewModel::class.java) -> {
                 UpdateProfileViewModel(repository) as T
             }
+            modelClass.isAssignableFrom(MerekKendaraanViewMoel::class.java) -> {
+                MerekKendaraanViewMoel(repository) as T
+            }
+            modelClass.isAssignableFrom(InputMerekKendaraanViewModel::class.java) -> {
+                InputMerekKendaraanViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(UpdateMerekKendaraanViewModel::class.java) -> {
+                UpdateMerekKendaraanViewModel(repository) as T
+            }
+
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }
     }

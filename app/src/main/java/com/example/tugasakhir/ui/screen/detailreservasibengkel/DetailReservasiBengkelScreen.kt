@@ -128,7 +128,7 @@ fun DetailReservasiBengkelScreen(
                         .padding(bottom = 8.dp)
                 )
                 Text(
-                    text = "Kendala Pelanggan: ${detailReservasiState.value?.jeniskendalaReservasi}",
+                    text = "Kendala Pelanggan: ${detailReservasiState.value?.namaLayanan}",
                     modifier = modifier
                         .padding(bottom = 8.dp)
                 )

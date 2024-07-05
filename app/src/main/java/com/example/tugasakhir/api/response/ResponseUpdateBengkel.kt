@@ -41,9 +41,6 @@ data class UpdateBengkel(
 	@field:SerializedName("users_id")
 	val usersId: Int? = null,
 
-	@field:SerializedName("jenis_layanan")
-	val jenisLayanan: List<String?>? = null,
-
 	@field:SerializedName("id")
 	val id: Int? = null,
 

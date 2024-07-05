@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhir.api.response.DetailKendaraan
+import com.example.tugasakhir.api.response.MerekKendaraanItem
 import com.example.tugasakhir.api.response.ResponseDeleteKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailKendaraan
+import com.example.tugasakhir.api.response.ResponseDisplayMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
 import com.example.tugasakhir.data.repository.UserRepository
 import com.google.gson.Gson
@@ -22,6 +24,11 @@ class DetailKendaraanViewModel(private val repository: UserRepository): ViewMode
 
     val errorDelete = MutableLiveData<String?>()
     val statusDelete: MutableLiveData<Boolean> = MutableLiveData()
+
+    val errorMerek = MutableLiveData<String?>()
+    val statusMerek: MutableLiveData<Boolean> = MutableLiveData()
+
+    val merekKendaraanList = MutableLiveData<List<MerekKendaraanItem?>?>()
 
     val detailKendaraan = MutableLiveData<DetailKendaraan?>()
 
@@ -47,10 +54,10 @@ class DetailKendaraanViewModel(private val repository: UserRepository): ViewMode
         }
     }
 
-    fun updateKendaraanUser(usersId: Int, kendaraanId: Int, plat_kendaraan: String, merek_kendaraan: String){
+    fun updateKendaraanUser(usersId: Int, kendaraanId: Int, plat_kendaraan: String, merek_kendaraan_id: Int){
         viewModelScope.launch {
             try {
-                val updateKendaraanResponse = repository.updateKendaraan(usersId, kendaraanId, plat_kendaraan, merek_kendaraan)
+                val updateKendaraanResponse = repository.updateKendaraan(usersId, kendaraanId, plat_kendaraan, merek_kendaraan_id)
                 statusUpdate.postValue(true)
                 Log.d("UPDATE KENDARAAN", "$updateKendaraanResponse")
             }catch (e: HttpException){
@@ -85,6 +92,28 @@ class DetailKendaraanViewModel(private val repository: UserRepository): ViewMode
                 errorDelete.postValue("Terjadi kesalahan saat membuat data")
                 statusDelete.postValue(false)
                 Log.d("DELETE KENDARAAN", "$e")
+            }
+        }
+    }
+
+    fun getMerekKendaraan(){
+        viewModelScope.launch {
+            try {
+                val responseMerekKendaraan = repository.displayMerekKendaraan()
+                merekKendaraanList.postValue(responseMerekKendaraan.merekKendaraan)
+                statusMerek.postValue(true)
+                Log.d("MEREK KENDARAAN", "$responseMerekKendaraan")
+            }catch (e: HttpException){
+                val jsonInString = e.response()?.errorBody()?.string()
+                Log.e("MEREK KENDARAAN", "Error response: $jsonInString")
+                val errorBody = Gson().fromJson(jsonInString, ResponseDisplayMerekKendaraan::class.java)
+                errorMerek.postValue(errorBody.message)
+                statusMerek.postValue(false)
+                Log.d("MEREK KENDARAAN", "$e")
+            }catch (e: Exception) {
+                errorMerek.postValue("Terjadi kesalahan saat membuat data")
+                statusMerek.postValue(false)
+                Log.d("MEREK KENDARAAN", "$e")
             }
         }
     }

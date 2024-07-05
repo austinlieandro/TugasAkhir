@@ -23,6 +23,12 @@ data class ReservasiBengkel(
 	@field:SerializedName("jam_reservasi")
 	val jamReservasi: String? = null,
 
+	@field:SerializedName("kendaraan_id")
+	val kendaraanId: Int? = null,
+
+	@field:SerializedName("prioritas")
+	val prioritas: Int? = null,
+
 	@field:SerializedName("tanggal_reservasi")
 	val tanggalReservasi: String? = null,
 
@@ -32,11 +38,17 @@ data class ReservasiBengkel(
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,
 
+	@field:SerializedName("merek_kendaraan")
+	val merekKendaraan: String? = null,
+
 	@field:SerializedName("kendaraan_reservasi")
 	val kendaraanReservasi: String? = null,
 
 	@field:SerializedName("jeniskendala_reservasi")
-	val jeniskendalaReservasi: String? = null,
+	val jeniskendalaReservasi: Int? = null,
+
+	@field:SerializedName("plat_kendaraan")
+	val platKendaraan: String? = null,
 
 	@field:SerializedName("karyawan_id")
 	val karyawanId: Int? = null,
@@ -55,6 +67,9 @@ data class ReservasiBengkel(
 
 	@field:SerializedName("id")
 	val id: Int? = null,
+
+	@field:SerializedName("nama_layanan")
+	val namaLayanan: String? = null,
 
 	@field:SerializedName("status_reservasi")
 	val statusReservasi: String? = null,

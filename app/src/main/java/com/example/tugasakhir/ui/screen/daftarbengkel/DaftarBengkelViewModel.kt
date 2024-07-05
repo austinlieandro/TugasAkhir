@@ -20,10 +20,32 @@ class DaftarBengkelViewModel(private val repository: BengkelRepository, private 
 
     val daftarBengkel = MutableLiveData<DaftarBengkel?>()
 
-    fun daftarBengkel(nama_bengkel: String, lokasi_bengkel: String, number_bengkel: String, alamat_bengkel: String, gmaps_bengkel: String, jenis_kendaraan: List<String>, jenis_layanan: List<String>, hari_operasional: List<String>, jam_buka: String, jam_tutup: String, users_id: Int){
+    fun daftarBengkel(
+        nama_bengkel: String,
+        lokasi_bengkel: String,
+        number_bengkel: String,
+        alamat_bengkel: String,
+        gmaps_bengkel: String,
+        jenis_kendaraan: List<String>,
+//        jenis_layanan: List<String>,
+        hari_operasional: List<String>,
+        jam_buka: String,
+        jam_tutup: String,
+        users_id: Int){
         viewModelScope.launch {
             try {
-                val daftarBengkelResponse = repository.daftarBengkel(nama_bengkel, lokasi_bengkel, number_bengkel, alamat_bengkel, gmaps_bengkel, jenis_kendaraan, jenis_layanan, hari_operasional, jam_buka, jam_tutup, users_id)
+                val daftarBengkelResponse = repository.daftarBengkel(
+                    nama_bengkel,
+                    lokasi_bengkel,
+                    number_bengkel,
+                    alamat_bengkel,
+                    gmaps_bengkel,
+                    jenis_kendaraan,
+//                    jenis_layanan,
+                    hari_operasional,
+                    jam_buka,
+                    jam_tutup,
+                    users_id)
                 val idUser = daftarBengkelResponse.user?.id
                 val statusUser = daftarBengkelResponse.user?.userBengkel
                 val usernameUser = daftarBengkelResponse.user?.username

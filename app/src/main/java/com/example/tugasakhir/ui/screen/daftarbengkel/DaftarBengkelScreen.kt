@@ -51,6 +51,7 @@ import com.example.tugasakhir.data.pref.UserPreference
 import com.example.tugasakhir.data.pref.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.InputJenisLayananScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.JamOperasionalScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -88,23 +89,6 @@ fun DaftarBengkelScreen(
     var isMobilChecked by remember { mutableStateOf(false) }
     var selectedKendaraan by remember { mutableStateOf(mutableListOf<String>()) }
 
-    var isOliChecked by remember { mutableStateOf(false) }
-    var isRemChecked by remember { mutableStateOf(false) }
-    var isBusiChecked by remember { mutableStateOf(false) }
-    var isAkiChecked by remember { mutableStateOf(false) }
-    var isListrikChecked by remember { mutableStateOf(false) }
-    var isSuspensiChecked by remember { mutableStateOf(false) }
-    var isMesinChecked by remember { mutableStateOf(false) }
-    var isBanChecked by remember { mutableStateOf(false) }
-    var isRantaiChecked by remember { mutableStateOf(false) }
-    var isKarburatorChecked by remember { mutableStateOf(false) }
-    var isBodyChecked by remember { mutableStateOf(false) }
-    var isFilterChecked by remember { mutableStateOf(false) }
-    var isAcChecked by remember { mutableStateOf(false) }
-    var isTransmisiChecked by remember { mutableStateOf(false) }
-    var isRadiatorChecked by remember { mutableStateOf(false) }
-    var selectedLayanan by remember { mutableStateOf(mutableListOf<String>()) }
-
     var isSeninChecked by remember { mutableStateOf(false) }
     var isSelasaChecked by remember { mutableStateOf(false) }
     var isRabuChecked by remember { mutableStateOf(false) }
@@ -138,32 +122,6 @@ fun DaftarBengkelScreen(
         selectedKendaraan.add("Motor")
     } else if (!isMotorChecked && selectedKendaraan.contains("Motor")) {
         selectedKendaraan.remove("Motor")
-    }
-
-    val layananMap = mapOf(
-        "Oli" to isOliChecked,
-        "Rem" to isRemChecked,
-        "Busi" to isBusiChecked,
-        "Aki" to isAkiChecked,
-        "Listrik" to isListrikChecked,
-        "Suspensi" to isSuspensiChecked,
-        "Mesin" to isMesinChecked,
-        "Ban" to isBanChecked,
-        "Rantai" to isRantaiChecked,
-        "Karburator/Injektor" to isKarburatorChecked,
-        "Body" to isBodyChecked,
-        "Filter" to isFilterChecked,
-        "AC" to isAcChecked,
-        "Transmisi" to isTransmisiChecked,
-        "Radiator" to isRadiatorChecked
-    )
-
-    layananMap.forEach { (layanan, isChecked) ->
-        if (isChecked && !selectedLayanan.contains(layanan)) {
-            selectedLayanan.add(layanan)
-        } else if (!isChecked && selectedLayanan.contains(layanan)) {
-            selectedLayanan.remove(layanan)
-        }
     }
 
     val hariMap = mapOf(
@@ -441,75 +399,6 @@ fun DaftarBengkelScreen(
                 ) {
                     Column {
                         Text(
-                            text = "Jenis Layanan",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .padding(bottom = 8.dp)
-                        )
-                        listOf(
-                            "Oli" to isOliChecked,
-                            "Rem" to isRemChecked,
-                            "Busi" to isBusiChecked,
-                            "Aki" to isAkiChecked,
-                            "Listrik" to isListrikChecked,
-                            "Suspensi" to isSuspensiChecked,
-                            "Mesin" to isMesinChecked,
-                            "Ban" to isBanChecked,
-                            "Rantai" to isRantaiChecked,
-                            "Karburator/Injektor" to isKarburatorChecked,
-                            "Body" to isBodyChecked,
-                            "Filter" to isFilterChecked,
-                            "AC" to isAcChecked,
-                            "Transmisi" to isTransmisiChecked,
-                            "Radiator" to isRadiatorChecked
-                        ).forEach { (label, isChecked) ->
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .padding(bottom = 8.dp)
-                            ) {
-                                Checkbox(
-                                    checked = isChecked,
-                                    onCheckedChange = {
-                                        when (label) {
-                                            "Oli" -> isOliChecked = it
-                                            "Rem" -> isRemChecked = it
-                                            "Busi" -> isBusiChecked = it
-                                            "Aki" -> isAkiChecked = it
-                                            "Listrik" -> isListrikChecked = it
-                                            "Suspensi" -> isSuspensiChecked = it
-                                            "Mesin" -> isMesinChecked = it
-                                            "Ban" -> isBanChecked = it
-                                            "Rantai" -> isRantaiChecked = it
-                                            "Karburator/Injektor" -> isKarburatorChecked = it
-                                            "Body" -> isBodyChecked = it
-                                            "Filter" -> isFilterChecked = it
-                                            "AC" -> isAcChecked = it
-                                            "Transmisi" -> isTransmisiChecked = it
-                                            "Radiator" -> isRadiatorChecked = it
-                                        }
-                                    }
-                                )
-                                Text(text = label, fontSize = 14.sp)
-                            }
-                        }
-                    }
-                }
-
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .border(
-                            width = 1.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        .background(color = Color.White)
-                        .padding(8.dp)
-                ) {
-                    Column {
-                        Text(
                             text = "Hari Operasional",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
@@ -648,7 +537,6 @@ fun DaftarBengkelScreen(
                             alamatBengkel,
                             gmapsBengkel,
                             selectedKendaraan.toList(),
-                            selectedLayanan.toList(),
                             selectedHari.toList(),
                             formattedTimeBuka,
                             formattedTimeTutup,
@@ -659,7 +547,7 @@ fun DaftarBengkelScreen(
                             Toast.LENGTH_SHORT
                         ).show()
                         Handler().postDelayed({
-                            navigator.navigate(JamOperasionalScreenDestination(bengkelId = daftarBengkelState.value?.id ?: 0))
+                            navigator.navigate(JamOperasionalScreenDestination(daftarBengkelState.value?.id ?: 0))
                         }, 500)
                     }
                 },

@@ -96,7 +96,7 @@ fun KarayawanScreen(
                                 contentDescription = "Add Karyawan",
                                 modifier = modifier
                                     .clickable {
-                                        navigator.navigate(InputKaryawanScerenDestination(bengkelId = idBengkel))
+                                        navigator.navigate(InputKaryawanScerenDestination(bengkelId = idBengkel, "lainnya"))
                                     }
                             )
                         }

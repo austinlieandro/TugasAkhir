@@ -10,6 +10,12 @@ data class ResponseDetailBengkel(
 	@field:SerializedName("jam_operasional")
 	val jamOperasional: List<JamOperasionalItem?>? = null,
 
+	@field:SerializedName("status_favorit")
+	val statusFavorit: String? = null,
+
+	@field:SerializedName("jenis_layanan")
+	val jenisLayanan: List<JenisLayananItem?>? = null,
+
 	@field:SerializedName("message")
 	val message: String? = null,
 
@@ -17,26 +23,23 @@ data class ResponseDetailBengkel(
 	val bengkel: Bengkel? = null,
 
 	@field:SerializedName("status")
-	val status: Boolean? = null,
-
-	@field:SerializedName("status_favorit")
-	val statusFavorit: String? = null
+	val status: Boolean? = null
 ) : Parcelable
 
 @Parcelize
-data class JamOperasionalItem(
+data class JenisLayananItem(
 
-	@field:SerializedName("jam_operasional")
-	val jamOperasional: String? = null,
+	@field:SerializedName("harga_layanan")
+	val hargaLayanan: Int? = null,
+
+	@field:SerializedName("jenis_layanan")
+	val jenisLayanan: List<String?>? = null,
 
 	@field:SerializedName("id")
 	val id: Int? = null,
 
-	@field:SerializedName("slot")
-	val slot: Int? = null,
-
-	@field:SerializedName("hari_operasional")
-	val hariOperasional: String? = null,
+	@field:SerializedName("nama_layanan")
+	val namaLayanan: String? = null,
 
 	@field:SerializedName("bengkels_id")
 	val bengkelsId: Int? = null
@@ -66,9 +69,6 @@ data class Bengkel(
 	@field:SerializedName("users_id")
 	val usersId: Int? = null,
 
-	@field:SerializedName("jenis_layanan")
-	val jenisLayanan: List<String?>? = null,
-
 	@field:SerializedName("id")
 	val id: Int? = null,
 
@@ -80,4 +80,23 @@ data class Bengkel(
 
 	@field:SerializedName("hari_operasional")
 	val hariOperasional: List<String?>? = null
+) : Parcelable
+
+@Parcelize
+data class JamOperasionalItem(
+
+	@field:SerializedName("jam_operasional")
+	val jamOperasional: String? = null,
+
+	@field:SerializedName("id")
+	val id: Int? = null,
+
+	@field:SerializedName("slot")
+	val slot: Int? = null,
+
+	@field:SerializedName("hari_operasional")
+	val hariOperasional: String? = null,
+
+	@field:SerializedName("bengkels_id")
+	val bengkelsId: Int? = null
 ) : Parcelable

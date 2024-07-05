@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhir.api.response.Bengkel
 import com.example.tugasakhir.api.response.JamOperasionalItem
+import com.example.tugasakhir.api.response.JenisLayananItem
 import com.example.tugasakhir.api.response.KendaraanItem
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
@@ -29,6 +30,7 @@ class BengkelDetailViewModel(private val repository: BengkelRepository, private 
     val statusKendaraan: MutableLiveData<Boolean> = MutableLiveData()
 
     val detailBengkel = MutableLiveData<Bengkel?>()
+    val jenisLayananBengkel = MutableLiveData<List<JenisLayananItem?>?>()
     val jamOperasionalList = MutableLiveData<List<JamOperasionalItem?>?>()
     val statusFavorit = MutableLiveData<String?>()
 
@@ -40,6 +42,7 @@ class BengkelDetailViewModel(private val repository: BengkelRepository, private 
                 val detailBengkelResponse = repository.getDetailBengkel(idUser, id)
                 detailBengkel.postValue(detailBengkelResponse.bengkel)
                 jamOperasionalList.postValue(detailBengkelResponse.jamOperasional)
+                jenisLayananBengkel.postValue(detailBengkelResponse.jenisLayanan)
                 statusFavorit.postValue(detailBengkelResponse.statusFavorit)
                 status.postValue(true)
                 Log.d("DETAIL BENGKEL", "Bengkel: ${detailBengkel.value} Jam Operasional: ${jamOperasionalList.value}")
@@ -104,7 +107,7 @@ class BengkelDetailViewModel(private val repository: BengkelRepository, private 
         viewModelScope.launch {
             try {
                 val kendaraanResponse = repositoryUser.displayKendaraan(id)
-                kendaraanList.postValue(kendaraanResponse.bengkel)
+                kendaraanList.postValue(kendaraanResponse.kendaraan)
                 statusKendaraan.postValue(true)
                 Log.d("KENDARAAN", "$kendaraanResponse")
             }catch (e: HttpException){

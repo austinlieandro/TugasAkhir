@@ -69,6 +69,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.text.NumberFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -92,11 +93,14 @@ fun BengkelDetailScreen(
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ) {
     val bengkelState = viewModel.detailBengkel.observeAsState()
+    val jenisLayananState = viewModel.jenisLayananBengkel.observeAsState()
     val statusState by viewModel.status.observeAsState(false)
     val statusFavorit = viewModel.statusFavorit.observeAsState()
     val kendaraanState = viewModel.kendaraanList.observeAsState()
     var holdFavorit by remember { mutableStateOf("") }
     var favorit by remember { mutableStateOf(holdFavorit == "1") }
+    var jenisLayanan by remember { mutableStateOf("") }
+    var hargaLayanan by remember { mutableStateOf(0) }
 
     val jamOperasionalState = viewModel.jamOperasionalList.observeAsState()
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
@@ -334,12 +338,14 @@ fun BengkelDetailScreen(
                         modifier = modifier
                             .background(Color.White)
                     ) {
-                        bengkelState.value?.jenisLayanan?.forEach { option ->
+                        jenisLayananState.value?.forEach { option ->
                             DropdownMenuItem(
-                                text = { option?.let { Text(it) } },
+                                text = { Text(text = "${option?.namaLayanan} - ${option?.hargaLayanan}") },
                                 onClick = {
-                                    option?.let { selectedTextLayanan = it }
+                                    selectedTextLayanan = option?.namaLayanan ?: ""
                                     isExpendedLayanan = false
+                                    jenisLayanan = option?.jenisLayanan?.joinToString(separator = ", ") ?: ""
+                                    hargaLayanan = option?.hargaLayanan ?: 0
                                 },
                                 modifier = modifier
                                     .background(Color.White)
@@ -347,6 +353,14 @@ fun BengkelDetailScreen(
                         }
                     }
                 }
+                Text(
+                    text = "Jenis Perbaikan: $jenisLayanan"
+                )
+                Text(
+                    text = "Harga Layanan: ${hargaLayanan.toRupiahString()}",
+                    modifier = modifier
+                        .padding(bottom = 16.dp)
+                )
 
                 val dateDialogState = rememberMaterialDialogState()
                 var isDateDialogOpen by remember { mutableStateOf(false) }
@@ -536,7 +550,7 @@ fun BengkelDetailScreen(
                             viewModel.reservasiBengkel(
                                 formattedDate.toString(),
                                 selectedTextJamOperasional.toString(),
-                                selectedTextLayanan.toString(),
+                                selectedTextLayanan,
                                 kendala.toString(),
                                 selectedTextKendaraan.toString(),
                                 bengkelId,
@@ -568,4 +582,14 @@ fun BengkelDetailScreen(
 fun openGmaps(context: Context, link: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
     context.startActivity(intent)
+}
+
+fun Int.toRupiahString(): String {
+    val formatter = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+    val formatted = formatter.format(this)
+    return if (formatted.contains(",")) {
+        formatted.substring(0, formatted.indexOf(","))
+    } else {
+        formatted
+    }
 }

@@ -80,7 +80,7 @@ fun ReservasiBengkelScreen(
                             numberUser = data?.userPhone ?: "",
                             namaKaryawan = data?.namaKaryawan ?: "",
                             statusReservasi = data?.statusReservasi ?: "",
-                            jenisKendalaReservasi = data?. jeniskendalaReservasi ?: "",
+                            jenisKendalaReservasi = data?.namaLayanan ?: "",
                             kendaraanReservasi = data?.kendaraanReservasi ?: "",
                             jamReservasi = data?.jamReservasi ?: "",
                             tanggalReservasi = data?.tanggalReservasi ?: "",

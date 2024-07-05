@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -47,6 +48,7 @@ import com.ramcosta.composedestinations.generated.destinations.DaftarBengkelScre
 import com.ramcosta.composedestinations.generated.destinations.DasbboardScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.FavoritScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.KendaraanScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.MerekKendaraanScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.UpdateProfileScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.WelcomeScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -179,7 +181,10 @@ fun ProfileScreen(
                         .clickable {
                             if (profileState.value?.userBengkel?.toLowerCase() == "pelanggan") {
                                 navigator.navigate(DaftarBengkelScreenDestination)
-                            } else {
+                            } else if(profileState.value?.userBengkel?.toLowerCase() == "admin"){
+                                navigator.navigate(MerekKendaraanScreenDestination)
+                            }
+                            else {
                                 navigator.navigate(DasbboardScreenDestination(idBengkel = userModel.bengkels_id))
                             }
                         },
@@ -195,7 +200,10 @@ fun ProfileScreen(
                     Text(
                         text = if (userModel.user_bengkel.lowercase() == "pelanggan"){
                             "Daftar pemilik Bengkel"
-                        }else {
+                        }else if(profileState.value?.userBengkel?.toLowerCase() == "admin"){
+                            "Nambah Merek Kendaraan"
+                        }
+                        else {
                             "Dashboard bengkel"
                         },
                         color = colorScheme.onSurface,

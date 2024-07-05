@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -61,16 +62,25 @@ fun InputKendaraanScreen(
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore)
 ){
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
+    val merekKendaraanState by viewModel.merekKendaraanList.observeAsState()
     val statusState by viewModel.status.observeAsState(false)
     val listJenisKendaraan = remember { mutableListOf("Motor", "Mobil") }
     var isExpendedKendaraan by remember { mutableStateOf(false) }
     var selectedTextKendaraan by remember { mutableStateOf("") }
+
+    var isExpendedMerek by remember { mutableStateOf(false) }
+    var selectedTextMerek by remember { mutableStateOf("") }
+    var idMerekKendaraan by remember { mutableStateOf(0) }
+
     var platKendaraan by remember { mutableStateOf("") }
-    var merekKendaraan by remember { mutableStateOf("") }
 
     val localFocusManager = LocalFocusManager.current
 
     val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.getMerekKendaraan()
+    }
 
     Surface(
         modifier = modifier
@@ -165,48 +175,58 @@ fun InputKendaraanScreen(
                     .padding(bottom = 16.dp)
                     .fillMaxWidth()
             )
-            OutlinedTextField(
-                value = merekKendaraan,
-                onValueChange = { merekKendaraan = it },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = { localFocusManager.clearFocus() }
-                ),
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Merek Kendaraan",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                label = {
-                    Text(
-                        text = "Merek Kendaraan",
-                        color = Color(0xFF86888D)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    containerColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
+            ExposedDropdownMenuBox(
+                expanded = isExpendedMerek,
+                onExpandedChange = { isExpendedMerek = !isExpendedMerek }
+            ) {
+                TextField(
+                    value = selectedTextMerek ?: "",
+                    onValueChange = {},
+                    readOnly = true,
+                    shape = RoundedCornerShape(10.dp),
+                    label = { Text("Pilih Merek Kendaraan") },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        containerColor = Color.White,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    ),
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedMerek)
+                    },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 16.dp)
+                )
+                ExposedDropdownMenu(
+                    expanded = isExpendedMerek,
+                    onDismissRequest = { isExpendedMerek = false },
+                    modifier = Modifier
+                        .background(Color.White)
+                ) {
+                    merekKendaraanState?.filter { it?.jenisKendaraan == selectedTextKendaraan }?.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(text = option?.merekKendaraan ?: "") },
+                            onClick = {
+                                selectedTextMerek = option?.merekKendaraan ?: ""
+                                idMerekKendaraan = option?.id ?: 0
+                                isExpendedMerek = false
+                            },
+                            modifier = Modifier
+                                .background(Color.White)
+                        )
+                    }
+                }
+            }
             Button(
                 onClick = {
-                    if(platKendaraan.isBlank() || merekKendaraan.isBlank() || selectedTextKendaraan.isBlank()){
+                    if(platKendaraan.isBlank() || selectedTextMerek.isBlank() || selectedTextKendaraan.isBlank()){
                         Toast.makeText(context, "Harap masukan semua data terlebih dahulu", Toast.LENGTH_SHORT).show()
                     }else{
-                        viewModel.inputKendaraan(selectedTextKendaraan, platKendaraan, merekKendaraan, userModel.id)
+                        viewModel.inputKendaraan(selectedTextKendaraan, platKendaraan, userModel.id, idMerekKendaraan)
                         platKendaraan = ""
-                        merekKendaraan = ""
                         Toast.makeText(context, "Berhasil Menambahkan Kendaraan", Toast.LENGTH_SHORT).show()
                     }
                 },

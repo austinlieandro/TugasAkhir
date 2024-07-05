@@ -44,9 +44,6 @@ data class DaftarBengkel(
 	@field:SerializedName("users_id")
 	val usersId: Int? = null,
 
-	@field:SerializedName("jenis_layanan")
-	val jenisLayanan: List<String?>? = null,
-
 	@field:SerializedName("number_bengkel")
 	val numberBengkel: String? = null,
 

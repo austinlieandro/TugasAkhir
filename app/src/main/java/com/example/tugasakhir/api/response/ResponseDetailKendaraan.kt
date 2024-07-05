@@ -32,6 +32,9 @@ data class DetailKendaraan(
 	@field:SerializedName("jenis_kendaraan")
 	val jenisKendaraan: String? = null,
 
+	@field:SerializedName("merek_kendaraan_id")
+	val merekKendaraanId: Int? = null,
+
 	@field:SerializedName("merek_kendaraan")
 	val merekKendaraan: String? = null
 ) : Parcelable

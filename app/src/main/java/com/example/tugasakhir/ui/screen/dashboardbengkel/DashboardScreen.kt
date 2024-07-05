@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.MiscellaneousServices
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.JenisLayananScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.KarayawanScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.ListOperasionalScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.ReservasiBengkelScreenDestination
@@ -181,6 +183,39 @@ fun DasbboardScreen(
                     Icon(
                         imageVector = Icons.Filled.NavigateNext,
                         contentDescription = "Navigate to Jam operasional",
+                        tint = colorScheme.onSurface,
+                    )
+                }
+            }
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navigator.navigate(JenisLayananScreenDestination("lainnya", idBengkel ))
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.MiscellaneousServices,
+                    contentDescription = "Icon Jam Operasional",
+                    tint = colorScheme.onSurface,
+                    modifier = modifier
+                        .padding(0.dp, 10.dp)
+                )
+                Text(
+                    text = "Edit/Nambah Jenis Layanan",
+                    color = colorScheme.onSurface,
+                    modifier = modifier
+                        .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                )
+                Box(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.NavigateNext,
+                        contentDescription = "Navigate to Jenis Layanan",
                         tint = colorScheme.onSurface,
                     )
                 }

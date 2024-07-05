@@ -1,6 +1,7 @@
 package com.example.tugasakhir.ui.screen.detailkendaraan
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,10 +13,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,7 +61,10 @@ fun DetailKendaraanScreen(
     val statusState by viewModel.status.observeAsState(false)
     val detailKendaraanState by viewModel.detailKendaraan.observeAsState()
     var platKendaraan by remember { mutableStateOf("") }
-    var merekKendaraan by remember { mutableStateOf("") }
+    val merekKendaraanState by viewModel.merekKendaraanList.observeAsState()
+    var isExpendedMerek by remember { mutableStateOf(false) }
+    var selectedTextMerek by remember { mutableStateOf("") }
+    var idMerekKendaraan by remember { mutableStateOf(0) }
 
     val localFocusManager = LocalFocusManager.current
     val context = LocalContext.current
@@ -63,12 +72,19 @@ fun DetailKendaraanScreen(
     LaunchedEffect(detailKendaraanState) {
         detailKendaraanState?.let { detail ->
             platKendaraan = detail.platKendaraan ?: ""
-            merekKendaraan = detail.merekKendaraan ?: ""
+        }
+    }
+    LaunchedEffect(merekKendaraanState) {
+        merekKendaraanState?.let { data ->
+            val selectedMerek = data.find { it?.id == detailKendaraanState?.merekKendaraanId }
+            selectedTextMerek = selectedMerek?.merekKendaraan ?: ""
+            idMerekKendaraan = selectedMerek?.id ?: 0
         }
     }
 
     LaunchedEffect(Unit) {
         viewModel.detailKendaraanUser(usersId, kendaraanId)
+        viewModel.getMerekKendaraan()
     }
 
     Surface(
@@ -133,46 +149,57 @@ fun DetailKendaraanScreen(
                         .padding(bottom = 16.dp)
                         .fillMaxWidth()
                 )
-                OutlinedTextField(
-                    value = merekKendaraan,
-                    onValueChange = { merekKendaraan = it },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { localFocusManager.clearFocus() }
-                    ),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Merek Kendaraan",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = "Merek Kendaraan",
-                            color = Color(0xFF86888D)
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                        containerColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth()
-                )
+                ExposedDropdownMenuBox(
+                    expanded = isExpendedMerek,
+                    onExpandedChange = { isExpendedMerek = !isExpendedMerek }
+                ) {
+                    TextField(
+                        value = selectedTextMerek ?: "",
+                        onValueChange = {},
+                        readOnly = true,
+                        shape = RoundedCornerShape(10.dp),
+                        label = { Text("Pilih Merek Kendaraan") },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MaterialTheme.colorScheme.outline,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            containerColor = Color.White,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedMerek)
+                        },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                            .padding(top = 16.dp, bottom = 16.dp)
+                    )
+                    ExposedDropdownMenu(
+                        expanded = isExpendedMerek,
+                        onDismissRequest = { isExpendedMerek = false },
+                        modifier = Modifier
+                            .background(Color.White)
+                    ) {
+                        merekKendaraanState?.filter { it?.jenisKendaraan == detailKendaraanState?.jenisKendaraan }?.forEach { option ->
+                            DropdownMenuItem(
+                                text = { Text(text = option?.merekKendaraan ?: "") },
+                                onClick = {
+                                    selectedTextMerek = option?.merekKendaraan ?: ""
+                                    idMerekKendaraan = option?.id ?: 0
+                                    isExpendedMerek = false
+                                },
+                                modifier = Modifier
+                                    .background(Color.White)
+                            )
+                        }
+                    }
+                }
                 Button(
                     onClick = {
-                        if (platKendaraan.isBlank() || merekKendaraan.isBlank()){
+                        if (platKendaraan.isBlank() || selectedTextMerek.isBlank()){
                             Toast.makeText(context, "Harap masukan semua data terlebih dahulu", Toast.LENGTH_SHORT).show()
                         }else{
-                            viewModel.updateKendaraanUser(usersId, kendaraanId, platKendaraan, merekKendaraan)
+                            viewModel.updateKendaraanUser(usersId, kendaraanId, platKendaraan, idMerekKendaraan)
                             Toast.makeText(context, "Berhasil update data kendaraan", Toast.LENGTH_SHORT).show()
                         }
                     },

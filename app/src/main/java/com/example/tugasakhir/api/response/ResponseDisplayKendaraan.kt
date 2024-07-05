@@ -7,11 +7,11 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class ResponseDisplayKendaraan(
 
+	@field:SerializedName("kendaraan")
+	val kendaraan: List<KendaraanItem?>? = null,
+
 	@field:SerializedName("message")
 	val message: String? = null,
-
-	@field:SerializedName("bengkel")
-	val bengkel: List<KendaraanItem?>? = null,
 
 	@field:SerializedName("status")
 	val status: Boolean? = null
@@ -31,6 +31,9 @@ data class KendaraanItem(
 
 	@field:SerializedName("jenis_kendaraan")
 	val jenisKendaraan: String? = null,
+
+	@field:SerializedName("merek_kendaraan_id")
+	val merekKendaraanId: Int? = null,
 
 	@field:SerializedName("merek_kendaraan")
 	val merekKendaraan: String? = null

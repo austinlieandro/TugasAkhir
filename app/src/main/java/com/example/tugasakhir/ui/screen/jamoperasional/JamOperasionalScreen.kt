@@ -50,6 +50,7 @@ import com.example.tugasakhir.data.pref.UserPreference
 import com.example.tugasakhir.data.pref.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.InputJenisLayananScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.InputKaryawanScerenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -317,7 +318,7 @@ fun JamOperasionalScreen(
                             Toast.makeText(context, "Silahkan tambah jam operasional terlebih dahulu", Toast.LENGTH_SHORT).show()
                         } else {
                             viewModel.daftarJamOperasional(jamOperasional, hari, listSlot, bengkelId)
-                            navigator.navigate(InputKaryawanScerenDestination(bengkelId = bengkelId))
+                            navigator.navigate(InputKaryawanScerenDestination(bengkelId, "lainnya"))
                         }
                     },
                     shape = RoundedCornerShape(10.dp),

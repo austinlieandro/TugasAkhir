@@ -37,6 +37,7 @@ import com.example.tugasakhir.data.factory.KaryawanModelFactory
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.BengkelScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.InputJenisLayananScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
@@ -44,6 +45,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun InputKaryawanSceren(
     bengkelId: Int,
+    jenisDaftar: String,
     navigator: DestinationsNavigator,
     modifier: Modifier = Modifier,
     viewModel: InputKaryawanViewModel = viewModel(
@@ -141,7 +143,7 @@ fun InputKaryawanSceren(
                             shape = RoundedCornerShape(10.dp),
                             onClick = {
                                 openAlertDialog.value = false
-                                navigator.navigate(BengkelScreenDestination)
+                                navigator.navigate(InputJenisLayananScreenDestination("daftar", bengkelId))
                             }
                         ) {
                             Text(

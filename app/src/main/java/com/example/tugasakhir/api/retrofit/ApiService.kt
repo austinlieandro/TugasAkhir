@@ -5,16 +5,21 @@ import com.example.tugasakhir.api.response.ResponseDaftarBengkel
 import com.example.tugasakhir.api.response.ResponseDeleteKaryawan
 import com.example.tugasakhir.api.response.ResponseDeleteKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
+import com.example.tugasakhir.api.response.ResponseDetailJenisLayanan
 import com.example.tugasakhir.api.response.ResponseDetailKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
 import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
+import com.example.tugasakhir.api.response.ResponseDisplayMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseFavoritBengkel
+import com.example.tugasakhir.api.response.ResponseInputJenisLayanan
 import com.example.tugasakhir.api.response.ResponseInputKaryawan
 import com.example.tugasakhir.api.response.ResponseInputKendaraan
+import com.example.tugasakhir.api.response.ResponseInputMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
+import com.example.tugasakhir.api.response.ResponseJenisLayanan
 import com.example.tugasakhir.api.response.ResponseLogin
 import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
@@ -23,8 +28,10 @@ import com.example.tugasakhir.api.response.ResponseRiwayatReservasi
 import com.example.tugasakhir.api.response.ResponseTogleFavorit
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateJamOperasional
+import com.example.tugasakhir.api.response.ResponseUpdateJenisLayanan
 import com.example.tugasakhir.api.response.ResponseUpdateKaryawan
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
+import com.example.tugasakhir.api.response.ResponseUpdateMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdateProfile
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -154,8 +161,8 @@ interface ApiService{
     suspend fun inputKendaraan(
         @Field("jenis_kendaraan") jenis_kendaraan: String,
         @Field("plat_kendaraan") plat_kendaraan: String,
-        @Field("merek_kendaraan") merek_kendaraan: String,
-        @Field("users_id") users_id: Int
+        @Field("users_id") users_id: Int,
+        @Field("merek_kendaraan_id") merek_kendaraan_id: Int,
     ): ResponseInputKendaraan
 
     @GET("detailKendaraan/{usersId}/{kendaraan_id}")
@@ -170,7 +177,7 @@ interface ApiService{
         @Path("usersId") usersId: Int,
         @Path("kendaraan_id") kendaraan_id: Int,
         @Field("plat_kendaraan") plat_kendaraan: String,
-        @Field("merek_kendaraan") merek_kendaraan: String
+        @Field("merek_kendaraan_id") merek_kendaraan_id: Int
     ): ResponseUpdateKendaraan
 
     @POST("deleteKendaraan/{usersId}/{kendaraan_id}")
@@ -210,4 +217,45 @@ interface ApiService{
         @Field("jam_operasional") jam_operasional: String,
         @Field("slot") slot: Int
     ): ResponseUpdateJamOperasional
+
+    @POST("inputJenisLayanan")
+    suspend fun inputJenisLayanan(
+        @Body request: HashMap<String, Any>
+    ): ResponseInputJenisLayanan
+
+    @GET("jenisLayanan/{bengkelId}")
+    suspend fun getJenisLayanan(
+        @Path("bengkelId") bengkelId: Int
+    ): ResponseJenisLayanan
+
+    @POST("updateJenisLayanan/{bengkelId}/{id}")
+    suspend fun updateJenisLayanan(
+        @Path("bengkelId") bengkelId: Int,
+        @Path("id") id: Int,
+        @Body request: HashMap<Any, Any>
+    ): ResponseUpdateJenisLayanan
+
+    @GET("detailJenisLayanan/{id}")
+    suspend fun detailJenisLayanan(
+        @Path("id") id: Int
+    ): ResponseDetailJenisLayanan
+
+    @FormUrlEncoded
+    @POST("inputMerekKendaraan")
+    suspend fun inputMerekKendaraan(
+        @Field("jenis_kendaraan") jenis_kendaraan:String,
+        @Field("merek_kendaraan") merek_kendaraan:String,
+        @Field("users_id") users_id:Int,
+    ): ResponseInputMerekKendaraan
+
+    @GET("displayMerekKendaraan")
+    suspend fun displayMerekKendaraan():ResponseDisplayMerekKendaraan
+
+    @FormUrlEncoded
+    @POST("updateMerekKendaraan/{usersId}/{merekKendaraanId}")
+    suspend fun updateMerekKendaraan(
+        @Path("usersId") usersId: Int,
+        @Path("merekKendaraanId") merekKendaraanId: Int,
+        @Field("merek_kendaraan") merek_kendaraan: String,
+    ): ResponseUpdateMerekKendaraan
 }

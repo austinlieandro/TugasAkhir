@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tugasakhir.api.response.DetailReservasi
 import com.example.tugasakhir.api.response.KaryawanItem
+import com.example.tugasakhir.api.response.Reservasi
 import com.example.tugasakhir.api.response.ResponseAsignKaryawan
 import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
@@ -25,7 +25,7 @@ class DetailReservasiBengkelViewModel(private val repository: BengkelRepository,
     val errorAssign = MutableLiveData<String?>()
     val statusAssign: MutableLiveData<Boolean> = MutableLiveData()
 
-    val detailReservasi = MutableLiveData<DetailReservasi?>()
+    val detailReservasi = MutableLiveData<Reservasi?>()
 
     val karyawanList = MutableLiveData<List<KaryawanItem?>?>()
 

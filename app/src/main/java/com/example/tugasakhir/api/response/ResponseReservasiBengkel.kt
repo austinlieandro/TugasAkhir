@@ -11,29 +11,41 @@ data class ResponseReservasiBengkel(
 	val message: String? = null,
 
 	@field:SerializedName("bengkel")
-	val bengkel: BengkelReservasi? = null,
+	val bengkel: ReservasiBengkelItem? = null,
 
 	@field:SerializedName("status")
 	val status: Boolean? = null
 ) : Parcelable
 
 @Parcelize
-data class BengkelReservasi(
+data class ReservasiBengkelItem(
 
 	@field:SerializedName("jam_reservasi")
 	val jamReservasi: String? = null,
 
+	@field:SerializedName("kendaraan_id")
+	val kendaraanId: Int? = null,
+
+	@field:SerializedName("prioritas")
+	val prioritas: Int? = null,
+
 	@field:SerializedName("tanggal_reservasi")
 	val tanggalReservasi: String? = null,
+
+	@field:SerializedName("created_at")
+	val createdAt: String? = null,
+
+	@field:SerializedName("kendaraan_reservasi")
+	val kendaraanReservasi: String? = null,
+
+	@field:SerializedName("jeniskendala_reservasi")
+	val jeniskendalaReservasi: Int? = null,
 
 	@field:SerializedName("updated_at")
 	val updatedAt: String? = null,
 
 	@field:SerializedName("users_id")
 	val usersId: Int? = null,
-
-	@field:SerializedName("created_at")
-	val createdAt: String? = null,
 
 	@field:SerializedName("id")
 	val id: Int? = null,
@@ -44,18 +56,6 @@ data class BengkelReservasi(
 	@field:SerializedName("detail_reservasi")
 	val detailReservasi: String? = null,
 
-	@field:SerializedName("kendaraan_reservasi")
-	val kendaraanReservasi: String? = null,
-
-	@field:SerializedName("jeniskendala_reservasi")
-	val jeniskendalaReservasi: String? = null,
-
 	@field:SerializedName("bengkels_id")
-	val bengkelsId: Int? = null,
-
-	@field:SerializedName("kendaraan_id")
-	val kendaraanId: Int? = null,
-
-	@field:SerializedName("prioritas")
-	val prioritas: Int? = null,
+	val bengkelsId: Int? = null
 ) : Parcelable

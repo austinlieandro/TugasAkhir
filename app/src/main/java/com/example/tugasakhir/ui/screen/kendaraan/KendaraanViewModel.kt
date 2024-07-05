@@ -21,7 +21,7 @@ class KendaraanViewModel(private val repository: UserRepository): ViewModel() {
         viewModelScope.launch {
             try {
                 val kendaraanResponse = repository.displayKendaraan(id)
-                kendaraanList.postValue(kendaraanResponse.bengkel)
+                kendaraanList.postValue(kendaraanResponse.kendaraan)
                 status.postValue(true)
                 Log.d("KENDARAAN", "$kendaraanResponse")
             }catch (e: HttpException){

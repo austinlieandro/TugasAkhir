@@ -33,5 +33,5 @@ data class Kendaraan(
 	val id: Int? = null,
 
 	@field:SerializedName("merek_kendaraan")
-	val merekKendaraan: String? = null
+	val merek_kendaraan_id: Int? = null
 ) : Parcelable

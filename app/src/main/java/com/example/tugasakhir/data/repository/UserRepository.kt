@@ -3,13 +3,16 @@ package com.example.tugasakhir.data.repository
 import com.example.tugasakhir.api.response.ResponseDeleteKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
+import com.example.tugasakhir.api.response.ResponseDisplayMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseFavoritBengkel
 import com.example.tugasakhir.api.response.ResponseInputKendaraan
+import com.example.tugasakhir.api.response.ResponseInputMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseLogin
 import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
 import com.example.tugasakhir.api.response.ResponseTogleFavorit
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
+import com.example.tugasakhir.api.response.ResponseUpdateMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdateProfile
 import com.example.tugasakhir.api.retrofit.ApiService
 import com.example.tugasakhir.data.pref.UserModel
@@ -29,16 +32,16 @@ class UserRepository(private val apiService: ApiService, private val userPrefere
         return apiService.displayKendaraan(id)
     }
 
-    suspend fun inputKendaraan(jenis_kendaraan: String, plat_kendaraan: String, merek_kendaraan: String, users_id: Int): ResponseInputKendaraan {
-        return apiService.inputKendaraan(jenis_kendaraan, plat_kendaraan, merek_kendaraan, users_id)
+    suspend fun inputKendaraan(jenis_kendaraan: String, plat_kendaraan: String, users_id: Int, merek_kendaraan_id: Int): ResponseInputKendaraan {
+        return apiService.inputKendaraan(jenis_kendaraan, plat_kendaraan, users_id, merek_kendaraan_id)
     }
 
     suspend fun detailKendaraan(usersId: Int, kendaraan_id: Int): ResponseDetailKendaraan{
         return apiService.detailKendaraan(usersId, kendaraan_id)
     }
 
-    suspend fun updateKendaraan(usersId: Int, kendaraan_id: Int, plat_kendaraan: String, merek_kendaraan: String): ResponseUpdateKendaraan{
-        return apiService.updateKendaraan(usersId, kendaraan_id, plat_kendaraan, merek_kendaraan)
+    suspend fun updateKendaraan(usersId: Int, kendaraan_id: Int, plat_kendaraan: String, merek_kendaraan_id: Int): ResponseUpdateKendaraan{
+        return apiService.updateKendaraan(usersId, kendaraan_id, plat_kendaraan, merek_kendaraan_id)
     }
 
     suspend fun deleteKendaraan(usersId: Int, kendaraan_id: Int): ResponseDeleteKendaraan{
@@ -71,6 +74,18 @@ class UserRepository(private val apiService: ApiService, private val userPrefere
 
     suspend fun logout() {
         userPreference.logout()
+    }
+
+    suspend fun inputMerekKendaraan(jenis_kendaraan: String, merek_kendaraan: String, users_id: Int): ResponseInputMerekKendaraan{
+        return apiService.inputMerekKendaraan(jenis_kendaraan, merek_kendaraan, users_id)
+    }
+
+    suspend fun displayMerekKendaraan(): ResponseDisplayMerekKendaraan{
+        return apiService.displayMerekKendaraan()
+    }
+
+    suspend fun updateMerekKendaraan(usersId: Int, merekKendaraanId: Int, merek_kendaraan: String): ResponseUpdateMerekKendaraan{
+        return apiService.updateMerekKendaraan(usersId, merekKendaraanId, merek_kendaraan)
     }
 
     companion object{
