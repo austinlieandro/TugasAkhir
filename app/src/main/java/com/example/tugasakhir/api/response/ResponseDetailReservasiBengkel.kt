@@ -66,7 +66,7 @@ data class Reservasi(
 	val jamReservasi: String? = null,
 
 	@field:SerializedName("prioritas")
-	val prioritas: Int? = null,
+	val prioritas: Double? = null,
 
 	@field:SerializedName("user_email")
 	val userEmail: String? = null,

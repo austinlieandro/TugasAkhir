@@ -58,6 +58,10 @@ fun JenisLayananScreen(
         BackHandler(enabled = true) {
             navigator.navigate(BengkelScreenDestination)
         }
+    }else{
+        BackHandler(enabled = true) {
+            navigator.popBackStack()
+        }
     }
     LaunchedEffect(Unit) {
         viewModel.getJenisLayanan(bengkelId)

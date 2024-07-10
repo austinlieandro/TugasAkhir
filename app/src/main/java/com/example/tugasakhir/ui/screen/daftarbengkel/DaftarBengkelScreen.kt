@@ -112,26 +112,26 @@ fun DaftarBengkelScreen(
             .format(pickedTimeTutup)
     } }
 
-    if (isMobilChecked && !selectedKendaraan.contains("Mobil")) {
-        selectedKendaraan.add("Mobil")
-    } else if (!isMobilChecked && selectedKendaraan.contains("Mobil")) {
-        selectedKendaraan.remove("Mobil")
+    if (isMobilChecked && !selectedKendaraan.contains("mobil")) {
+        selectedKendaraan.add("mobil")
+    } else if (!isMobilChecked && selectedKendaraan.contains("mobil")) {
+        selectedKendaraan.remove("mobil")
     }
 
-    if (isMotorChecked && !selectedKendaraan.contains("Motor")) {
-        selectedKendaraan.add("Motor")
-    } else if (!isMotorChecked && selectedKendaraan.contains("Motor")) {
-        selectedKendaraan.remove("Motor")
+    if (isMotorChecked && !selectedKendaraan.contains("motor")) {
+        selectedKendaraan.add("motor")
+    } else if (!isMotorChecked && selectedKendaraan.contains("motor")) {
+        selectedKendaraan.remove("motor")
     }
 
     val hariMap = mapOf(
-        "Senin" to isSeninChecked,
-        "Selasa" to isSelasaChecked,
-        "Rabu" to isRabuChecked,
-        "Kamis" to isKamisChecked,
-        "Jumat" to isJumatChecked,
-        "Sabtu" to isSabtuChecked,
-        "Minggu" to isMingguChecked
+        "senin" to isSeninChecked,
+        "selasa" to isSelasaChecked,
+        "rabu" to isRabuChecked,
+        "kamis" to isKamisChecked,
+        "jumat" to isJumatChecked,
+        "sabtu" to isSabtuChecked,
+        "minggu" to isMingguChecked
     )
 
     hariMap.forEach { (hari, isChecked) ->

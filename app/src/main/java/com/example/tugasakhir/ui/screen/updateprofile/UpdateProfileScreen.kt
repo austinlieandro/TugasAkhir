@@ -241,7 +241,11 @@ fun UpdateProfileScreen(
                 Button(
                     onClick = {
                         viewModel.updateProfile(userModel.id, nama, email, username, password, phone)
-                        Toast.makeText(context, "${errorState.value}", Toast.LENGTH_SHORT).show()
+                        if (errorState.value == null){
+                            Toast.makeText(context, "Berhasil Update Profile", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(context, "${errorState.value}", Toast.LENGTH_SHORT).show()
+                        }
                     },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(Color.Red),

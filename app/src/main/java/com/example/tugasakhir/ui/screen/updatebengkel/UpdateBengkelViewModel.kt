@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhir.api.response.Bengkel
+import com.example.tugasakhir.api.response.ReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDetailBengkel
+import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
 import com.example.tugasakhir.data.repository.BengkelRepository
 import com.google.gson.Gson
@@ -17,8 +19,34 @@ class UpdateBengkelViewModel(private val repository: BengkelRepository): ViewMod
     val status: MutableLiveData<Boolean> = MutableLiveData()
     val errorBengkel = MutableLiveData<String?>()
     val statusBengkel: MutableLiveData<Boolean> = MutableLiveData()
+    val errorBengkelReservasi = MutableLiveData<String?>()
+    val statusBengkelReservasi: MutableLiveData<Boolean> = MutableLiveData()
 
     val detailBengkel = MutableLiveData<Bengkel?>()
+
+    val reservasiList = MutableLiveData<List<ReservasiBengkel?>?>()
+
+    fun getReservasiBengkel(bengkelId: Int){
+        viewModelScope.launch {
+            try {
+                val reservasiBengkelResponse = repository.displayReservasiBengkel(bengkelId)
+                reservasiList.postValue(reservasiBengkelResponse.reservasi)
+                statusBengkelReservasi.postValue(true)
+                Log.d("RESERVASI BENGKEL", "$reservasiBengkelResponse")
+            }catch (e: HttpException){
+                val jsonInString = e.response()?.errorBody()?.string()
+                Log.e("RESERVASI BENGKEL", "Error response: $jsonInString")
+                val errorBody = Gson().fromJson(jsonInString, ResponseDisplayReservasiBengkel::class.java)
+                errorBengkelReservasi.postValue(errorBody.message)
+                statusBengkelReservasi.postValue(false)
+                Log.d("RESERVASI BENGKEL", "$e")
+            }catch (e: Exception) {
+                errorBengkelReservasi.postValue("Terjadi kesalahan saat membuat data")
+                statusBengkelReservasi.postValue(false)
+                Log.d("RESERVASI BENGKEL", "$e")
+            }
+        }
+    }
 
     fun updateBengkel(
         usersId: Int,

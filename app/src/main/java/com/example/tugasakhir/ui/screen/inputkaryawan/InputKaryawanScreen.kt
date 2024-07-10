@@ -143,7 +143,11 @@ fun InputKaryawanSceren(
                             shape = RoundedCornerShape(10.dp),
                             onClick = {
                                 openAlertDialog.value = false
-                                navigator.navigate(InputJenisLayananScreenDestination("daftar", bengkelId))
+                                if (jenisDaftar == "lainnya"){
+                                    navigator.popBackStack()
+                                }else{
+                                    navigator.navigate(InputJenisLayananScreenDestination("daftar", bengkelId))
+                                }
                             }
                         ) {
                             Text(

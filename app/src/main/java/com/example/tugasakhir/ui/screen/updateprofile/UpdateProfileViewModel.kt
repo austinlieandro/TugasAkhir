@@ -48,6 +48,7 @@ class UpdateProfileViewModel(private val repository: UserRepository): ViewModel(
             try {
                 val updateProfileResponse = repository.updateProfile(id, name, email, username, password, phone)
                 statusUpdate.postValue(true)
+                errorUpdate.postValue(updateProfileResponse.message)
                 Log.d("UPDATE PROFILE", "$updateProfileResponse")
             }catch (e: HttpException){
                 val jsonInString = e.response()?.errorBody()?.string()

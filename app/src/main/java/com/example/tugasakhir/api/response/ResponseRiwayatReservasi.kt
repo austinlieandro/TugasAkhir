@@ -27,7 +27,7 @@ data class ReservasiItem(
 	val kendaraanId: Int? = null,
 
 	@field:SerializedName("prioritas")
-	val prioritas: Int? = null,
+	val prioritas: Double? = null,
 
 	@field:SerializedName("alamat_bengkel")
 	val alamatBengkel: String? = null,

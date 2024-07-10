@@ -1,5 +1,7 @@
 package com.example.tugasakhir.ui.screen.updatebengkel
 
+import android.app.AlertDialog
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -53,6 +55,7 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -69,8 +72,10 @@ fun UpdateBengkelScreen(
     val statusState by viewModel.statusBengkel.observeAsState(false)
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
     val detailBengkel = viewModel.detailBengkel.observeAsState()
+    val statusReservasi = viewModel.reservasiList.observeAsState()
     LaunchedEffect(userModel.bengkels_id) {
         viewModel.getDetailBengkel(userModel.id, userModel.bengkels_id)
+        viewModel.getReservasiBengkel(userModel.bengkels_id)
     }
 
     val localFocusManager = LocalFocusManager.current
@@ -109,16 +114,16 @@ fun UpdateBengkelScreen(
             .format(pickedTimeTutup)
     } }
 
-    if (isMobilChecked && !selectedKendaraan.contains("Mobil")) {
-        selectedKendaraan.add("Mobil")
-    } else if (!isMobilChecked && selectedKendaraan.contains("Mobil")) {
-        selectedKendaraan.remove("Mobil")
+    if (isMobilChecked && !selectedKendaraan.contains("mobil")) {
+        selectedKendaraan.add("mobil")
+    } else if (!isMobilChecked && selectedKendaraan.contains("mobil")) {
+        selectedKendaraan.remove("mobil")
     }
 
-    if (isMotorChecked && !selectedKendaraan.contains("Motor")) {
-        selectedKendaraan.add("Motor")
-    } else if (!isMotorChecked && selectedKendaraan.contains("Motor")) {
-        selectedKendaraan.remove("Motor")
+    if (isMotorChecked && !selectedKendaraan.contains("motor")) {
+        selectedKendaraan.add("motor")
+    } else if (!isMotorChecked && selectedKendaraan.contains("motor")) {
+        selectedKendaraan.remove("motor")
     }
 
     LaunchedEffect(detailBengkel.value) {
@@ -149,13 +154,13 @@ fun UpdateBengkelScreen(
     }
 
     val hariMap = mapOf(
-        "Senin" to isSeninChecked,
-        "Selasa" to isSelasaChecked,
-        "Rabu" to isRabuChecked,
-        "Kamis" to isKamisChecked,
-        "Jumat" to isJumatChecked,
-        "Sabtu" to isSabtuChecked,
-        "Minggu" to isMingguChecked
+        "senin" to isSeninChecked,
+        "selasa" to isSelasaChecked,
+        "rabu" to isRabuChecked,
+        "kamis" to isKamisChecked,
+        "jumat" to isJumatChecked,
+        "sabtu" to isSabtuChecked,
+        "minggu" to isMingguChecked
     )
 
     hariMap.forEach { (hari, isChecked) ->
@@ -553,6 +558,7 @@ fun UpdateBengkelScreen(
 
                 Button(
                     onClick = {
+
                         if (namaBengkel.isBlank() || lokasiBengkel.isBlank() || numberBengkel.isBlank() ||
                             alamatBengkel.isBlank() || selectedKendaraan.isEmpty() || selectedHari.isEmpty()) {
                             Toast.makeText(
@@ -561,25 +567,91 @@ fun UpdateBengkelScreen(
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
-                            viewModel.updateBengkel(
-                                detailBengkel.value?.usersId ?: 0,
-                                detailBengkel.value?.id ?: 0,
-                                namaBengkel,
-                                lokasiBengkel,
-                                numberBengkel,
-                                alamatBengkel,
-                                gmapsBengkel,
-                                selectedKendaraan.toList(),
-//                                selectedLayanan.toList(),
-                                selectedHari.toList(),
-                                formattedTimeBuka,
-                                formattedTimeTutup,
-                            )
-                            Toast.makeText(
-                                context,
-                                "Data berhasil disimpan",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            fun isTimeAfterOrEqual(timeToCheck: String, referenceTime: String): Boolean {
+                                return timeToCheck >= referenceTime
+                            }
+
+                            fun isSameDate(dateToCheck: String, referenceDate: String): Boolean {
+                                return dateToCheck == referenceDate
+                            }
+
+                            val closingTime = formattedTimeTutup
+
+                            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                            val today = LocalDate.now()
+                            val formatDate = today.format(formatter)
+
+                            Log.d("Debug", "Closing Time: $closingTime")
+                            Log.d("Debug", "Today's Date: $formatDate")
+
+                            val overlappingReservations = statusReservasi.value?.filter { reservasi ->
+                                val reservasiDate = reservasi?.tanggalReservasi ?: ""
+                                val endTime = reservasi?.jamReservasi
+                                val endTimePart = endTime?.split(" - ")
+                                val endTimeFix = endTimePart?.getOrNull(0) ?: ""
+
+                                Log.d("Debug", "Reservasi Date: $reservasiDate")
+                                Log.d("Debug", "End Time: $endTimeFix")
+
+                                isSameDate(reservasiDate, formatDate) && isTimeAfterOrEqual(endTimeFix, closingTime)
+                            }
+                            if (overlappingReservations?.isNotEmpty() == true){
+                                val alertDialogBuilder = AlertDialog.Builder(context)
+                                alertDialogBuilder.apply {
+                                    setTitle("Peringatan")
+                                    setMessage("Ada reservasi pada hari ini yang berakhir setelah atau pada waktu tutup yang diubah. Tetap mengubah jam tutup?")
+                                    setPositiveButton("Ya") { dialog, _ ->
+                                        dialog.dismiss()
+                                        viewModel.updateBengkel(
+                                            detailBengkel.value?.usersId ?: 0,
+                                            detailBengkel.value?.id ?: 0,
+                                            namaBengkel,
+                                            lokasiBengkel,
+                                            numberBengkel,
+                                            alamatBengkel,
+                                            gmapsBengkel,
+                                            selectedKendaraan.toList(),
+                                            selectedHari.toList(),
+                                            formattedTimeBuka,
+                                            formattedTimeTutup,
+                                        )
+                                        Toast.makeText(
+                                            context,
+                                            "Data berhasil disimpan",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    setNegativeButton("Tidak") { dialog, _ ->
+                                        dialog.dismiss()
+                                        Toast.makeText(
+                                            context,
+                                            "Perubahan dibatalkan",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    show()
+                                }
+                            }else{
+                                Log.d("Debug", "Overlapping Reservations Found")
+                                viewModel.updateBengkel(
+                                    detailBengkel.value?.usersId ?: 0,
+                                    detailBengkel.value?.id ?: 0,
+                                    namaBengkel,
+                                    lokasiBengkel,
+                                    numberBengkel,
+                                    alamatBengkel,
+                                    gmapsBengkel,
+                                    selectedKendaraan.toList(),
+                                    selectedHari.toList(),
+                                    formattedTimeBuka,
+                                    formattedTimeTutup,
+                                )
+                                Toast.makeText(
+                                    context,
+                                    "Data berhasil disimpan",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     },
                     colors = ButtonDefaults.buttonColors(Color.Red),
