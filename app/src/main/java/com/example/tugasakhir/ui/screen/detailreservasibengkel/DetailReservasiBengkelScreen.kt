@@ -129,12 +129,16 @@ fun DetailReservasiBengkelScreen(
                             .padding(bottom = 8.dp)
                     )
                     Text(
-                        text = "Kendala Pelanggan: ${detail?.jenisLayanan}",
+                        text = "Kendala Pelanggan: ${detail?.jenisLayanan?.joinToString(separator = ", ") ?: ""}",
                         modifier = modifier
                             .padding(bottom = 8.dp)
                     )
                     Text(
-                        text = "Rincian Kendala: ${detail?.detailReservasi}",
+                        text = if(detail?.detailReservasi == null){
+                            "Rincian Kendala: Pelanggan tidak memasukan rincian"
+                        }else{
+                            "Rincian Kendala: ${detail?.detailReservasi}"
+                        },
                         modifier = modifier
                             .padding(bottom = 8.dp)
                     )
