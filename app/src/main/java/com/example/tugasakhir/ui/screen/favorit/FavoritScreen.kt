@@ -103,6 +103,7 @@ fun FavoritScreen(
                                 lokasiBengkel = data?.lokasiBengkel ?: "",
                                 alamatBengkel = data?.alamatBengkel ?: "",
                                 numberBengkel = data?.numberBengkel ?: "",
+                                hariBuka = data?.hariOperasional?.joinToString(separator = ", ") ?: "",
                                 modifier = modifier
                                     .clickable {
                                         data?.id?.let { navigator.navigate(BengkelDetailScreenDestination(userModel.id, bengkelId = it)) }

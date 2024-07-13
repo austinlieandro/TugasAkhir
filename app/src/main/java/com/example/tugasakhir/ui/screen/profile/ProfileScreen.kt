@@ -1,5 +1,6 @@
 package com.example.tugasakhir.ui.screen.profile
 
+import android.os.Handler
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -47,6 +48,7 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.DaftarBengkelScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.DasbboardScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.FavoritScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.JamOperasionalScreenDestination.invoke
 import com.ramcosta.composedestinations.generated.destinations.KendaraanScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.MerekKendaraanScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.UpdateProfileScreenDestination
@@ -266,8 +268,10 @@ fun ProfileScreen(
                     Button(
                         colors = ButtonDefaults.buttonColors(Color.Transparent),
                         onClick = {
-                            navigator.navigate(WelcomeScreenDestination)
                             viewModel.logout()
+                            Handler().postDelayed({
+                                navigator.navigate(WelcomeScreenDestination)
+                            }, 500)
                         },
                         modifier = modifier
                             .fillMaxWidth()

@@ -43,6 +43,7 @@ fun RiwayatItem(
     gmapsBengkel: String,
     merekKendaraan: String,
     platKendaraan: String,
+    jenisPerbaikan: String,
     modifier: Modifier = Modifier
 ){
     val context = LocalContext.current
@@ -104,6 +105,12 @@ fun RiwayatItem(
                     .padding(start = 16.dp, bottom = 8.dp)
             )
             Text(
+                text = "Jenis Perbaikan: $jenisPerbaikan",
+                fontSize = 18.sp,
+                modifier = modifier
+                    .padding(start = 16.dp, bottom = 8.dp)
+            )
+            Text(
                 text = "Plat Kendaraan: $platKendaraan",
                 fontSize = 18.sp,
                 modifier = modifier
@@ -132,7 +139,7 @@ fun RiwayatItem(
                         .padding(start = 16.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .background(
-                            if (statusBengkel.lowercase() == "menunggu" || statusBengkel.lowercase() == "dibatalkan") {
+                            if (statusBengkel.lowercase() == "menunggu" || statusBengkel.lowercase() == "dibatalkan" || statusBengkel.lowercase() == "relokasi") {
                                 Color.Red
                             } else if(statusBengkel.lowercase() == "proses") {
                                 Color.Yellow
@@ -146,7 +153,7 @@ fun RiwayatItem(
                         text = statusBengkel,
                         fontSize = 18.sp,
                         color =
-                        if (statusBengkel.lowercase() == "menunggu" || statusBengkel.lowercase() =="dibatalkan") {
+                        if (statusBengkel.lowercase() == "menunggu" || statusBengkel.lowercase() =="dibatalkan" || statusBengkel.lowercase() == "relokasi") {
                             Color.White
                         } else{
                             Color.Black
@@ -172,7 +179,8 @@ fun PreviewRiwayatItem() {
             jamReservasi = "13.00 - 15.00",
             gmapsBengkel = "",
             "Honda",
-            "L 5555 QM"
+            "L 5555 QM",
+            "Mesin"
         )
     }
 }

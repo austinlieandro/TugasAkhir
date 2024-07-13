@@ -89,7 +89,8 @@ fun RiwayatScreen(
                             jamReservasi = data?.jamReservasi ?: "",
                             gmapsBengkel = data?.gmapsBengkel ?: "",
                             merekKendaraan = data?.merekKendaraan ?: "",
-                            platKendaraan = data?.platKendaraan ?: ""
+                            platKendaraan = data?.platKendaraan ?: "",
+                            jenisPerbaikan = data?.jenisLayanan?.joinToString(separator = ", ") ?: ""
                         )
                     }
                 }

@@ -72,9 +72,9 @@ fun DetailReservasiBengkelScreen(
     }
 
     LaunchedEffect(detailReservasiState.value) {
-        detailReservasiState.value?.let { detail ->
-            selectedTextKaryawan = detail.namaKaryawan ?: ""
-            selectedTextStatus = detail.statusReservasi ?: ""
+        detailReservasiState.value?.forEach { detail ->
+            selectedTextKaryawan = detail?.namaKaryawan ?: ""
+            selectedTextStatus = detail?.statusReservasi ?: ""
         }
     }
 
@@ -90,174 +90,178 @@ fun DetailReservasiBengkelScreen(
                 CircularProgressIndicator()
             }
         }else{
-            Column(
-                modifier = modifier
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Text(
-                    text = "Detail Reservasi",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
+            detailReservasiState.value?.forEach { detail ->
+                Column(
                     modifier = modifier
-                        .padding(bottom = 16.dp)
-                )
-                Text(
-                    text = "Nama pelanggan: ${detailReservasiState.value?.userName}",
-                    modifier = modifier
-                        .padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "Nomor pelanggan: ${detailReservasiState.value?.userPhone}",
-                    modifier = modifier
-                        .padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "Kendaraan pelanggan: ${detailReservasiState.value?.kendaraanReservasi}",
-                    modifier = modifier
-                        .padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "Merek kendaraan pelanggan: ${detailReservasiState.value?.merekKendaraan}",
-                    modifier = modifier
-                        .padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "Plat kendaraan pelanggan: ${detailReservasiState.value?.platKendaraan}",
-                    modifier = modifier
-                        .padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "Kendala Pelanggan: ${detailReservasiState.value?.namaLayanan}",
-                    modifier = modifier
-                        .padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "Rincian Kendala: ${detailReservasiState.value?.detailReservasi}",
-                    modifier = modifier
-                        .padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "Jam Reservasi: ${detailReservasiState.value?.jamReservasi}",
-                    modifier = modifier
-                        .padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "Tanggal Reservasi: ${detailReservasiState.value?.tanggalReservasi}",
-                    modifier = modifier
-                        .padding(bottom = 8.dp)
-                )
-                ExposedDropdownMenuBox(
-                    expanded = isExpendedKaryawan,
-                    onExpandedChange = { isExpendedKaryawan = !isExpendedKaryawan }
-                ) {
-                    TextField(
-                        value = selectedTextKaryawan,
-                        onValueChange = {},
-                        readOnly = true,
-                        shape = RoundedCornerShape(10.dp),
-                        label = { Text("Pilih Karyawan") },
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = MaterialTheme.colorScheme.outline,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                            containerColor = Color.White,
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        ),
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKaryawan)
-                        },
-                        modifier = Modifier
-                            .menuAnchor()
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
-                    )
-
-                    ExposedDropdownMenu(
-                        expanded = isExpendedKaryawan,
-                        onDismissRequest = { isExpendedKaryawan = false },
-                        modifier = Modifier
-                            .background(Color.White)
-                    ) {
-                        listKaryawanState.value?.forEach { option ->
-                            DropdownMenuItem(
-                                text = { option?.namaKaryawan?.let { Text(it) } },
-                                onClick = {
-                                    option?.id?.let { idSelectedKarywan = it }
-                                    option?.namaKaryawan?.let { selectedTextKaryawan = it }
-                                    isExpendedKaryawan = false
-                                },
-                                modifier = Modifier
-                                    .background(Color.White)
-                            )
-                        }
-                    }
-                }
-                ExposedDropdownMenuBox(
-                    expanded = isExpendedStatus,
-                    onExpandedChange = { isExpendedStatus = !isExpendedStatus }
-                ) {
-                    TextField(
-                        value = selectedTextStatus,
-                        onValueChange = {},
-                        readOnly = true,
-                        shape = RoundedCornerShape(10.dp),
-                        label = { Text("Pilih Status") },
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = MaterialTheme.colorScheme.outline,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                            containerColor = Color.White,
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        ),
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedStatus)
-                        },
-                        modifier = Modifier
-                            .menuAnchor()
-                            .fillMaxWidth()
-                            .padding(top = 16.dp)
-                    )
-
-                    ExposedDropdownMenu(
-                        expanded = isExpendedStatus,
-                        onDismissRequest = { isExpendedStatus = false },
-                        modifier = Modifier
-                            .background(Color.White)
-                    ) {
-                        listStatus.forEach { option ->
-                            DropdownMenuItem(
-                                text = { option.let { Text(it) } },
-                                onClick = {
-                                    option.let { selectedTextStatus = it }
-                                    isExpendedStatus = false
-                                },
-                                modifier = Modifier
-                                    .background(Color.White)
-                            )
-                        }
-                    }
-                }
-                Button(
-                    onClick = {
-                        viewModel.assignReservasi(
-                            detailReservasiState.value?.id ?: 0,
-                            idSelectedKarywan,
-                            selectedTextStatus.lowercase()
-                        )
-                        Toast.makeText(context, "Berhasil Assign Karyawan", Toast.LENGTH_SHORT).show()
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Red),
-                    modifier = modifier
-                        .padding(top = 16.dp)
-                        .fillMaxSize()
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        text = "Update Reservasi"
+                        text = "Detail Reservasi",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = modifier
+                            .padding(bottom = 16.dp)
                     )
+                    Text(
+                        text = "Nama pelanggan: ${detail?.name}",
+                        modifier = modifier
+                            .padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Nomor pelanggan: ${detail?.phone}",
+                        modifier = modifier
+                            .padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Kendaraan pelanggan: ${detail?.kendaraanReservasi}",
+                        modifier = modifier
+                            .padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Merek kendaraan pelanggan: ${detail?.merekKendaraan}",
+                        modifier = modifier
+                            .padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Plat kendaraan pelanggan: ${detail?.platKendaraan}",
+                        modifier = modifier
+                            .padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Kendala Pelanggan: ${detail?.jenisLayanan}",
+                        modifier = modifier
+                            .padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Rincian Kendala: ${detail?.detailReservasi}",
+                        modifier = modifier
+                            .padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Jam Reservasi: ${detail?.jamReservasi}",
+                        modifier = modifier
+                            .padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Tanggal Reservasi: ${detail?.tanggalReservasi}",
+                        modifier = modifier
+                            .padding(bottom = 8.dp)
+                    )
+                    ExposedDropdownMenuBox(
+                        expanded = isExpendedKaryawan,
+                        onExpandedChange = { isExpendedKaryawan = !isExpendedKaryawan }
+                    ) {
+                        TextField(
+                            value = selectedTextKaryawan,
+                            onValueChange = {},
+                            readOnly = true,
+                            shape = RoundedCornerShape(10.dp),
+                            label = { Text("Pilih Karyawan") },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = MaterialTheme.colorScheme.outline,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                                containerColor = Color.White,
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            ),
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedKaryawan)
+                            },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
+                                .padding(top = 8.dp)
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = isExpendedKaryawan,
+                            onDismissRequest = { isExpendedKaryawan = false },
+                            modifier = Modifier
+                                .background(Color.White)
+                        ) {
+                            listKaryawanState.value?.forEach { option ->
+                                DropdownMenuItem(
+                                    text = { option?.namaKaryawan?.let { Text(it) } },
+                                    onClick = {
+                                        option?.id?.let { idSelectedKarywan = it }
+                                        option?.namaKaryawan?.let { selectedTextKaryawan = it }
+                                        isExpendedKaryawan = false
+                                    },
+                                    modifier = Modifier
+                                        .background(Color.White)
+                                )
+                            }
+                        }
+                    }
+                    ExposedDropdownMenuBox(
+                        expanded = isExpendedStatus,
+                        onExpandedChange = { isExpendedStatus = !isExpendedStatus }
+                    ) {
+                        TextField(
+                            value = selectedTextStatus,
+                            onValueChange = {},
+                            readOnly = true,
+                            shape = RoundedCornerShape(10.dp),
+                            label = { Text("Pilih Status") },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = MaterialTheme.colorScheme.outline,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                                containerColor = Color.White,
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            ),
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpendedStatus)
+                            },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
+                                .padding(top = 16.dp)
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = isExpendedStatus,
+                            onDismissRequest = { isExpendedStatus = false },
+                            modifier = Modifier
+                                .background(Color.White)
+                        ) {
+                            listStatus.forEach { option ->
+                                DropdownMenuItem(
+                                    text = { option.let { Text(it) } },
+                                    onClick = {
+                                        option.let { selectedTextStatus = it }
+                                        isExpendedStatus = false
+                                    },
+                                    modifier = Modifier
+                                        .background(Color.White)
+                                )
+                            }
+                        }
+                    }
+                    Button(
+                        onClick = {
+                            viewModel.assignReservasi(
+                                detail?.id ?: 0,
+                                idSelectedKarywan,
+                                selectedTextStatus.lowercase()
+                            )
+                            Toast.makeText(context, "Berhasil Assign Karyawan", Toast.LENGTH_SHORT).show()
+                        },
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(Color.Red),
+                        modifier = modifier
+                            .padding(top = 16.dp)
+                            .fillMaxSize()
+                    ) {
+                        Text(
+                            text = "Update Reservasi"
+                        )
+                    }
                 }
+
             }
+
         }
     }
 }

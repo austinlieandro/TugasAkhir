@@ -71,14 +71,14 @@ data class ReservasiItem(
 	@field:SerializedName("gmaps_bengkel")
 	val gmapsBengkel: String? = null,
 
+	@field:SerializedName("jenis_layanan")
+	val jenisLayanan: List<String?>? = null,
+
 	@field:SerializedName("id")
 	val id: Int? = null,
 
 	@field:SerializedName("number_bengkel")
 	val numberBengkel: String? = null,
-
-	@field:SerializedName("nama_layanan")
-	val namaLayanan: String? = null,
 
 	@field:SerializedName("status_reservasi")
 	val statusReservasi: String? = null,

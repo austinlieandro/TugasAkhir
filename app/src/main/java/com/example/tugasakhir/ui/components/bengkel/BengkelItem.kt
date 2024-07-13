@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,13 +31,13 @@ fun BengkelItem(
     lokasiBengkel: String,
     alamatBengkel: String,
     numberBengkel: String,
+    hariBuka: String,
     modifier: Modifier = Modifier
 ){
     Card(
         colors = CardDefaults.cardColors(Color.White),
         modifier = modifier
             .fillMaxWidth()
-            .height(140.dp)
             .shadow(12.dp, RoundedCornerShape(12.dp))
     ) {
         Column(
@@ -59,6 +60,17 @@ fun BengkelItem(
             )
             Text(
                 text = numberBengkel,
+                fontSize = 18.sp,
+                modifier = modifier
+                    .padding(start = 16.dp)
+            )
+            Divider(
+                color = Color.Black,
+                modifier = modifier
+                    .padding(8.dp)
+            )
+            Text(
+                text = "Hari Buka: $hariBuka",
                 fontSize = 18.sp,
                 modifier = modifier
                     .padding(start = 16.dp)
@@ -94,6 +106,7 @@ fun PreviewBengkelItem() {
             lokasiBengkel = "Jakarta",
             alamatBengkel = "Jl. Konoha",
             numberBengkel = "081234567890",
+            "Senin - Kamis"
         )
     }
 }

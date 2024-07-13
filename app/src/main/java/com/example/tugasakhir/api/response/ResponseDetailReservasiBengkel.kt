@@ -11,7 +11,7 @@ data class ResponseDetailReservasiBengkel(
 	val message: String? = null,
 
 	@field:SerializedName("reservasi")
-	val reservasi: Reservasi? = null,
+	val reservasi: List<Reservasi?>? = null,
 
 	@field:SerializedName("status")
 	val status: Boolean? = null
@@ -25,9 +25,6 @@ data class Reservasi(
 
 	@field:SerializedName("alamat_bengkel")
 	val alamatBengkel: String? = null,
-
-	@field:SerializedName("user_name")
-	val userName: String? = null,
 
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,
@@ -53,9 +50,6 @@ data class Reservasi(
 	@field:SerializedName("users_id")
 	val usersId: Int? = null,
 
-	@field:SerializedName("user_phone")
-	val userPhone: String? = null,
-
 	@field:SerializedName("id")
 	val id: Int? = null,
 
@@ -67,9 +61,6 @@ data class Reservasi(
 
 	@field:SerializedName("prioritas")
 	val prioritas: Double? = null,
-
-	@field:SerializedName("user_email")
-	val userEmail: String? = null,
 
 	@field:SerializedName("tanggal_reservasi")
 	val tanggalReservasi: String? = null,
@@ -83,8 +74,17 @@ data class Reservasi(
 	@field:SerializedName("merek_kendaraan")
 	val merekKendaraan: String? = null,
 
+	@field:SerializedName("phone")
+	val phone: String? = null,
+
+	@field:SerializedName("name")
+	val name: String? = null,
+
 	@field:SerializedName("gmaps_bengkel")
 	val gmapsBengkel: String? = null,
+
+	@field:SerializedName("jenis_layanan")
+	val jenisLayanan: List<String?>? = null,
 
 	@field:SerializedName("number_bengkel")
 	val numberBengkel: String? = null,

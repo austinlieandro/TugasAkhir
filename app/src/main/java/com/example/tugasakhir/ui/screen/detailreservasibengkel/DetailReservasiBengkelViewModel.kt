@@ -25,7 +25,7 @@ class DetailReservasiBengkelViewModel(private val repository: BengkelRepository,
     val errorAssign = MutableLiveData<String?>()
     val statusAssign: MutableLiveData<Boolean> = MutableLiveData()
 
-    val detailReservasi = MutableLiveData<Reservasi?>()
+    val detailReservasi = MutableLiveData<List<Reservasi?>?>()
 
     val karyawanList = MutableLiveData<List<KaryawanItem?>?>()
 

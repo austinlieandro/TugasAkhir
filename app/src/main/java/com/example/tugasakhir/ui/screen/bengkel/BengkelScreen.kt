@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -88,8 +89,35 @@ fun BengkelScreen(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = modifier
-                        .padding(16.dp)
+                        .padding(start = 16.dp, top = 16.dp, end = 16.dp)
                 )
+                SearchBar(
+                    query = query,
+                    onQueryChange = viewModel::search,
+                    onSearch = {},
+                    active = false,
+                    onActiveChange = {},
+                    shape = RoundedCornerShape(10.dp),
+                    colors = SearchBarDefaults.colors(containerColor = Color.White),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "",
+                            tint = colorScheme.onSurface
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Cari Bengkel",
+                            fontSize = 14.sp,
+                        )
+                    },
+                    modifier = modifier
+                        .padding(16.dp, 0.dp, 0.dp, 32.dp)
+                        .fillMaxWidth()
+                        .height(55.dp)
+                ) {
+                }
                 LazyColumn(
                     contentPadding = PaddingValues(bottom = 30.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -97,31 +125,7 @@ fun BengkelScreen(
                         .padding(horizontal = 16.dp)
                 ) {
                     item {
-                        SearchBar(
-                            query = query,
-                            onQueryChange = viewModel::search,
-                            onSearch = {},
-                            active = false,
-                            onActiveChange = {},
-                            shape = RoundedCornerShape(10.dp),
-                            colors = SearchBarDefaults.colors(containerColor = Color.White),
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Search,
-                                    contentDescription = "",
-                                    tint = colorScheme.onSurface
-                                )
-                            },
-                            placeholder = {
-                                Text(
-                                    text = "Cari Bengkel",
-                                    fontSize = 14.sp,
-                                )
-                            },
-                            modifier = modifier
-                                .fillMaxWidth()
-                        ) {
-                        }
+
                     }
                     if (statusState) {
                         items(bengkelListState.value ?: emptyList()) { data ->
@@ -130,6 +134,7 @@ fun BengkelScreen(
                                 lokasiBengkel = data?.lokasiBengkel ?: "",
                                 alamatBengkel = data?.alamatBengkel ?: "",
                                 numberBengkel = data?.numberBengkel ?: "",
+                                hariBuka = data?.hariOperasional?.joinToString(separator = ", ") ?: "",
                                 modifier = modifier
                                     .clickable {
                                         data?.id?.let {
