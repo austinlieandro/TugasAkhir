@@ -291,8 +291,18 @@ fun BengkelDetailScreen(
                         modifier = Modifier
                             .background(Color.White)
                     ) {
-                        filteredKendaraanUser?.forEach { option ->
-                            var teksKendaraan = "${option?.merekKendaraan ?: ""} - ${option?.platKendaraan ?: ""}"
+                        if (filteredKendaraanUser.isNullOrEmpty()) {
+                        DropdownMenuItem(
+                            text = { Text("Kamu tidak memiliki data kendaraan silakan mengisi data kendaraan") },
+                            onClick = {
+                                isExpendedKendaraanUser = false
+                            },
+                            modifier = Modifier
+                                .background(Color.White)
+                        )
+                    } else {
+                        filteredKendaraanUser.forEach { option ->
+                            val teksKendaraan = "${option?.merekKendaraan ?: ""} - ${option?.platKendaraan ?: ""}"
                             DropdownMenuItem(
                                 text = { Text(teksKendaraan) },
                                 onClick = {
@@ -304,6 +314,7 @@ fun BengkelDetailScreen(
                                     .background(Color.White)
                             )
                         }
+                    }
                     }
                 }
                 ExposedDropdownMenuBox(
@@ -331,7 +342,6 @@ fun BengkelDetailScreen(
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
                     )
-
                     ExposedDropdownMenu(
                         expanded = isExpendedLayanan,
                         onDismissRequest = { isExpendedLayanan = false },
