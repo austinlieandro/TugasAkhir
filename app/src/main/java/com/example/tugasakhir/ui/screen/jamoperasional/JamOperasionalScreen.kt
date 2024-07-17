@@ -318,7 +318,7 @@ fun JamOperasionalScreen(
                             Toast.makeText(context, "Silahkan tambah jam operasional terlebih dahulu", Toast.LENGTH_SHORT).show()
                         } else {
                             viewModel.daftarJamOperasional(jamOperasional, hari, listSlot, bengkelId)
-                            navigator.navigate(InputKaryawanScerenDestination(bengkelId, "lainnya"))
+                            navigator.navigate(InputKaryawanScerenDestination(bengkelId, "daftar"))
                         }
                     },
                     shape = RoundedCornerShape(10.dp),
