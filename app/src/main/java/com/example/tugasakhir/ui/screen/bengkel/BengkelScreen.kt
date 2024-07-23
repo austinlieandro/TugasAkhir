@@ -85,7 +85,7 @@ fun BengkelScreen(
         }else{
             Column {
                 Text(
-                    text = "List Bengkel",
+                    text = "Daftar Bengkel",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = modifier

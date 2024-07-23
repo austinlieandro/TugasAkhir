@@ -49,7 +49,7 @@ fun DasbboardScreen(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Dashboard Bengkel",
+                text = "Dasbor Bengkel",
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 modifier = modifier

@@ -73,7 +73,7 @@ fun FavoritScreen(
                     .padding(horizontal = 16.dp)
             ){
                 Text(
-                    text = "List Favorit Bengkel",
+                    text = "Daftar Favorit Bengkel",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = modifier
@@ -89,7 +89,7 @@ fun FavoritScreen(
                 ){
                     item {
                         Text(
-                            text = "List Favorit Bengkel",
+                            text = "Daftar Favorit Bengkel",
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = modifier

@@ -91,7 +91,7 @@ fun InputKendaraanScreen(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Input Kendaraan",
+                text = "Memasukan Data Kendaraan",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = modifier

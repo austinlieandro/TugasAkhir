@@ -92,7 +92,7 @@ fun UpdateProfileScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Edit Profile",
+                    text = "Perbarui Profile",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = modifier
@@ -188,13 +188,13 @@ fun UpdateProfileScreen(
                     singleLine = true,
                     placeholder = {
                         Text(
-                            text = "Phone Number",
+                            text = "Nomor Telepon",
                             color = Color(0xFF86888D)
                         )
                     },
                     label = {
                         Text(
-                            text = "Phone Number",
+                            text = "Nomor Telepon",
                             color = Color(0xFF86888D)
                         )
                     },
@@ -242,7 +242,7 @@ fun UpdateProfileScreen(
                     onClick = {
                         viewModel.updateProfile(userModel.id, nama, email, username, password, phone)
                         if (errorState.value == null){
-                            Toast.makeText(context, "Berhasil Update Profile", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Berhasil Perbarui Profile", Toast.LENGTH_SHORT).show()
                         }else{
                             Toast.makeText(context, "${errorState.value}", Toast.LENGTH_SHORT).show()
                         }
@@ -253,7 +253,7 @@ fun UpdateProfileScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = "Update Profile"
+                        text = "Perbarui Profile"
                     )
                 }
             }

@@ -66,7 +66,7 @@ fun ReservasiBengkelScreen(
             ){
                 item {
                     Text(
-                        text = "List Reservasi",
+                        text = "Daftar Reservasi",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = modifier

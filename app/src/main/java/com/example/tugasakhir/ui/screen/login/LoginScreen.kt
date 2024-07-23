@@ -89,7 +89,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Login To Your Account",
+                text = "Masuk ke akun anda",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )

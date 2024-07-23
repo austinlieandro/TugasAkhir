@@ -311,7 +311,7 @@ fun UpdateJenisLayananScreen(
                 Button(
                     onClick = {
                         if(namaLayanan.isBlank() || selectedLayanan.isEmpty() || hargaLayanan.isBlank()){
-                            Toast.makeText(context, "Field Tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Data Tidak boleh kosong", Toast.LENGTH_SHORT).show()
                         }else{
                             viewModel.updateJenisLayanan(bengkelId, idJenisLayanan, namaLayanan, selectedLayanan, hargaLayanan.toInt())
                             Toast.makeText(context, "Berhasil Update data Jenis Layanan", Toast.LENGTH_SHORT).show()

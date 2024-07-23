@@ -70,7 +70,7 @@ fun InputMerekKendaraanScreen(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Input Merek Kendaraan",
+                text = "Memasukan Data Merek Kendaraan",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = modifier

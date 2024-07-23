@@ -57,7 +57,7 @@ fun UpdateMerekKendaraanScreen(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Input Merek Kendaraan",
+                text = "Masukan Data Merek Kendaraan",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = modifier
@@ -112,7 +112,7 @@ fun UpdateMerekKendaraanScreen(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Update Merek Kendaraan"
+                    text = "Perbarui Merek Kendaraan"
                 )
             }
         }

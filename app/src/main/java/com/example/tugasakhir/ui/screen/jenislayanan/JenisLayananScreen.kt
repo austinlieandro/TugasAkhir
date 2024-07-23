@@ -88,7 +88,7 @@ fun JenisLayananScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "List Jenis Layanan",
+                        text = "Daftar Jenis Layanan",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = modifier
@@ -124,7 +124,7 @@ fun JenisLayananScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "List Jenis Layanan",
+                                text = "Daftar Jenis Layanan",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = modifier

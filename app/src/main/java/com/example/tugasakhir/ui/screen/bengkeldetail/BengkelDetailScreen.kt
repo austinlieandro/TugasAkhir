@@ -427,7 +427,7 @@ fun BengkelDetailScreen(
                 ){
                     datepicker(
                         initialDate = LocalDate.now(),
-                        title = "Pick a date",
+                        title = "Pilih Tanggal Reservasi",
                         allowedDateValidator = { date ->
                             val startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY)
                             val endOfWeek = startOfWeek.plusDays(6)

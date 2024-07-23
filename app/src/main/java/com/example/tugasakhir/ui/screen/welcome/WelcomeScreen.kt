@@ -73,7 +73,7 @@ fun WelcomeScreen(
                 .fillMaxSize()
         ) {
             Text(
-                text = "Selamat datang pada aplikasi ....",
+                text = "Selamat datang pada aplikasi",
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 modifier = modifier
@@ -89,7 +89,7 @@ fun WelcomeScreen(
                     .size(300.dp, 50.dp)
             ) {
                 Text(
-                    text = "Login",
+                    text = "Masuk",
                     fontSize = 16.sp
                 )
             }
@@ -105,7 +105,7 @@ fun WelcomeScreen(
                     .border(2.dp, Color.Red, RoundedCornerShape(10.dp))
             ) {
                 Text(
-                    text = "Register",
+                    text = "Mendaftarkan Akun",
                     fontSize = 16.sp,
                     color = Color.Red
                 )

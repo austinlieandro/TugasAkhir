@@ -80,7 +80,7 @@ fun KarayawanScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "List Karyawan",
+                            text = "Daftar Karyawan",
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = modifier

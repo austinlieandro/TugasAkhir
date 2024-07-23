@@ -159,7 +159,7 @@ fun ProfileScreen(
                             .padding(0.dp, 10.dp)
                     )
                     Text(
-                        text = "List Kendaraan",
+                        text = "Daftar Kendaraan",
                         color = colorScheme.onSurface,
                         modifier = modifier
                             .padding(8.dp, 0.dp, 8.dp, 0.dp)
@@ -206,7 +206,7 @@ fun ProfileScreen(
                             "Nambah Merek Kendaraan"
                         }
                         else {
-                            "Dashboard bengkel"
+                            "Dasbor bengkel"
                         },
                         color = colorScheme.onSurface,
                         modifier = modifier

@@ -268,7 +268,7 @@ fun InputJenisLayananScreen(
             Button(
                 onClick = {
                     if(namaLayanan.isBlank() || selectedLayanan.isEmpty() || hargaLayanan.isBlank()){
-                        Toast.makeText(context, "Field Tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Data Tidak boleh kosong", Toast.LENGTH_SHORT).show()
                     }else{
                         viewModel.inputJenisLayanan(namaLayanan, selectedLayanan, hargaLayanan.toInt(), bengkelId)
                         navigator.navigate(JenisLayananScreenDestination(jenis, bengkelId))

@@ -71,7 +71,7 @@ fun ListOperasionalScreen(
             ) {
                 item {
                     Text(
-                        text = "List Jam Operasional",
+                        text = "Daftar Jam Operasional",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = modifier

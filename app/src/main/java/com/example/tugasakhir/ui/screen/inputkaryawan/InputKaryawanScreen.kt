@@ -67,7 +67,7 @@ fun InputKaryawanSceren(
                 .verticalScroll(rememberScrollState())
         ) {
             Text(
-                text = "Input Karyawan",
+                text = "Memasukan Data Karyawan",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = modifier
@@ -133,7 +133,7 @@ fun InputKaryawanSceren(
                 AlertDialog(
                     onDismissRequest = { openAlertDialog.value = false },
                     title = {
-                        Text(text = "Warning")
+                        Text(text = "Peringatan")
                     },
                     text = {
                         Text(text = "Apakah kamu sudah selesai input karyawan?")

@@ -81,7 +81,7 @@ fun MerekKendaraanScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "List Merek Kendaraan",
+                        text = "Daftar Merek Kendaraan",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = modifier
@@ -117,7 +117,7 @@ fun MerekKendaraanScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "List Merek Kendaraan",
+                                text = "Daftar Merek Kendaraan",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = modifier

@@ -48,7 +48,7 @@ enum class BottomBarDestination(
     Home(
         direction = BengkelScreenDestination,
         icon = Icons.Default.Home,
-        title = "Home"
+        title = "Halaman Utama"
     ),
     Riwayat(
         direction = RiwayatScreenDestination,
@@ -58,6 +58,6 @@ enum class BottomBarDestination(
     Profile(
         direction = ProfileScreenDestination,
         icon = Icons.Default.Person,
-        title = "Profile"
+        title = "Profil"
     )
 }

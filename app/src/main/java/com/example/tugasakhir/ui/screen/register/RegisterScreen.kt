@@ -92,12 +92,12 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Sign up",
+                text = "Mendaftar Akun",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = "Please input your data",
+                text = "Mohon masukan data anda!",
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -115,13 +115,13 @@ fun RegisterScreen(
                 singleLine = true,
                 placeholder = {
                     Text(
-                        text = "Fullname",
+                        text = "Nama Lengkap",
                         color = Color(0xFF86888D)
                     )
                 },
                 label = {
                     Text(
-                        text = "Fullname",
+                        text = "Nama Lengkap",
                         color = Color(0xFF86888D)
                     )
                 },
@@ -278,12 +278,12 @@ fun RegisterScreen(
             ){
                 when {
                     !isValidEmpty ->  Text(
-                        text = "Please input email",
+                        text = "Tolong masukan email",
                         color = Color.Red,
                         fontSize = 12.sp
                     )
                     !isValidEmail ->  Text(
-                        text = "Please enter valid email",
+                        text = "Tolong masukan email yang valid",
                         color = Color.Red,
                         fontSize = 12.sp
                     )
@@ -357,12 +357,12 @@ fun RegisterScreen(
             ) {
                 when {
                     !isValidEmpty ->  Text(
-                        text = "Please input password",
+                        text = "Mohon masukan password",
                         color = Color.Red,
                         fontSize = 12.sp
                     )
                     !isValidEmail ->  Text(
-                        text = "Password minimum 8 character",
+                        text = "Password minimal 8 karekter",
                         color = Color.Red,
                         fontSize = 12.sp
                     )
@@ -390,7 +390,7 @@ fun RegisterScreen(
                     .padding(0.dp, 8.dp, 0.dp, 0.dp)
             ) {
                 Text(
-                    text = "Sign up",
+                    text = "Daftarkan Akun",
                 )
             }
             LaunchedEffect(statusState) {

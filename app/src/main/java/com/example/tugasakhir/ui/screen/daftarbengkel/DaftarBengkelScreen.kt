@@ -474,7 +474,7 @@ fun DaftarBengkelScreen(
             ){
                 timepicker(
                     initialTime = LocalTime.NOON,
-                    title = "Pick a time",
+                    title = "Pilih Jam",
                 ){
                     pickedTimeBuka = it
                 }
@@ -514,7 +514,7 @@ fun DaftarBengkelScreen(
             ){
                 timepicker(
                     initialTime = LocalTime.NOON,
-                    title = "Pick a time",
+                    title = "Pilih Jam",
                 ){
                     pickedTimeTutup = it
                 }

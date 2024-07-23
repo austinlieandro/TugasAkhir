@@ -510,7 +510,7 @@ fun UpdateBengkelScreen(
                 ){
                     timepicker(
                         initialTime = LocalTime.NOON,
-                        title = "Pick a time",
+                        title = "Pilih Jam",
                     ){
                         pickedTimeBuka = it
                     }
@@ -550,7 +550,7 @@ fun UpdateBengkelScreen(
                 ){
                     timepicker(
                         initialTime = LocalTime.NOON,
-                        title = "Pick a time",
+                        title = "Pilih Jam",
                     ){
                         pickedTimeTutup = it
                     }
@@ -558,7 +558,6 @@ fun UpdateBengkelScreen(
 
                 Button(
                     onClick = {
-
                         if (namaBengkel.isBlank() || lokasiBengkel.isBlank() || numberBengkel.isBlank() ||
                             alamatBengkel.isBlank() || selectedKendaraan.isEmpty() || selectedHari.isEmpty()) {
                             Toast.makeText(
@@ -580,9 +579,6 @@ fun UpdateBengkelScreen(
                             val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
                             val today = LocalDate.now()
                             val formatDate = today.format(formatter)
-
-                            Log.d("Debug", "Closing Time: $closingTime")
-                            Log.d("Debug", "Today's Date: $formatDate")
 
                             val overlappingReservations = statusReservasi.value?.filter { reservasi ->
                                 val reservasiDate = reservasi?.tanggalReservasi ?: ""
@@ -662,7 +658,7 @@ fun UpdateBengkelScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = "Update Bengkel",
+                        text = "Perbarui Bengkel",
                         color = Color.White
                     )
                 }
