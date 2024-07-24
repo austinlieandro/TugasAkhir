@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.NavigateNext
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -49,6 +50,7 @@ import com.ramcosta.composedestinations.generated.destinations.DaftarBengkelScre
 import com.ramcosta.composedestinations.generated.destinations.DasbboardScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.FavoritScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.JamOperasionalScreenDestination.invoke
+import com.ramcosta.composedestinations.generated.destinations.JenisServiceScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.KendaraanScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.MerekKendaraanScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.UpdateProfileScreenDestination
@@ -256,6 +258,42 @@ fun ProfileScreen(
                             contentDescription = "Navigate to Daftar Bengkel",
                             tint = colorScheme.onSurface,
                         )
+                    }
+                }
+                if (profileState.value?.userBengkel == "admin"){
+                    Row(
+                        modifier = modifier
+                            .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                            .fillMaxWidth()
+                            .clickable {
+                                navigator.navigate(JenisServiceScreenDestination)
+                            },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = "Icon Favorit Bengkel",
+                            tint = colorScheme.onSurface,
+                            modifier = modifier
+                                .padding(0.dp, 10.dp)
+                        )
+                        Text(
+                            text = "Tambah/Edit Jenis Servis",
+                            color = colorScheme.onSurface,
+                            modifier = modifier
+                                .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                        )
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.TopEnd
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.NavigateNext,
+                                contentDescription = "Navigate to Jenis Service",
+                                tint = colorScheme.onSurface,
+                            )
+                        }
                     }
                 }
                 Box(

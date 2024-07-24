@@ -9,12 +9,14 @@ import com.example.tugasakhir.api.response.ResponseDetailJenisLayanan
 import com.example.tugasakhir.api.response.ResponseDetailKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
+import com.example.tugasakhir.api.response.ResponseDisplayJenisService
 import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
 import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseFavoritBengkel
 import com.example.tugasakhir.api.response.ResponseInputJenisLayanan
+import com.example.tugasakhir.api.response.ResponseInputJenisService
 import com.example.tugasakhir.api.response.ResponseInputKaryawan
 import com.example.tugasakhir.api.response.ResponseInputKendaraan
 import com.example.tugasakhir.api.response.ResponseInputMerekKendaraan
@@ -29,6 +31,7 @@ import com.example.tugasakhir.api.response.ResponseTogleFavorit
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateJamOperasional
 import com.example.tugasakhir.api.response.ResponseUpdateJenisLayanan
+import com.example.tugasakhir.api.response.ResponseUpdateJenisService
 import com.example.tugasakhir.api.response.ResponseUpdateKaryawan
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdateMerekKendaraan
@@ -258,4 +261,22 @@ interface ApiService{
         @Path("merekKendaraanId") merekKendaraanId: Int,
         @Field("merek_kendaraan") merek_kendaraan: String,
     ): ResponseUpdateMerekKendaraan
+
+    @FormUrlEncoded
+    @POST("inputJenisService")
+    suspend fun inputJenisService(
+        @Field("nama_service") nama_service: String,
+        @Field("users_id") usersId: Int,
+    ): ResponseInputJenisService
+
+    @GET("displayJenisService")
+    suspend fun displayJenisService(): ResponseDisplayJenisService
+
+    @FormUrlEncoded
+    @POST("updateJenisService/{usersId}/{serviceId}")
+    suspend fun updateJenisService(
+        @Path("usersId") usersId: Int,
+        @Path("serviceId") serviceId: Int,
+        @Field("nama_service") nama_service: String,
+    ): ResponseUpdateJenisService
 }

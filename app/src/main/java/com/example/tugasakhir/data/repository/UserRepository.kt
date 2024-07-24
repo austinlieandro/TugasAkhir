@@ -2,15 +2,18 @@ package com.example.tugasakhir.data.repository
 
 import com.example.tugasakhir.api.response.ResponseDeleteKendaraan
 import com.example.tugasakhir.api.response.ResponseDetailKendaraan
+import com.example.tugasakhir.api.response.ResponseDisplayJenisService
 import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseFavoritBengkel
+import com.example.tugasakhir.api.response.ResponseInputJenisService
 import com.example.tugasakhir.api.response.ResponseInputKendaraan
 import com.example.tugasakhir.api.response.ResponseInputMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseLogin
 import com.example.tugasakhir.api.response.ResponseProfile
 import com.example.tugasakhir.api.response.ResponseRegister
 import com.example.tugasakhir.api.response.ResponseTogleFavorit
+import com.example.tugasakhir.api.response.ResponseUpdateJenisService
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdateMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdateProfile
@@ -86,6 +89,18 @@ class UserRepository(private val apiService: ApiService, private val userPrefere
 
     suspend fun updateMerekKendaraan(usersId: Int, merekKendaraanId: Int, merek_kendaraan: String): ResponseUpdateMerekKendaraan{
         return apiService.updateMerekKendaraan(usersId, merekKendaraanId, merek_kendaraan)
+    }
+
+    suspend fun inputJenisService(nama_service: String, users_id: Int): ResponseInputJenisService{
+        return apiService.inputJenisService(nama_service, users_id)
+    }
+
+    suspend fun displayJenisService(): ResponseDisplayJenisService {
+        return apiService.displayJenisService()
+    }
+
+    suspend fun updateJenisService(usersId: Int, serviceId: Int, nama_service: String): ResponseUpdateJenisService {
+        return apiService.updateJenisService(usersId, serviceId, nama_service)
     }
 
     companion object{
