@@ -1,5 +1,6 @@
 package com.example.tugasakhir.ui.screen.inputjenislayanan
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,7 +24,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,6 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhir.data.factory.BengkelModelFactory
+import com.example.tugasakhir.data.factory.UserModelFactory
+import com.example.tugasakhir.ui.screen.jenisservice.JenisServiceViewModel
 import com.example.tugasakhir.ui.theme.TugasAkhirTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -60,54 +66,37 @@ fun InputJenisLayananScreen(
     modifier: Modifier = Modifier,
     viewModel: InputJenisLayananViewModel = viewModel(
         factory = BengkelModelFactory.getInstance(LocalContext.current)
+    ),
+    layananViewModel: JenisServiceViewModel = viewModel(
+        factory = UserModelFactory.getInstance(LocalContext.current)
     )
 ) {
+    LaunchedEffect(Unit) {
+        layananViewModel.getJenisService()
+    }
+
     val localFocusManager = LocalFocusManager.current
     val context = LocalContext.current
 
     var namaLayanan by remember { mutableStateOf("") }
     var hargaLayanan by remember { mutableStateOf("") }
 
-    var isOliChecked by remember { mutableStateOf(false) }
-    var isRemChecked by remember { mutableStateOf(false) }
-    var isBusiChecked by remember { mutableStateOf(false) }
-    var isAkiChecked by remember { mutableStateOf(false) }
-    var isListrikChecked by remember { mutableStateOf(false) }
-    var isSuspensiChecked by remember { mutableStateOf(false) }
-    var isMesinChecked by remember { mutableStateOf(false) }
-    var isBanChecked by remember { mutableStateOf(false) }
-    var isRantaiChecked by remember { mutableStateOf(false) }
-    var isKarburatorChecked by remember { mutableStateOf(false) }
-    var isBodyChecked by remember { mutableStateOf(false) }
-    var isFilterChecked by remember { mutableStateOf(false) }
-    var isAcChecked by remember { mutableStateOf(false) }
-    var isTransmisiChecked by remember { mutableStateOf(false) }
-    var isRadiatorChecked by remember { mutableStateOf(false) }
-    var selectedLayanan by remember { mutableStateOf(mutableListOf<String>()) }
+    var selectedLayanan = remember { mutableStateListOf<String>() }
 
-    val layananMap = mapOf(
-        "Oli" to isOliChecked,
-        "Rem" to isRemChecked,
-        "Busi" to isBusiChecked,
-        "Aki" to isAkiChecked,
-        "Listrik" to isListrikChecked,
-        "Suspensi" to isSuspensiChecked,
-        "Mesin" to isMesinChecked,
-        "Ban" to isBanChecked,
-        "Rantai" to isRantaiChecked,
-        "Karburator/Injektor" to isKarburatorChecked,
-        "Body" to isBodyChecked,
-        "Filter" to isFilterChecked,
-        "AC" to isAcChecked,
-        "Transmisi" to isTransmisiChecked,
-        "Radiator" to isRadiatorChecked
-    )
+    val jenisSeviceListState by layananViewModel.jenisSeviceList.observeAsState(emptyList())
 
-    layananMap.forEach { (layanan, isChecked) ->
-        if (isChecked && !selectedLayanan.contains(layanan)) {
-            selectedLayanan.add(layanan)
-        } else if (!isChecked && selectedLayanan.contains(layanan)) {
-            selectedLayanan.remove(layanan)
+    jenisSeviceListState?.let { serviceList ->
+        serviceList.forEach { service ->
+            service?.let {
+                val layanan = it.namaService
+                val isChecked = layanan?.let { it1 -> layananViewModel.isServiceChecked(it1) }
+
+                if (isChecked == true && !selectedLayanan.contains(layanan)) {
+                    selectedLayanan.add(layanan)
+                } else if (!isChecked!! && selectedLayanan.contains(layanan)) {
+                    selectedLayanan.remove(layanan)
+                }
+            }
         }
     }
 
@@ -183,51 +172,29 @@ fun InputJenisLayananScreen(
                             modifier = Modifier
                                 .padding(bottom = 8.dp)
                         )
-                        listOf(
-                            "Oli" to isOliChecked,
-                            "Rem" to isRemChecked,
-                            "Busi" to isBusiChecked,
-                            "Aki" to isAkiChecked,
-                            "Listrik" to isListrikChecked,
-                            "Suspensi" to isSuspensiChecked,
-                            "Mesin" to isMesinChecked,
-                            "Ban" to isBanChecked,
-                            "Rantai" to isRantaiChecked,
-                            "Karburator/Injektor" to isKarburatorChecked,
-                            "Body" to isBodyChecked,
-                            "Filter" to isFilterChecked,
-                            "AC" to isAcChecked,
-                            "Transmisi" to isTransmisiChecked,
-                            "Radiator" to isRadiatorChecked
-                        ).forEach { (label, isChecked) ->
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .padding(bottom = 8.dp)
-                            ) {
-                                Checkbox(
-                                    checked = isChecked,
-                                    onCheckedChange = {
-                                        when (label) {
-                                            "Oli" -> isOliChecked = it
-                                            "Rem" -> isRemChecked = it
-                                            "Busi" -> isBusiChecked = it
-                                            "Aki" -> isAkiChecked = it
-                                            "Listrik" -> isListrikChecked = it
-                                            "Suspensi" -> isSuspensiChecked = it
-                                            "Mesin" -> isMesinChecked = it
-                                            "Ban" -> isBanChecked = it
-                                            "Rantai" -> isRantaiChecked = it
-                                            "Karburator/Injektor" -> isKarburatorChecked = it
-                                            "Body" -> isBodyChecked = it
-                                            "Filter" -> isFilterChecked = it
-                                            "AC" -> isAcChecked = it
-                                            "Transmisi" -> isTransmisiChecked = it
-                                            "Radiator" -> isRadiatorChecked = it
+                        jenisSeviceListState?.forEach { service ->
+                            service?.let {
+                                val layanan = it.namaService
+                                val isChecked = it.isChecked
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(bottom = 8.dp)
+                                ) {
+                                    Checkbox(
+                                        checked = isChecked,
+                                        onCheckedChange = { checked ->
+                                            layanan?.let { layananName ->
+                                                layananViewModel.setServiceChecked(layananName, checked)
+                                                if (checked && !selectedLayanan.contains(layananName)) {
+                                                    selectedLayanan.add(layananName)
+                                                } else if (!checked && selectedLayanan.contains(layananName)) {
+                                                    selectedLayanan.remove(layananName)
+                                                }
+                                            }
                                         }
-                                    }
-                                )
-                                Text(text = label, fontSize = 14.sp)
+                                    )
+                                    Text(text = layanan ?: "", fontSize = 14.sp)
+                                }
                             }
                         }
                     }

@@ -9,18 +9,25 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -31,6 +38,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -67,6 +77,8 @@ fun BengkelScreen(
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
     val context = LocalContext.current
 
+    var selectedFilter by remember { mutableStateOf("") }
+
     LaunchedEffect(Unit) {
         viewModel.getBengkel()
     }
@@ -84,13 +96,27 @@ fun BengkelScreen(
             }
         }else{
             Column {
-                Text(
-                    text = "Daftar Bengkel",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = modifier
-                        .padding(start = 16.dp, top = 16.dp, end = 16.dp)
-                )
+                Row{
+                    Text(
+                        text = "Daftar Bengkel",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = modifier
+                            .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                            .width(300.dp)
+                    )
+                    Box(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        DropDownMenu(onFilterSelected = {filter ->
+                            selectedFilter = filter
+                            viewModel.setJenisKendaraan(filter)
+                        })
+                    }
+
+                }
                 SearchBar(
                     query = query,
                     onQueryChange = viewModel::search,
@@ -152,6 +178,50 @@ fun BengkelScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun DropDownMenu(
+    modifier: Modifier = Modifier,
+    onFilterSelected: (String) -> Unit
+){
+    val context = LocalContext.current
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentSize()
+    ) {
+        IconButton(
+            onClick = { expanded = !expanded }
+        ) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = "Filter"
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text(text = "Mobil") },
+                onClick = {
+                    onFilterSelected("mobil")
+                    expanded = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(text = "Motor") },
+                onClick = {
+                    onFilterSelected("motor")
+                    expanded = false
+                }
+            )
         }
     }
 }

@@ -118,6 +118,17 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         }
     }
 
+    suspend fun jenisKendaraan(jenisKendaraan: String): List<BengkelItem?>? {
+        return apiService.displayBengkel().bengkel?.filter {
+            val matchesJenisKendaraan = when (jenisKendaraan) {
+                "mobil" -> it?.jenisKendaraan?.any { jenis -> jenis?.contains("mobil", ignoreCase = true) == true } == true
+                "motor" -> it?.jenisKendaraan?.any { jenis -> jenis?.contains("motor", ignoreCase = true) == true } == true
+                else -> true
+            }
+            matchesJenisKendaraan
+        }
+    }
+
     suspend fun inputJenisLayanan(
         nama_layanan: String,
         jenis_layanan: List<String>,

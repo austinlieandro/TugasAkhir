@@ -23,6 +23,9 @@ class BengkelViewModel(private val repository: BengkelRepository): ViewModel() {
     private val _query = mutableStateOf("")
     val query: State<String> get() = _query
 
+    private val _jenisKendaraan = mutableStateOf("")
+    val jenisKendaraan: State<String> get() = _jenisKendaraan
+
     init {
         getBengkel()
     }
@@ -53,6 +56,14 @@ class BengkelViewModel(private val repository: BengkelRepository): ViewModel() {
         viewModelScope.launch {
             _query.value = newQuery
             val shopSearch = repository.searchBengkel(_query.value)
+            bengkelList.postValue(shopSearch)
+        }
+    }
+
+    fun setJenisKendaraan(jenisKendaraan: String) {
+        viewModelScope.launch {
+            _jenisKendaraan.value = jenisKendaraan
+            val shopSearch = repository.jenisKendaraan(jenisKendaraan)
             bengkelList.postValue(shopSearch)
         }
     }

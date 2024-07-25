@@ -27,5 +27,7 @@ data class JenisServiceItem(
 	val id: Int? = null,
 
 	@field:SerializedName("nama_service")
-	val namaService: String? = null
+	val namaService: String? = null,
+
+	var isChecked: Boolean = false
 ) : Parcelable
