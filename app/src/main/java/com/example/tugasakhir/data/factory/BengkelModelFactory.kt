@@ -15,6 +15,8 @@ import com.example.tugasakhir.ui.screen.inputjenislayanan.InputJenisLayananViewM
 import com.example.tugasakhir.ui.screen.jamoperasional.JamOperasionalViewModel
 import com.example.tugasakhir.ui.screen.jenislayanan.JenisLayananViewModel
 import com.example.tugasakhir.ui.screen.listjamoperasional.ListOperasionalViewModel
+import com.example.tugasakhir.ui.screen.prioritasbengkel.PrioritasBengkelViewModel
+import com.example.tugasakhir.ui.screen.prioritashargabengkel.PrioritasHargaBengkelViewModel
 import com.example.tugasakhir.ui.screen.reservasibengkel.ReservasiBengkelViewModel
 import com.example.tugasakhir.ui.screen.updatebengkel.UpdateBengkelViewModel
 import com.example.tugasakhir.ui.screen.updatejamoperasional.UpdateOperasionalViewModel
@@ -58,6 +60,12 @@ class BengkelModelFactory(private val repository: BengkelRepository, private val
             }
             modelClass.isAssignableFrom(UpdateJenisLayananViewModel::class.java) -> {
                 UpdateJenisLayananViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(PrioritasBengkelViewModel::class.java) -> {
+                PrioritasBengkelViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(PrioritasHargaBengkelViewModel::class.java) -> {
+                PrioritasHargaBengkelViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }

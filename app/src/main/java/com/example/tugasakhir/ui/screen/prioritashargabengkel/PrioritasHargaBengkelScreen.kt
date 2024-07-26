@@ -1,4 +1,4 @@
-package com.example.tugasakhir.ui.screen.jenisservice
+package com.example.tugasakhir.ui.screen.prioritashargabengkel
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -26,38 +27,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tugasakhir.data.factory.UserModelFactory
-import com.example.tugasakhir.ui.components.jenisservice.JenisServiceItem
-import com.example.tugasakhir.ui.theme.TugasAkhirTheme
+import com.example.tugasakhir.data.factory.BengkelModelFactory
+import com.example.tugasakhir.data.pref.UserModel
+import com.example.tugasakhir.data.pref.UserPreference
+import com.example.tugasakhir.data.pref.dataStore
+import com.example.tugasakhir.ui.components.prioritas.Prioritasitem
+import com.example.tugasakhir.ui.components.prioritasharga.PrioritasHargaItem
+import com.example.tugasakhir.ui.screen.prioritasbengkel.PrioritasBengkelViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.InputJenisServiceScreenDestination
-import com.ramcosta.composedestinations.generated.destinations.UpdateJenisServiceScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
 @Composable
-fun JenisServiceScreen(
+fun PrioritasHargaBengkelScreen(
     navigator: DestinationsNavigator,
     modifier: Modifier = Modifier,
-    viewModel: JenisServiceViewModel = viewModel(
-        factory = UserModelFactory.getInstance(LocalContext.current)
+    viewModel: PrioritasHargaBengkelViewModel = viewModel(
+        factory = BengkelModelFactory.getInstance(LocalContext.current)
     ),
+    userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ){
+    val prioritasHargaState = viewModel.prioritasList.observeAsState()
     val statusState by viewModel.status.observeAsState(false)
-    val jenisSeviceListState by viewModel.jenisSeviceList.observeAsState()
+    val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
 
-    LaunchedEffect(Unit) {
-        viewModel.getJenisService()
+    LaunchedEffect(userModel.id) {
+        viewModel.getPrioritasHarga(userModel.bengkels_id)
     }
 
     Surface(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxWidth()
     ) {
         if (!statusState){
             Box(
@@ -67,7 +71,7 @@ fun JenisServiceScreen(
                 CircularProgressIndicator()
             }
         }else{
-            if (jenisSeviceListState?.isNotEmpty() == true){
+            if(prioritasHargaState.value?.isNotEmpty() == true){
                 LazyColumn(
                     contentPadding = PaddingValues(bottom = 30.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -81,7 +85,7 @@ fun JenisServiceScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Daftar Jenis Service",
+                                text = "Daftar Prioritas Harga",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = modifier
@@ -97,19 +101,19 @@ fun JenisServiceScreen(
                                     contentDescription = "Add Jenis Service",
                                     modifier = modifier
                                         .clickable {
-                                            navigator.navigate(InputJenisServiceScreenDestination)
                                         }
                                 )
                             }
                         }
                     }
-                    if (statusState){
-                        items(jenisSeviceListState ?: emptyList()){ data ->
-                            JenisServiceItem(
-                                namaService = data?.namaService ?: "",
+                    if(statusState){
+                        items(prioritasHargaState.value ?: emptyList()){ data ->
+                            PrioritasHargaItem(
+                                harga = data?.harga?.toInt() ?: 0,
+                                bobotNilai = data?.bobotNilai ?: 0,
                                 modifier = modifier
                                     .clickable {
-                                        navigator.navigate(UpdateJenisServiceScreenDestination(data?.namaService ?: "", data?.id ?: 0))
+
                                     }
                             )
                         }
@@ -123,7 +127,7 @@ fun JenisServiceScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Daftar Jenis Service",
+                        text = "Daftar Prioritas",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = modifier
@@ -139,7 +143,6 @@ fun JenisServiceScreen(
                             contentDescription = "Add Jenis Service",
                             modifier = modifier
                                 .clickable {
-                                    navigator.navigate(InputJenisServiceScreenDestination)
                                 }
                         )
                     }
@@ -151,7 +154,7 @@ fun JenisServiceScreen(
                         .fillMaxSize()
                 ) {
                     Text(
-                        text = "Mohon Tambahkan Jenis Service",
+                        text = "Mohon Tambahkan Prioritas Harga",
                         fontSize = 24.sp,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,

@@ -13,6 +13,8 @@ import com.example.tugasakhir.api.response.ResponseDisplayJenisService
 import com.example.tugasakhir.api.response.ResponseDisplayKaryawan
 import com.example.tugasakhir.api.response.ResponseDisplayKendaraan
 import com.example.tugasakhir.api.response.ResponseDisplayMerekKendaraan
+import com.example.tugasakhir.api.response.ResponseDisplayPrioritas
+import com.example.tugasakhir.api.response.ResponseDisplayPrioritasHarga
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseFavoritBengkel
 import com.example.tugasakhir.api.response.ResponseInputJenisLayanan
@@ -279,4 +281,14 @@ interface ApiService{
         @Path("serviceId") serviceId: Int,
         @Field("nama_service") nama_service: String,
     ): ResponseUpdateJenisService
+
+    @GET("displayPrioritas/{bengkelsId}")
+    suspend fun displayPrioritas(
+        @Path("bengkelsId") bengkelsId: Int
+    ): ResponseDisplayPrioritas
+
+    @GET("displayPrioritasHarga/{bengkelsId}")
+    suspend fun displayPrioritasHarga(
+        @Path("bengkelsId") bengkelsId: Int
+    ): ResponseDisplayPrioritasHarga
 }

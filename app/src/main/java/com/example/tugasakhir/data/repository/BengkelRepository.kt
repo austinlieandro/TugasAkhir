@@ -7,6 +7,8 @@ import com.example.tugasakhir.api.response.ResponseDetailBengkel
 import com.example.tugasakhir.api.response.ResponseDetailJenisLayanan
 import com.example.tugasakhir.api.response.ResponseDetailReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayBengkel
+import com.example.tugasakhir.api.response.ResponseDisplayPrioritas
+import com.example.tugasakhir.api.response.ResponseDisplayPrioritasHarga
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseInputJenisLayanan
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
@@ -127,6 +129,14 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
             }
             matchesJenisKendaraan
         }
+    }
+
+    suspend fun displayPrioritas(idBengkel: Int): ResponseDisplayPrioritas{
+        return apiService.displayPrioritas(idBengkel)
+    }
+
+    suspend fun displayPrioritasHarga(idBengkel: Int): ResponseDisplayPrioritasHarga{
+        return apiService.displayPrioritasHarga(idBengkel)
     }
 
     suspend fun inputJenisLayanan(

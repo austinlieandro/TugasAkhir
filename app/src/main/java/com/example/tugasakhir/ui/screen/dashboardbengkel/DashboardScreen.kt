@@ -12,8 +12,10 @@ import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.MiscellaneousServices
+import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PriorityHigh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
@@ -29,6 +31,8 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.JenisLayananScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.KarayawanScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.ListOperasionalScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.PrioritasBengkelScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.PrioritasHargaBengkelScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.ReservasiBengkelScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.UpdateBengkelScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -216,6 +220,72 @@ fun DasbboardScreen(
                     Icon(
                         imageVector = Icons.Filled.NavigateNext,
                         contentDescription = "Navigate to Jenis Layanan",
+                        tint = colorScheme.onSurface,
+                    )
+                }
+            }
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navigator.navigate(PrioritasBengkelScreenDestination)
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.PriorityHigh,
+                    contentDescription = "Icon Jam Operasional",
+                    tint = colorScheme.onSurface,
+                    modifier = modifier
+                        .padding(0.dp, 10.dp)
+                )
+                Text(
+                    text = "Edit/Nambah Prioritas Bengkel",
+                    color = colorScheme.onSurface,
+                    modifier = modifier
+                        .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                )
+                Box(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.NavigateNext,
+                        contentDescription = "Navigate to Prioritas Bengkel",
+                        tint = colorScheme.onSurface,
+                    )
+                }
+            }
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navigator.navigate(PrioritasHargaBengkelScreenDestination)
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Money,
+                    contentDescription = "Icon Prioritas Harga",
+                    tint = colorScheme.onSurface,
+                    modifier = modifier
+                        .padding(0.dp, 10.dp)
+                )
+                Text(
+                    text = "Edit/Nambah Prioritas Harga Bengkel",
+                    color = colorScheme.onSurface,
+                    modifier = modifier
+                        .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                )
+                Box(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.NavigateNext,
+                        contentDescription = "Navigate to Prioritas Harga Bengkel",
                         tint = colorScheme.onSurface,
                     )
                 }
