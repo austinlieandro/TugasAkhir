@@ -49,10 +49,10 @@ class InputPrioritasSatuanViewModel(private val repository: BengkelRepository, p
         }
     }
 
-    fun getDetailBengkel(idUser: Int, id: Int){
+    fun getDetailBengkel(idUser: Int, id: Int, tanggal_reservasi: String, jam_reservasi: String){
         viewModelScope.launch {
             try {
-                val detailBengkelResponse = repository.getDetailBengkel(idUser, id)
+                val detailBengkelResponse = repository.getDetailBengkel(idUser, id, tanggal_reservasi, jam_reservasi)
                 detailBengkel.postValue(detailBengkelResponse.bengkel)
                 status.postValue(true)
                 Log.d("DETAIL BENGKEL", "Bengkel: ${detailBengkel.value}")

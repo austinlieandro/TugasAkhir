@@ -81,7 +81,7 @@ fun InputJamOperasionalScreen(
     }
 
     LaunchedEffect(userModel.id) {
-        viewModel.detailBengkel(userModel.id, userModel.bengkels_id)
+        viewModel.detailBengkel(userModel.id, userModel.bengkels_id, "", "")
     }
 
     Surface(

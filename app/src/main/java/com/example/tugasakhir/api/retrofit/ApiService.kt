@@ -49,6 +49,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService{
     @FormUrlEncoded
@@ -74,7 +75,9 @@ interface ApiService{
     @GET("bengkel/{usersId}/{bengkelId}")
     suspend fun detailBengkel(
         @Path("usersId") usersId: Int,
-        @Path("bengkelId") bengkelId: Int
+        @Path("bengkelId") bengkelId: Int,
+        @Query("tanggal_reservasi") tanggalReservasi: String,
+        @Query("jam_reservasi") jamReservasi: String
     ): ResponseDetailBengkel
 
     @FormUrlEncoded

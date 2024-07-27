@@ -33,19 +33,21 @@ class BengkelDetailViewModel(private val repository: BengkelRepository, private 
     val jenisLayananBengkel = MutableLiveData<List<JenisLayananItem?>?>()
     val jamOperasionalList = MutableLiveData<List<JamOperasionalItem?>?>()
     val statusFavorit = MutableLiveData<String?>()
+    val sisaSlot = MutableLiveData<Int?>()
 
     val kendaraanList = MutableLiveData<List<KendaraanItem?>?>()
 
-    fun getDetailBengkel(idUser: Int, id: Int){
+    fun getDetailBengkel(idUser: Int, id: Int, tanggal_reservasi: String, jam_reservasi: String){
         viewModelScope.launch {
             try {
-                val detailBengkelResponse = repository.getDetailBengkel(idUser, id)
+                val detailBengkelResponse = repository.getDetailBengkel(idUser, id, tanggal_reservasi, jam_reservasi)
                 detailBengkel.postValue(detailBengkelResponse.bengkel)
                 jamOperasionalList.postValue(detailBengkelResponse.jamOperasional)
                 jenisLayananBengkel.postValue(detailBengkelResponse.jenisLayanan)
                 statusFavorit.postValue(detailBengkelResponse.statusFavorit)
+                sisaSlot.postValue(detailBengkelResponse.sisaSlot)
                 status.postValue(true)
-                Log.d("DETAIL BENGKEL", "Bengkel: ${detailBengkel.value} Jam Operasional: ${jamOperasionalList.value}")
+                Log.d("DETAIL BENGKEL", "${detailBengkelResponse.sisaSlot}")
             }catch (e: HttpException){
                 val jsonInString = e.response()?.errorBody()?.string()
                 Log.e("DETAIL BENGKEL", "Error response: $jsonInString")

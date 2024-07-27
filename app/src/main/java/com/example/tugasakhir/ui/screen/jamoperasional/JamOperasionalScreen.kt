@@ -86,7 +86,7 @@ fun JamOperasionalScreen(
     val context = LocalContext.current
 
     LaunchedEffect(userModel.id) {
-        viewModel.detailBengkel(userModel.id, bengkelId)
+        viewModel.detailBengkel(userModel.id, bengkelId, "", "")
     }
 
     fun isValidTimeFormat(time: String): Boolean {

@@ -55,7 +55,7 @@ fun ListOperasionalScreen(
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
 
     LaunchedEffect(userModel.id) {
-        viewModel.getJamOperasional(userModel.id, userModel.bengkels_id)
+        viewModel.getJamOperasional(userModel.id, userModel.bengkels_id, "", "")
     }
 
     Surface(

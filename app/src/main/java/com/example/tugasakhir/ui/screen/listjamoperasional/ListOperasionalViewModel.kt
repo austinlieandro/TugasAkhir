@@ -17,10 +17,10 @@ class ListOperasionalViewModel(private val repository: BengkelRepository): ViewM
 
     val listOperasional = MutableLiveData<List<JamOperasionalItem?>?>()
 
-    fun getJamOperasional(idUser: Int, id: Int){
+    fun getJamOperasional(idUser: Int, id: Int, tanggal_reservasi: String, jam_reservasi: String){
         viewModelScope.launch {
             try {
-                val detailBengkelResponse = repository.getDetailBengkel(idUser, id)
+                val detailBengkelResponse = repository.getDetailBengkel(idUser, id, tanggal_reservasi, jam_reservasi)
                 listOperasional.postValue(detailBengkelResponse.jamOperasional)
                 status.postValue(true)
                 Log.d("DETAIL JAM", "Bengkel: $detailBengkelResponse")

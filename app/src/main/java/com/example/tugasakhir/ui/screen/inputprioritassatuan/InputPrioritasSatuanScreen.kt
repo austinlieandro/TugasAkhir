@@ -65,7 +65,7 @@ fun InputPrioritasSatuanScreen(
 
     LaunchedEffect(userModel.id) {
         viewModel.getJenisService()
-        viewModel.getDetailBengkel(userModel.id, userModel.bengkels_id)
+        viewModel.getDetailBengkel(userModel.id, userModel.bengkels_id, "", "")
     }
 
     var selectedTextJenisKendaraan by remember { mutableStateOf("") }

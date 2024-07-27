@@ -13,6 +13,9 @@ data class ResponseDetailBengkel(
 	@field:SerializedName("status_favorit")
 	val statusFavorit: String? = null,
 
+	@field:SerializedName("sisa_slot")
+	val sisaSlot: Int? = null,
+
 	@field:SerializedName("jenis_layanan")
 	val jenisLayanan: List<JenisLayananItem?>? = null,
 

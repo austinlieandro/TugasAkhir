@@ -74,7 +74,7 @@ fun UpdateBengkelScreen(
     val detailBengkel = viewModel.detailBengkel.observeAsState()
     val statusReservasi = viewModel.reservasiList.observeAsState()
     LaunchedEffect(userModel.bengkels_id) {
-        viewModel.getDetailBengkel(userModel.id, userModel.bengkels_id)
+        viewModel.getDetailBengkel(userModel.id, userModel.bengkels_id, "", "")
         viewModel.getReservasiBengkel(userModel.bengkels_id)
     }
 

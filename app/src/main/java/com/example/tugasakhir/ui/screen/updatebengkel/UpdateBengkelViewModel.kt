@@ -91,10 +91,10 @@ class UpdateBengkelViewModel(private val repository: BengkelRepository): ViewMod
         }
     }
 
-    fun getDetailBengkel(userdId: Int, id: Int){
+    fun getDetailBengkel(userdId: Int, id: Int, tanggal: String, jam: String){
         viewModelScope.launch {
             try {
-                val detailBengkelResponse = repository.getDetailBengkel(userdId, id)
+                val detailBengkelResponse = repository.getDetailBengkel(userdId, id, "", "")
                 detailBengkel.postValue(detailBengkelResponse.bengkel)
                 statusBengkel.postValue(true)
                 Log.d("DETAIL BENGKEL", "Bengkel: ${detailBengkel.value}")

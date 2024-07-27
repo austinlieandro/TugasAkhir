@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -65,6 +67,7 @@ import com.example.tugasakhir.data.pref.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.KonfirmasiScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.WelcomeScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -93,6 +96,7 @@ fun BengkelDetailScreen(
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
 ) {
     val bengkelState = viewModel.detailBengkel.observeAsState()
+    val slotState = viewModel.sisaSlot.observeAsState()
     val jenisLayananState = viewModel.jenisLayananBengkel.observeAsState()
     val statusState by viewModel.status.observeAsState(false)
     val statusFavorit = viewModel.statusFavorit.observeAsState()
@@ -106,7 +110,7 @@ fun BengkelDetailScreen(
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
 
     LaunchedEffect(userModel.id) {
-        viewModel.getDetailBengkel(userId, bengkelId)
+        viewModel.getDetailBengkel(userId, bengkelId, "", "")
         viewModel.getKendaraan(userId)
     }
 
@@ -496,8 +500,11 @@ fun BengkelDetailScreen(
                                             sisaSlot = 0
                                         } else {
                                             selectedTextJamOperasional = jamOperasionalText
-                                            sisaSlot = option?.slot ?: 0
                                             isExpendedJamOperasional = false
+                                            viewModel.getDetailBengkel(userId, bengkelId, formattedDate.toString(), selectedTextJamOperasional.toString())
+                                            Handler().postDelayed({
+                                                sisaSlot = slotState.value?.toInt() ?: 0
+                                            }, 500)
                                         }
                                     }
                                 },
