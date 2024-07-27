@@ -39,6 +39,8 @@ import com.example.tugasakhir.ui.components.prioritasharga.PrioritasHargaItem
 import com.example.tugasakhir.ui.screen.prioritasbengkel.PrioritasBengkelViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.InputPrioritasHargaScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.UpdatePrioritasHargaScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
@@ -101,6 +103,7 @@ fun PrioritasHargaBengkelScreen(
                                     contentDescription = "Add Jenis Service",
                                     modifier = modifier
                                         .clickable {
+                                            navigator.navigate(InputPrioritasHargaScreenDestination)
                                         }
                                 )
                             }
@@ -113,7 +116,11 @@ fun PrioritasHargaBengkelScreen(
                                 bobotNilai = data?.bobotNilai ?: 0,
                                 modifier = modifier
                                     .clickable {
-
+                                        navigator.navigate(UpdatePrioritasHargaScreenDestination(
+                                            data?.harga ?: 0,
+                                            data?.bobotNilai ?: 0,
+                                            data?.bengkelsId ?: 0,
+                                            data?.id ?: 0))
                                     }
                             )
                         }
@@ -143,6 +150,7 @@ fun PrioritasHargaBengkelScreen(
                             contentDescription = "Add Jenis Service",
                             modifier = modifier
                                 .clickable {
+                                    navigator.navigate(InputPrioritasHargaScreenDestination)
                                 }
                         )
                     }

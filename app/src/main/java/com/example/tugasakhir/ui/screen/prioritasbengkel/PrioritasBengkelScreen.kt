@@ -37,6 +37,8 @@ import com.example.tugasakhir.data.pref.dataStore
 import com.example.tugasakhir.ui.components.prioritas.Prioritasitem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.InputPrioritasSatuanScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.UpdatePrioritasScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
@@ -99,6 +101,7 @@ fun PrioritasBengkelScreen(
                                     contentDescription = "Add Jenis Service",
                                     modifier = modifier
                                         .clickable {
+                                            navigator.navigate(InputPrioritasSatuanScreenDestination)
                                         }
                                 )
                             }
@@ -111,7 +114,15 @@ fun PrioritasBengkelScreen(
                                 jenisKerusakan = data?.jenisKerusakan ?: "",
                                 modifier = modifier
                                     .clickable {
-
+                                        navigator.navigate(UpdatePrioritasScreenDestination(
+                                            data?.id ?: 0,
+                                            data?.bengkelsId ?: 0,
+                                            data?.bobotNilai ?: 0,
+                                            data?.bobotEstimasi ?: 0,
+                                            data?.bobotUrgensi ?: 0,
+                                            data?.jenisKendaraan ?: "",
+                                            data?.jenisKerusakan ?: ""
+                                        ))
                                     }
                             )
                         }
@@ -141,6 +152,7 @@ fun PrioritasBengkelScreen(
                             contentDescription = "Add Jenis Service",
                             modifier = modifier
                                 .clickable {
+                                    navigator.navigate(InputPrioritasSatuanScreenDestination)
                                 }
                         )
                     }

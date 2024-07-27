@@ -17,11 +17,14 @@ import com.example.tugasakhir.api.response.ResponseDisplayPrioritas
 import com.example.tugasakhir.api.response.ResponseDisplayPrioritasHarga
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseFavoritBengkel
+import com.example.tugasakhir.api.response.ResponseInputJamOperasionalSatuan
 import com.example.tugasakhir.api.response.ResponseInputJenisLayanan
 import com.example.tugasakhir.api.response.ResponseInputJenisService
 import com.example.tugasakhir.api.response.ResponseInputKaryawan
 import com.example.tugasakhir.api.response.ResponseInputKendaraan
 import com.example.tugasakhir.api.response.ResponseInputMerekKendaraan
+import com.example.tugasakhir.api.response.ResponseInputPrioritasSatuan
+import com.example.tugasakhir.api.response.ResponseInputPriortiasHarga
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
 import com.example.tugasakhir.api.response.ResponseJenisLayanan
 import com.example.tugasakhir.api.response.ResponseLogin
@@ -37,6 +40,8 @@ import com.example.tugasakhir.api.response.ResponseUpdateJenisService
 import com.example.tugasakhir.api.response.ResponseUpdateKaryawan
 import com.example.tugasakhir.api.response.ResponseUpdateKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdateMerekKendaraan
+import com.example.tugasakhir.api.response.ResponseUpdatePrioritas
+import com.example.tugasakhir.api.response.ResponseUpdatePrioritasHarga
 import com.example.tugasakhir.api.response.ResponseUpdateProfile
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -291,4 +296,48 @@ interface ApiService{
     suspend fun displayPrioritasHarga(
         @Path("bengkelsId") bengkelsId: Int
     ): ResponseDisplayPrioritasHarga
+
+    @FormUrlEncoded
+    @POST("inputJamOperasional")
+    suspend fun inputJamOperasionalSatuan(
+        @Field("jam_operasional") jam_operasional: String,
+        @Field("hari_operasional") hari_operasional: String,
+        @Field("slot") slot: Int,
+        @Field("bengkels_id") bengkels_id: Int,
+    ): ResponseInputJamOperasionalSatuan
+
+    @POST("inputPrioritasHarga")
+    suspend fun inputPrioritasHarga(
+        @Body request: HashMap<Any, Any>
+    ): ResponseInputPriortiasHarga
+
+    @FormUrlEncoded
+    @POST("editPrioritasHarga/{bengkelsId}/{id}")
+    suspend fun updatePrioritasHarga(
+        @Path("bengkelsId") bengkelsId: Int,
+        @Path("id") id: Int,
+        @Field("harga") harga: Int,
+        @Field("bobot_nilai") bobot_nilai: Int,
+    ): ResponseUpdatePrioritasHarga
+
+    @FormUrlEncoded
+    @POST("inputPrioritasSatu")
+    suspend fun inputPrioritasSatuan(
+        @Field("jenis_kendaraan") jenis_kendaraan: String,
+        @Field("jenis_kerusakan") jenis_kerusakan: String,
+        @Field("bobot_nilai") bobot_nilai: Int,
+        @Field("bobot_estimasi") bobot_estimasi: Int,
+        @Field("bobot_urgensi") bobot_urgensi: Int,
+        @Field("bengkels_id") bengkels_id: Int,
+    ): ResponseInputPrioritasSatuan
+
+    @FormUrlEncoded
+    @POST("editPrioritas/{bengkelsId}/{id}")
+    suspend fun updatePrioritas(
+        @Path("bengkelsId") bengkelsId: Int,
+        @Path("id") id: Int,
+        @Field("bobot_nilai") bobot_nilai: Int,
+        @Field("bobot_estimasi") bobot_estimasi: Int,
+        @Field("bobot_urgensi") bobot_urgensi: Int,
+    ): ResponseUpdatePrioritas
 }

@@ -10,13 +10,18 @@ import com.example.tugasakhir.api.response.ResponseDisplayBengkel
 import com.example.tugasakhir.api.response.ResponseDisplayPrioritas
 import com.example.tugasakhir.api.response.ResponseDisplayPrioritasHarga
 import com.example.tugasakhir.api.response.ResponseDisplayReservasiBengkel
+import com.example.tugasakhir.api.response.ResponseInputJamOperasionalSatuan
 import com.example.tugasakhir.api.response.ResponseInputJenisLayanan
+import com.example.tugasakhir.api.response.ResponseInputPrioritasSatuan
+import com.example.tugasakhir.api.response.ResponseInputPriortiasHarga
 import com.example.tugasakhir.api.response.ResponseJamOperasionalBengkel
 import com.example.tugasakhir.api.response.ResponseJenisLayanan
 import com.example.tugasakhir.api.response.ResponseReservasiBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateBengkel
 import com.example.tugasakhir.api.response.ResponseUpdateJamOperasional
 import com.example.tugasakhir.api.response.ResponseUpdateJenisLayanan
+import com.example.tugasakhir.api.response.ResponseUpdatePrioritas
+import com.example.tugasakhir.api.response.ResponseUpdatePrioritasHarga
 import com.example.tugasakhir.api.retrofit.ApiService
 import com.example.tugasakhir.data.pref.UserPreference
 
@@ -139,6 +144,10 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         return apiService.displayPrioritasHarga(idBengkel)
     }
 
+    suspend fun inputJamOperasionalSatuan(jam_operasional: String, hari_operasional: String, slot: Int, bengkels_id: Int): ResponseInputJamOperasionalSatuan{
+        return apiService.inputJamOperasionalSatuan(jam_operasional, hari_operasional, slot, bengkels_id)
+    }
+
     suspend fun inputJenisLayanan(
         nama_layanan: String,
         jenis_layanan: List<String>,
@@ -151,6 +160,18 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         requestBody["harga_layanan"] = harga_layanan
         requestBody["bengkels_id"] = bengkels_id
         return apiService.inputJenisLayanan(requestBody)
+    }
+
+    suspend fun inputPrioritasHarga(
+        harga: List<Int>,
+        bobot_nilai: List<Int>,
+        bengkels_id: Int
+    ): ResponseInputPriortiasHarga{
+        val requestBody = HashMap<Any, Any>()
+        requestBody["harga"] = harga
+        requestBody["bobot_nilai"] = bobot_nilai
+        requestBody["bengkels_id"] = bengkels_id
+        return apiService.inputPrioritasHarga(requestBody)
     }
 
     suspend fun getJenisLayanan(bengkels_id: Int): ResponseJenisLayanan{
@@ -171,10 +192,20 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
         return apiService.updateJenisLayanan(bengkelId, id, requestBody)
     }
 
-    suspend fun detailJenisLayanan(
-        id: Int
-    ): ResponseDetailJenisLayanan{
+    suspend fun detailJenisLayanan(id: Int): ResponseDetailJenisLayanan{
         return apiService.detailJenisLayanan(id)
+    }
+
+    suspend fun updatePrioritasHarga(bengkelsId: Int, id: Int, harga: Int, bobot_nilai: Int): ResponseUpdatePrioritasHarga {
+        return apiService.updatePrioritasHarga(bengkelsId, id, harga, bobot_nilai)
+    }
+
+    suspend fun inputPrioritasSatuan(jenis_kendaraan: String, jenis_kerusakan: String, bobot_nilai: Int, bobot_estimasi: Int, bobot_urgensi: Int, bengkels_id: Int): ResponseInputPrioritasSatuan{
+        return apiService.inputPrioritasSatuan(jenis_kendaraan, jenis_kerusakan, bobot_nilai, bobot_estimasi, bobot_urgensi, bengkels_id)
+    }
+
+    suspend fun updatePrioritas(bengkelsId: Int, id: Int, bobot_nilai: Int, bobot_estimasi: Int, bobot_urgensi: Int): ResponseUpdatePrioritas {
+        return apiService.updatePrioritas(bengkelsId, id, bobot_nilai, bobot_estimasi, bobot_urgensi)
     }
 
     companion object{

@@ -4,11 +4,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +35,8 @@ import com.example.tugasakhir.data.pref.dataStore
 import com.example.tugasakhir.ui.components.jamoperasional.JamOperasionalItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.InputJamOperasionalScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.JamOperasionalScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.UpdateOperasionalScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -70,13 +77,33 @@ fun ListOperasionalScreen(
                     .padding(horizontal = 16.dp)
             ) {
                 item {
-                    Text(
-                        text = "Daftar Jam Operasional",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
+                    Row(
                         modifier = modifier
-                            .padding(8.dp)
-                    )
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Daftar Jam Operasional",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = modifier
+                                .padding(8.dp)
+                        )
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.BottomEnd
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Add Jam Operasional",
+                                modifier = modifier
+                                    .clickable {
+                                        navigator.navigate(InputJamOperasionalScreenDestination)
+                                    }
+                            )
+                        }
+                    }
                 }
                 items(jamOperasionalState.value ?: emptyList()){ data->
                     JamOperasionalItem(

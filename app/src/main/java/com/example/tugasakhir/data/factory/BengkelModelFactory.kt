@@ -3,6 +3,7 @@ package com.example.tugasakhir.data.factory
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.tugasakhir.api.response.UpdatePrioritas
 import com.example.tugasakhir.data.repository.BengkelRepository
 import com.example.tugasakhir.data.repository.KaryawanRepository
 import com.example.tugasakhir.data.repository.UserRepository
@@ -11,7 +12,10 @@ import com.example.tugasakhir.ui.screen.bengkel.BengkelViewModel
 import com.example.tugasakhir.ui.screen.bengkeldetail.BengkelDetailViewModel
 import com.example.tugasakhir.ui.screen.daftarbengkel.DaftarBengkelViewModel
 import com.example.tugasakhir.ui.screen.detailreservasibengkel.DetailReservasiBengkelViewModel
+import com.example.tugasakhir.ui.screen.inputjamoperasional.InputJamOperasionalViewModel
 import com.example.tugasakhir.ui.screen.inputjenislayanan.InputJenisLayananViewModel
+import com.example.tugasakhir.ui.screen.inputprioritasharga.InputPrioritasHargaViewModel
+import com.example.tugasakhir.ui.screen.inputprioritassatuan.InputPrioritasSatuanViewModel
 import com.example.tugasakhir.ui.screen.jamoperasional.JamOperasionalViewModel
 import com.example.tugasakhir.ui.screen.jenislayanan.JenisLayananViewModel
 import com.example.tugasakhir.ui.screen.listjamoperasional.ListOperasionalViewModel
@@ -21,6 +25,8 @@ import com.example.tugasakhir.ui.screen.reservasibengkel.ReservasiBengkelViewMod
 import com.example.tugasakhir.ui.screen.updatebengkel.UpdateBengkelViewModel
 import com.example.tugasakhir.ui.screen.updatejamoperasional.UpdateOperasionalViewModel
 import com.example.tugasakhir.ui.screen.updatejenislayanan.UpdateJenisLayananViewModel
+import com.example.tugasakhir.ui.screen.updateprioritas.UpdatePrioritasViewModel
+import com.example.tugasakhir.ui.screen.updateprioritasharga.UpdatePrioritasHargaViewModel
 
 class BengkelModelFactory(private val repository: BengkelRepository, private val repositoryUser: UserRepository, private val repositoryKaryawan: KaryawanRepository): ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T{
@@ -66,6 +72,21 @@ class BengkelModelFactory(private val repository: BengkelRepository, private val
             }
             modelClass.isAssignableFrom(PrioritasHargaBengkelViewModel::class.java) -> {
                 PrioritasHargaBengkelViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(InputJamOperasionalViewModel::class.java) -> {
+                InputJamOperasionalViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(InputPrioritasHargaViewModel::class.java) -> {
+                InputPrioritasHargaViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(UpdatePrioritasHargaViewModel::class.java) -> {
+                UpdatePrioritasHargaViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(InputPrioritasSatuanViewModel::class.java) -> {
+                InputPrioritasSatuanViewModel(repository, repositoryUser) as T
+            }
+            modelClass.isAssignableFrom(UpdatePrioritasViewModel::class.java) -> {
+                UpdatePrioritasViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }
