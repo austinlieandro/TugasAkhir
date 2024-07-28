@@ -1,5 +1,6 @@
 package com.example.tugasakhir.ui.screen.riwayat
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.UpdateeReservasiScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Destination<RootGraph>
 @Composable
@@ -47,6 +50,7 @@ fun RiwayatScreen(
     val riwayatState = viewModel.riwayatReservasiList.observeAsState()
     val statusState by viewModel.status.observeAsState(false)
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
+    val context = LocalContext.current
 
     LaunchedEffect(userModel.id) {
         viewModel.getReservasi(userModel.id)
@@ -81,6 +85,12 @@ fun RiwayatScreen(
                 }
                 if(statusState){
                     items(riwayatState.value ?: emptyList()) {data ->
+                        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                        val tanggalReservasi = data?.tanggalReservasi ?: ""
+                        val tanggalReservasiDate = LocalDate.parse(tanggalReservasi, formatter)
+                        val today = LocalDate.now()
+                        val daysDifference = java.time.temporal.ChronoUnit.DAYS.between(today, tanggalReservasiDate)
+
                         RiwayatItem(
                             namaBengkel = data?.namaBengkel ?: "",
                             lokasiBengkel = data?.lokasiBengkel ?: "",
@@ -95,20 +105,24 @@ fun RiwayatScreen(
                             jenisPerbaikan = data?.jenisLayanan?.joinToString(separator = ", ") ?: "",
                             modifier = modifier
                                 .clickable {
-                                    navigator.navigate(UpdateeReservasiScreenDestination(
-                                        data?.id ?: 0,
-                                        data?.tanggalReservasi ?: "",
-                                        data?.jamReservasi ?: "",
-                                        data?.kendaraanReservasi ?: "",
-                                        data?.merekKendaraan ?: "",
-                                        data?.nama_layanan ?: "",
-                                        data?.detailReservasi ?: "",
-                                        data?.bengkelsId ?: 0,
-                                        data?.kendaraanId ?: 0,
-                                        data?.jenisLayanan?.joinToString(separator = ", ") ?: "",
-                                        data?.harga_layanan ?: 0,
-                                        data?.usersId ?:0
-                                    ))
+                                    if(daysDifference >= 3){
+                                        navigator.navigate(UpdateeReservasiScreenDestination(
+                                            data?.id ?: 0,
+                                            data?.tanggalReservasi ?: "",
+                                            data?.jamReservasi ?: "",
+                                            data?.kendaraanReservasi ?: "",
+                                            data?.merekKendaraan ?: "",
+                                            data?.nama_layanan ?: "",
+                                            data?.detailReservasi ?: "",
+                                            data?.bengkelsId ?: 0,
+                                            data?.kendaraanId ?: 0,
+                                            data?.jenisLayanan?.joinToString(separator = ", ") ?: "",
+                                            data?.harga_layanan ?: 0,
+                                            data?.usersId ?:0
+                                        ))
+                                    }else{
+                                        Toast.makeText(context, "Kamu tidak bisa mengubah reservasi", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                         )
                     }
