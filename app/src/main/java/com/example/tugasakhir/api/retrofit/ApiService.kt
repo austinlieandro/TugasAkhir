@@ -43,6 +43,7 @@ import com.example.tugasakhir.api.response.ResponseUpdateMerekKendaraan
 import com.example.tugasakhir.api.response.ResponseUpdatePrioritas
 import com.example.tugasakhir.api.response.ResponseUpdatePrioritasHarga
 import com.example.tugasakhir.api.response.ResponseUpdateProfile
+import com.example.tugasakhir.api.response.ResponseUpdateReservasi
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -343,4 +344,17 @@ interface ApiService{
         @Field("bobot_estimasi") bobot_estimasi: Int,
         @Field("bobot_urgensi") bobot_urgensi: Int,
     ): ResponseUpdatePrioritas
+
+    @FormUrlEncoded
+    @POST("updateReservasi")
+    suspend fun updateReservasi(
+        @Field("reservasi_id") reservasi_id: Int,
+        @Field("tanggal_reservasi") tanggal_reservasi: String,
+        @Field("jam_reservasi") jam_reservasi: String,
+        @Field("jeniskendala_reservasi") jeniskendala_reservasi: String,
+        @Field("detail_reservasi") detail_reservasi: String,
+        @Field("kendaraan_reservasi") kendaraan_reservasi: String,
+        @Field("bengkels_id") bengkels_id: Int,
+        @Field("kendaraan_id") kendaraan_id: Int,
+    ): ResponseUpdateReservasi
 }

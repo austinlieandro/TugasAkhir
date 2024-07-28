@@ -1,5 +1,6 @@
 package com.example.tugasakhir.ui.screen.riwayat
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,6 +31,7 @@ import com.example.tugasakhir.di.Injection
 import com.example.tugasakhir.ui.components.riwayat.RiwayatItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.UpdateeReservasiScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
@@ -90,7 +92,24 @@ fun RiwayatScreen(
                             gmapsBengkel = data?.gmapsBengkel ?: "",
                             merekKendaraan = data?.merekKendaraan ?: "",
                             platKendaraan = data?.platKendaraan ?: "",
-                            jenisPerbaikan = data?.jenisLayanan?.joinToString(separator = ", ") ?: ""
+                            jenisPerbaikan = data?.jenisLayanan?.joinToString(separator = ", ") ?: "",
+                            modifier = modifier
+                                .clickable {
+                                    navigator.navigate(UpdateeReservasiScreenDestination(
+                                        data?.id ?: 0,
+                                        data?.tanggalReservasi ?: "",
+                                        data?.jamReservasi ?: "",
+                                        data?.kendaraanReservasi ?: "",
+                                        data?.merekKendaraan ?: "",
+                                        data?.nama_layanan ?: "",
+                                        data?.detailReservasi ?: "",
+                                        data?.bengkelsId ?: 0,
+                                        data?.kendaraanId ?: 0,
+                                        data?.jenisLayanan?.joinToString(separator = ", ") ?: "",
+                                        data?.harga_layanan ?: 0,
+                                        data?.usersId ?:0
+                                    ))
+                                }
                         )
                     }
                 }

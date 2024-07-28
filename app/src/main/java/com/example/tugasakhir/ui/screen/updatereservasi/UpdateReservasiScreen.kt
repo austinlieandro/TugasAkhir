@@ -1,13 +1,10 @@
-package com.example.tugasakhir.ui.screen.bengkeldetail
+package com.example.tugasakhir.ui.screen.updatereservasi
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Handler
-import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -64,37 +61,44 @@ import com.example.tugasakhir.data.factory.BengkelModelFactory
 import com.example.tugasakhir.data.pref.UserModel
 import com.example.tugasakhir.data.pref.UserPreference
 import com.example.tugasakhir.data.pref.dataStore
+import com.example.tugasakhir.ui.screen.bengkeldetail.toRupiahString
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.KonfirmasiScreenDestination
-import com.ramcosta.composedestinations.generated.destinations.WelcomeScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.text.NumberFormat
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 import java.time.format.TextStyle
 import java.util.Locale
 
 @Destination<RootGraph>
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BengkelDetailScreen(
+fun UpdateeReservasiScreen(
     navigator: DestinationsNavigator,
-    userId: Int,
-    bengkelId: Int,
     modifier: Modifier = Modifier,
-    viewModel: BengkelDetailViewModel = viewModel(
+    reservasiId: Int,
+    tanggalReservasi: String,
+    jamReservasi: String,
+    kendaraanReservasi: String,
+    kendaraanUser: String,
+    namaLayanan: String,
+    detailReservasi: String,
+    bengkelId: Int,
+    kendaraanId: Int,
+    jenis_layanan: String,
+    harga_layanan: Int,
+    userId: Int,
+    viewModel: UpdateReservasiViewModel = viewModel(
         factory = BengkelModelFactory.getInstance(LocalContext.current)
     ),
     userPreference: UserPreference = UserPreference.getInstance(LocalContext.current.dataStore),
-) {
+){
     val bengkelState = viewModel.detailBengkel.observeAsState()
     val slotState = viewModel.sisaSlot.observeAsState()
     val jenisLayananState = viewModel.jenisLayananBengkel.observeAsState()
@@ -103,15 +107,19 @@ fun BengkelDetailScreen(
     val kendaraanState = viewModel.kendaraanList.observeAsState()
     var holdFavorit by remember { mutableStateOf("") }
     var favorit by remember { mutableStateOf(holdFavorit == "1") }
-    var jenisLayanan by remember { mutableStateOf("") }
-    var hargaLayanan by remember { mutableStateOf(0) }
-
+    var jenisLayanan by remember { mutableStateOf(jenis_layanan) }
+    var hargaLayanan by remember { mutableStateOf(harga_layanan) }
+    var sisaSlot by remember { mutableStateOf(0) }
     val jamOperasionalState = viewModel.jamOperasionalList.observeAsState()
     val userModel by userPreference.getSession().collectAsState(initial = UserModel("", false, 0, ""))
 
     LaunchedEffect(userModel.id) {
-        viewModel.getDetailBengkel(userId, bengkelId, "", "")
+        viewModel.getDetailBengkel(userId, bengkelId, tanggalReservasi, jamReservasi)
         viewModel.getKendaraan(userId)
+
+        Handler().postDelayed({
+            sisaSlot = slotState.value?.toInt() ?: 0
+        }, 500)
     }
 
     LaunchedEffect(statusFavorit.value) {
@@ -120,24 +128,19 @@ fun BengkelDetailScreen(
 
     val context = LocalContext.current
 
-    var selectedTextKendaraan by remember { mutableStateOf("") }
-    var selectedTextKendaraanUser by remember { mutableStateOf("") }
-    var selectedTextLayanan by remember { mutableStateOf("") }
-    var selectedTextJamOperasional by remember { mutableStateOf("") }
-
+    var selectedTextKendaraan by remember { mutableStateOf(kendaraanReservasi) }
+    var selectedTextKendaraanUser by remember { mutableStateOf(kendaraanUser) }
+    var selectedTextLayanan by remember { mutableStateOf(namaLayanan) }
+    var selectedTextJamOperasional by remember { mutableStateOf(jamReservasi) }
     var selectedHariOperasional by remember { mutableStateOf<String?>(null) }
-
     var isExpendedKendaraan by remember { mutableStateOf(false) }
     var isExpendedKendaraanUser by remember { mutableStateOf(false) }
     var isExpendedLayanan by remember { mutableStateOf(false) }
     var isExpendedJamOperasional by remember { mutableStateOf(false) }
-
-    var idSelectedKendaraanUser by remember { mutableStateOf(0) }
-
+    var idSelectedKendaraanUser by remember { mutableStateOf(kendaraanId) }
     val localFocusManager = LocalFocusManager.current
+    var kendala by remember { mutableStateOf(detailReservasi) }
 
-    var kendala by remember { mutableStateOf("") }
-    var sisaSlot by remember { mutableStateOf(0) }
 
     var pickerDate by remember { mutableStateOf(LocalDate.now()) }
     val formattedDate by remember { derivedStateOf {
@@ -202,7 +205,7 @@ fun BengkelDetailScreen(
                 Row(
                     modifier = modifier
                         .clickable {
-                            openGmaps(context, bengkelState.value?.gmapsBengkel ?: "")
+                            com.example.tugasakhir.ui.screen.bengkeldetail.openGmaps(context, bengkelState.value?.gmapsBengkel ?: "")
                         }
                 ) {
                     Icon(
@@ -296,29 +299,29 @@ fun BengkelDetailScreen(
                             .background(Color.White)
                     ) {
                         if (filteredKendaraanUser.isNullOrEmpty()) {
-                        DropdownMenuItem(
-                            text = { Text("Kamu tidak memiliki data kendaraan silakan mengisi data kendaraan") },
-                            onClick = {
-                                isExpendedKendaraanUser = false
-                            },
-                            modifier = Modifier
-                                .background(Color.White)
-                        )
-                    } else {
-                        filteredKendaraanUser.forEach { option ->
-                            val teksKendaraan = "${option?.merekKendaraan ?: ""} - ${option?.platKendaraan ?: ""}"
                             DropdownMenuItem(
-                                text = { Text(teksKendaraan) },
+                                text = { Text("Kamu tidak memiliki data kendaraan silakan mengisi data kendaraan") },
                                 onClick = {
-                                    option?.id?.let { idSelectedKendaraanUser = it }
-                                    teksKendaraan.let { selectedTextKendaraanUser = it }
                                     isExpendedKendaraanUser = false
                                 },
                                 modifier = Modifier
                                     .background(Color.White)
                             )
+                        } else {
+                            filteredKendaraanUser.forEach { option ->
+                                val teksKendaraan = "${option?.merekKendaraan ?: ""} - ${option?.platKendaraan ?: ""}"
+                                DropdownMenuItem(
+                                    text = { Text(teksKendaraan) },
+                                    onClick = {
+                                        option?.id?.let { idSelectedKendaraanUser = it }
+                                        teksKendaraan.let { selectedTextKendaraanUser = it }
+                                        isExpendedKendaraanUser = false
+                                    },
+                                    modifier = Modifier
+                                        .background(Color.White)
+                                )
+                            }
                         }
-                    }
                     }
                 }
                 ExposedDropdownMenuBox(
@@ -392,7 +395,7 @@ fun BengkelDetailScreen(
                             color = Color.Black
                         )
                     },
-                    value = if (!isDateDialogOpen) "" else "Selected Date: $formattedDate",
+                    value = if (!isDateDialogOpen) "Tanggal Terpilih: $tanggalReservasi" else "Tanggal Terpilih: $formattedDate",
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
@@ -562,20 +565,23 @@ fun BengkelDetailScreen(
                             selectedTextJamOperasional.isBlank()){
                             Toast.makeText(context, "Silahkan isi data yang diperlukan", Toast.LENGTH_SHORT).show()
                         } else{
-                            viewModel.reservasiBengkel(
+                            viewModel.updateReservasi(
+                                reservasiId,
                                 formattedDate.toString(),
                                 selectedTextJamOperasional.toString(),
                                 selectedTextLayanan,
                                 kendala.toString(),
                                 selectedTextKendaraan.toString(),
                                 bengkelId,
-                                userModel.id,
-                                idSelectedKendaraanUser)
-                            navigator.navigate(KonfirmasiScreenDestination(
+                                idSelectedKendaraanUser
+                            )
+                            navigator.navigate(
+                                KonfirmasiScreenDestination(
                                 bengkelState.value?.namaBengkel ?: "",
                                 formattedDate.toString(),
                                 selectedTextJamOperasional,
-                            ))
+                            )
+                            )
                             Toast.makeText(context, "Berhasil Melakukan Reservasi", Toast.LENGTH_SHORT).show()
                         }
                     },
@@ -586,7 +592,7 @@ fun BengkelDetailScreen(
                         .fillMaxWidth()
                 ){
                     Text(
-                        text = "Reservasi"
+                        text = "Perbarui Reservasi"
                     )
                 }
             }

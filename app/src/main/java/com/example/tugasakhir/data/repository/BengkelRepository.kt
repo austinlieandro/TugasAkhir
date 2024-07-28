@@ -22,6 +22,7 @@ import com.example.tugasakhir.api.response.ResponseUpdateJamOperasional
 import com.example.tugasakhir.api.response.ResponseUpdateJenisLayanan
 import com.example.tugasakhir.api.response.ResponseUpdatePrioritas
 import com.example.tugasakhir.api.response.ResponseUpdatePrioritasHarga
+import com.example.tugasakhir.api.response.ResponseUpdateReservasi
 import com.example.tugasakhir.api.retrofit.ApiService
 import com.example.tugasakhir.data.pref.UserPreference
 
@@ -36,6 +37,10 @@ class BengkelRepository(private val apiService: ApiService, private val userPref
 
     suspend fun reservasiBengkel(tanggal_reservasi: String, jam_reservasi: String, jeniskendala_reservasi: String, detail_reservasi: String, kendaraan_reservasi: String, bengkels_id: Int, users_id: Int, kendaraan_id: Int): ResponseReservasiBengkel{
         return apiService.reservasiBengkel(tanggal_reservasi, jam_reservasi, jeniskendala_reservasi, detail_reservasi, kendaraan_reservasi, bengkels_id, users_id, kendaraan_id)
+    }
+
+    suspend fun updateReservasi(reservasi_id: Int, tanggal_reservasi: String, jam_reservasi: String, jeniskendala_reservasi: String, detail_reservasi: String, kendaraan_reservasi: String, bengkels_id: Int, kendaraan_id: Int): ResponseUpdateReservasi{
+        return apiService.updateReservasi(reservasi_id, tanggal_reservasi, jam_reservasi, jeniskendala_reservasi, detail_reservasi, kendaraan_reservasi, bengkels_id, kendaraan_id)
     }
 
     suspend fun daftarBengkel(

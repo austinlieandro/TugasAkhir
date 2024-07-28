@@ -27,6 +27,7 @@ import com.example.tugasakhir.ui.screen.updatejamoperasional.UpdateOperasionalVi
 import com.example.tugasakhir.ui.screen.updatejenislayanan.UpdateJenisLayananViewModel
 import com.example.tugasakhir.ui.screen.updateprioritas.UpdatePrioritasViewModel
 import com.example.tugasakhir.ui.screen.updateprioritasharga.UpdatePrioritasHargaViewModel
+import com.example.tugasakhir.ui.screen.updatereservasi.UpdateReservasiViewModel
 
 class BengkelModelFactory(private val repository: BengkelRepository, private val repositoryUser: UserRepository, private val repositoryKaryawan: KaryawanRepository): ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T{
@@ -87,6 +88,9 @@ class BengkelModelFactory(private val repository: BengkelRepository, private val
             }
             modelClass.isAssignableFrom(UpdatePrioritasViewModel::class.java) -> {
                 UpdatePrioritasViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(UpdateReservasiViewModel::class.java) -> {
+                UpdateReservasiViewModel(repository, repositoryUser) as T
             }
             else -> throw IllegalArgumentException("Unkown ViewModel class: " + modelClass.name)
         }
